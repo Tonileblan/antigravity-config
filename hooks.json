@@ -1,0 +1,12 @@
+{
+  "antigravity-cross-sync": {
+    "enabled": true,
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "./scripts/auto-sync-hook.sh",
+        "timeout": 10
+      }
+    ]
+  }
+}
