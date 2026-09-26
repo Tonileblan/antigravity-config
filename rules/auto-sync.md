@@ -6,13 +6,17 @@ trigger: always_on
 # 🔄 Antigravity Cross-Machine Configuration & Skill Sync
 
 ## Objective
-Ensure that whenever Antigravity is active on either macOS or Windows, skills, MCP tools, and custom configurations are synchronized with the central repository (`https://github.com/Tonileblan/antigravity-config`).
+Ensure seamless parity between macOS and Windows environments across skills, MCP servers, and project repositories.
 
-## Sync Protocol
-1. **Startup Check:**
-   - On session start or before configuring new tools, ensure the local configuration is up-to-date with `origin/main`.
-   - On macOS: Runs `~/Proyectos/antigravity-config/install.sh` if new skills are detected.
-   - On Windows: Runs `C:\Proyectos\antigravity-config\install.ps1` if new skills are detected.
+## 1. Global Customizations & Skills Sync (`antigravity-config`)
+- **Startup Check:** On session start, verify and pull the latest changes from `https://github.com/Tonileblan/antigravity-config`.
+- **Platform Execution:**
+  - On macOS: Runs `install.sh` if new skills/rules are detected.
+  - On Windows: Runs `install.ps1` if new skills/rules are detected.
+- **Skill Propagation:** Whenever a new skill or rule is modified or added, commit and push to `antigravity-config` automatically so the other machine receives it.
 
-2. **Skill Propagation:**
-   - Whenever a new skill or rule is added or modified during a session, commit and push to `antigravity-config` so the other machine receives the update immediately.
+## 2. Active Project Workspace Sync (Code & Canvas Designs)
+- **Pre-Flight Check:** Whenever a task or conversation starts inside a project repository (e.g. `Control61-Web`, `Bicicletas-Puertanueva`, etc.):
+  - Check if remote tracking branch (`origin/main`) has newer commits.
+  - Perform a fast fast-forward pull so the workspace is 100% updated with changes made on the other machine.
+- **Auto-Commit & Push:** When completing significant milestones (like UI suites, `.pen` canvas changes, or feature implementations), propose or push changes to keep the remote branch up-to-date.
