@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "description": "Manifest of all workspace project repositories for Antigravity cross-machine sync",
+  "projects": [
+    {
+      "name": "Control61-Web",
+      "repo": "https://github.com/Tonileblan/intel-web-glow.git",
+      "branch": "main"
+    },
+    {
+      "name": "Bicicletas-Puertanueva",
+      "repo": "https://github.com/Tonileblan/bicicletaspuertanueva.git",
+      "branch": "main"
+    },
+    {
+      "name": "Flowmind",
+      "repo": "https://github.com/Tonileblan/core-calm-creator.git",
+      "branch": "main"
+    },
+    {
+      "name": "Flow-Girl",
+      "repo": "https://github.com/Tonileblan/Flow-Girl.git",
+      "branch": "main"
+    },
+    {
+      "name": "Vita-Trading",
+      "repo": "https://github.com/Tonileblan/vita-trading.git",
+      "branch": "main"
+    },
+    {
+      "name": "IA-Trading",
+      "repo": "https://github.com/Tonileblan/algo-wizard-pro.git",
+      "branch": "main"
+    },
+    {
+      "name": "ByToniProyect",
+      "repo": "https://github.com/Tonileblan/ByToniProyect.git",
+      "branch": "main"
+    },
+    {
+      "name": "antigravity-config",
+      "repo": "https://github.com/Tonileblan/antigravity-config.git",
+      "branch": "main"
+    }
+  ]
+}

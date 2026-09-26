@@ -48,4 +48,10 @@ fi
 echo "🔌 Configurando servidores MCP..."
 sed "s|__CONFIG_DIR__|$SCRIPT_DIR|g" "$SCRIPT_DIR/config/mcp_config.mac.json" > "$GEMINI_CONFIG_DIR/mcp_config.json"
 
-echo "✅ ¡Antigravity en macOS sincronizado correctamente con reglas automáticas!"
+# 6. Sincronizar todos los proyectos del workspace
+echo "📂 Comprobando y sincronizando proyectos del workspace..."
+if [ -f "$SCRIPT_DIR/scripts/sync-all-projects.sh" ]; then
+  "$SCRIPT_DIR/scripts/sync-all-projects.sh"
+fi
+
+echo "✅ ¡Antigravity en macOS sincronizado correctamente con todos los proyectos!"

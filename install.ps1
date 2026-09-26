@@ -1,7 +1,7 @@
 # Script de instalación y sincronización para Windows
 # Ejecutar en PowerShell: .\install.ps1
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $GeminiConfigDir = Join-Path $env:USERPROFILE ".gemini\config"
 
@@ -56,5 +56,12 @@ $escapedScriptDir = $ScriptDir.Replace("\", "\\")
 $resolvedConfig = $template.Replace("__CONFIG_DIR__", $escapedScriptDir)
 $resolvedConfig | Set-Content (Join-Path $GeminiConfigDir "mcp_config.json") -Encoding UTF8
 
+# 7. Sincronizar automáticamente todos los proyectos del catálogo
+Write-Host "📂 Sincronizando proyectos en el espacio de trabajo..." -ForegroundColor Cyan
+$syncProjectsScript = Join-Path $ScriptDir "scripts\sync-all-projects.ps1"
+if (Test-Path $syncProjectsScript) {
+    & $syncProjectsScript
+}
+
 Write-Host "✅ ¡Antigravity en Windows sincronizado con éxito!" -ForegroundColor Green
-Write-Host "Ahora cada inicio de sesión se sincronizará automáticamente." -ForegroundColor Cyan
+Write-Host "Todos los proyectos, skills y reglas están activos y al día." -ForegroundColor Cyan
