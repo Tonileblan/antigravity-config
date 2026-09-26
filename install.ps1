@@ -5,7 +5,14 @@ $ErrorActionPreference = "Continue"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $GeminiConfigDir = Join-Path $env:USERPROFILE ".gemini\config"
 
-Write-Host "🚀 Configurando Antigravity para Windows..." -ForegroundColor Cyan
+Write-Host "🚀 Sincronizando e instalando Antigravity para Windows..." -ForegroundColor Cyan
+
+# 0. Actualizar el repositorio de configuración a la última versión
+try {
+    Push-Location $ScriptDir
+    git pull origin main
+    Pop-Location
+} catch {}
 
 # 1. Crear directorios base
 New-Item -ItemType Directory -Force -Path $GeminiConfigDir | Out-Null
@@ -56,7 +63,7 @@ $escapedScriptDir = $ScriptDir.Replace("\", "\\")
 $resolvedConfig = $template.Replace("__CONFIG_DIR__", $escapedScriptDir)
 $resolvedConfig | Set-Content (Join-Path $GeminiConfigDir "mcp_config.json") -Encoding UTF8
 
-# 7. Sincronizar automáticamente todos los proyectos del catálogo
+# 7. Sincronizar automáticamente todos los proyectos del catálogo en el workspace
 Write-Host "📂 Sincronizando proyectos en el espacio de trabajo..." -ForegroundColor Cyan
 $syncProjectsScript = Join-Path $ScriptDir "scripts\sync-all-projects.ps1"
 if (Test-Path $syncProjectsScript) {
