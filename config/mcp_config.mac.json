@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "stitch": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "__CONFIG_DIR__/tools/stitch-mcp/index.js"
+      ]
+    },
+    "macos-control": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/toni/Proyectos/Flowmind/tools/macos-control/index.js"
+      ]
+    }
+  }
+}
