@@ -16,26 +16,28 @@ const __dirname = path.dirname(__filename);
 const CONFIG_PATH = path.join(__dirname, "config.json");
 
 let botToken = process.env.TELEGRAM_BOT_TOKEN || "";
+let defaultChatId = process.env.TELEGRAM_DEFAULT_CHAT_ID || "";
 let botInstance = null;
 let botInfo = null;
 
-async function loadToken() {
-  if (botToken) return botToken;
+async function loadConfig() {
   try {
     const data = await fs.readFile(CONFIG_PATH, "utf8");
     const json = JSON.parse(data);
-    if (json.botToken) {
+    if (!botToken && json.botToken) {
       botToken = json.botToken;
     }
+    if (!defaultChatId && json.defaultChatId) {
+      defaultChatId = String(json.defaultChatId);
+    }
   } catch {}
-  return botToken;
 }
 
 async function getBot() {
-  const token = await loadToken();
-  if (!token) return null;
+  await loadConfig();
+  if (!botToken) return null;
   if (!botInstance) {
-    botInstance = new Bot(token);
+    botInstance = new Bot(botToken);
     try {
       botInfo = await botInstance.api.getMe();
       console.error(`[Telegram MCP] Bot autenticado: @${botInfo.username} (${botInfo.first_name})`);
@@ -51,7 +53,7 @@ async function getBot() {
 const server = new Server(
   {
     name: "telegram-mcp",
-    version: "1.0.0",
+    version: "1.1.0",
   },
   {
     capabilities: {
@@ -77,7 +79,7 @@ const TOOLS = [
       properties: {
         token: {
           type: "string",
-          description: "El token HTTP API del bot (ejemplo: '123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ').",
+          description: "El token HTTP API del bot.",
         },
       },
       required: ["token"],
@@ -85,13 +87,13 @@ const TOOLS = [
   },
   {
     name: "telegram_send_message",
-    description: "Envía un mensaje de texto a un chat, usuario o canal de Telegram.",
+    description: "Envía un mensaje de texto a un chat, usuario o canal de Telegram. Si no se especifica chatId, se envía a Toni por defecto.",
     inputSchema: {
       type: "object",
       properties: {
         chatId: {
           type: "string",
-          description: "ID del chat (número entero o cadena) o @username del canal/grupo público (ej. '@micana' o '123456789').",
+          description: "ID del chat o @username del canal. Opcional (por defecto envía a Toni).",
         },
         text: {
           type: "string",
@@ -103,7 +105,7 @@ const TOOLS = [
           description: "Modo de formateo del texto. Opcional.",
         },
       },
-      required: ["chatId", "text"],
+      required: ["text"],
     },
   },
   {
@@ -114,7 +116,7 @@ const TOOLS = [
       properties: {
         limit: {
           type: "number",
-          description: "Cantidad máxima de actualizaciones a recuperar (1 a 100, por defecto 20).",
+          description: "Cantidad máxima de actualizaciones a recuperar (por defecto 20).",
         },
       },
     },
@@ -141,7 +143,7 @@ const TOOLS = [
       properties: {
         chatId: {
           type: "string",
-          description: "ID del chat o @username.",
+          description: "ID del chat o @username. Opcional (por defecto envía a Toni).",
         },
         photo: {
           type: "string",
@@ -152,7 +154,7 @@ const TOOLS = [
           description: "Texto de pie de foto opcional.",
         },
       },
-      required: ["chatId", "photo"],
+      required: ["photo"],
     },
   },
 ];
@@ -175,7 +177,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         botInstance = testBot;
         botInfo = me;
 
-        await fs.writeFile(CONFIG_PATH, JSON.stringify({ botToken: token }, null, 2), "utf8");
+        let existing = {};
+        try {
+          existing = JSON.parse(await fs.readFile(CONFIG_PATH, "utf8"));
+        } catch {}
+
+        await fs.writeFile(
+          CONFIG_PATH,
+          JSON.stringify({ ...existing, botToken: token }, null, 2),
+          "utf8"
+        );
 
         return {
           content: [
@@ -184,7 +195,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               text: JSON.stringify(
                 {
                   success: true,
-                  message: `Bot @${me.username} (${me.first_name}) configurado y guardado correctamente.`,
+                  message: `Bot @${me.username} (${me.first_name}) configurado correctamente.`,
                   bot: me,
                 },
                 null,
@@ -205,9 +216,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 text: JSON.stringify(
                   {
                     connected: false,
-                    message: "No hay ningún Bot Token de Telegram configurado o el token es inválido.",
-                    instructions:
-                      "1. Abre Telegram y escribe a @BotFather\n2. Ejecuta /newbot para crear tu bot y obtener el token.\n3. Pega el token o usa la herramienta 'telegram_set_token'.",
+                    message: "No hay ningún Bot Token de Telegram configurado.",
                   },
                   null,
                   2
@@ -225,6 +234,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 {
                   connected: true,
                   bot: botInfo,
+                  defaultChatId: defaultChatId || null,
                 },
                 null,
                 2
@@ -240,10 +250,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           throw new Error("Bot no configurado. Proporciona primero el token con 'telegram_set_token'.");
         }
 
+        const targetChat = args.chatId || defaultChatId;
+        if (!targetChat) {
+          throw new Error("No se especificó chatId ni existe un defaultChatId configurado.");
+        }
+
         const options = {};
         if (args.parseMode) options.parse_mode = args.parseMode;
 
-        const sent = await bot.api.sendMessage(args.chatId, args.text, options);
+        const sent = await bot.api.sendMessage(targetChat, args.text, options);
 
         return {
           content: [
@@ -266,9 +281,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "telegram_get_updates": {
         const bot = await getBot();
-        if (!bot) {
-          throw new Error("Bot no configurado.");
-        }
+        if (!bot) throw new Error("Bot no configurado.");
 
         const limit = args?.limit || 20;
         const updates = await bot.api.getUpdates({ limit });
@@ -291,14 +304,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                           date: new Date(u.message.date * 1000).toISOString(),
                         }
                       : null,
-                    channelPost: u.channel_post
-                      ? {
-                          messageId: u.channel_post.message_id,
-                          chat: u.channel_post.chat,
-                          text: u.channel_post.text,
-                          date: new Date(u.channel_post.date * 1000).toISOString(),
-                        }
-                      : null,
                   })),
                 },
                 null,
@@ -313,7 +318,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const bot = await getBot();
         if (!bot) throw new Error("Bot no configurado.");
 
-        const chat = await bot.api.getChat(args.chatId);
+        const targetChat = args.chatId || defaultChatId;
+        const chat = await bot.api.getChat(targetChat);
         return {
           content: [
             {
@@ -328,12 +334,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const bot = await getBot();
         if (!bot) throw new Error("Bot no configurado.");
 
+        const targetChat = args.chatId || defaultChatId;
         let photoPayload = args.photo;
         if (!args.photo.startsWith("http://") && !args.photo.startsWith("https://")) {
           photoPayload = new InputFile(args.photo);
         }
 
-        const sent = await bot.api.sendPhoto(args.chatId, photoPayload, {
+        const sent = await bot.api.sendPhoto(targetChat, photoPayload, {
           caption: args.caption,
         });
 
