@@ -11,6 +11,19 @@
       "args": [
         "__CONFIG_DIR__\\tools\\notebook-mcp\\index.js"
       ]
+    },
+    "supabase": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase@latest"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "__SUPABASE_ACCESS_TOKEN__"
+      }
     }
   }
 }
+

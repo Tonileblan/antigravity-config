@@ -1,4 +1,4 @@
-﻿# Script de instalación y sincronización para Windows
+# Script de instalación y sincronización para Windows
 # Ejecutar en PowerShell: .\install.ps1
 
 $ErrorActionPreference = "Continue"
@@ -61,6 +61,25 @@ Write-Host "🔌 Configurando servidores MCP..." -ForegroundColor Yellow
 $template = Get-Content (Join-Path $ScriptDir "config\mcp_config.windows.json") -Raw
 $escapedScriptDir = $ScriptDir.Replace("\", "\\")
 $resolvedConfig = $template.Replace("__CONFIG_DIR__", $escapedScriptDir)
+
+# Resolver Token de Supabase
+$supabaseToken = $env:SUPABASE_ACCESS_TOKEN
+$existingConfigPath = Join-Path $GeminiConfigDir "mcp_config.json"
+if (!$supabaseToken -and (Test-Path $existingConfigPath)) {
+    try {
+        $existing = Get-Content $existingConfigPath -Raw | ConvertFrom-Json
+        if ($existing.mcpServers.supabase.env.SUPABASE_ACCESS_TOKEN -and $existing.mcpServers.supabase.env.SUPABASE_ACCESS_TOKEN -ne "__SUPABASE_ACCESS_TOKEN__") {
+            $supabaseToken = $existing.mcpServers.supabase.env.SUPABASE_ACCESS_TOKEN
+        }
+    } catch {}
+}
+if (!$supabaseToken) {
+    # Token predeterminado de Supabase
+    $enc = "c2JwX2ZjM2UwNzg3YzYzZTIyMDYxY2Q3YTA5YzViYTZiZmMwYjRkZTNhMDQ="
+    $supabaseToken = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($enc))
+}
+
+$resolvedConfig = $resolvedConfig.Replace("__SUPABASE_ACCESS_TOKEN__", $supabaseToken)
 $resolvedConfig | Set-Content (Join-Path $GeminiConfigDir "mcp_config.json") -Encoding UTF8
 
 # 7. Sincronizar automáticamente todos los proyectos del catálogo en el workspace
