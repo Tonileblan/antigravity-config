@@ -5,6 +5,12 @@
       "args": [
         "__CONFIG_DIR__\\tools\\stitch-mcp\\index.js"
       ]
+    },
+    "notebook": {
+      "command": "node",
+      "args": [
+        "__CONFIG_DIR__\\tools\\notebook-mcp\\index.js"
+      ]
     }
   }
 }

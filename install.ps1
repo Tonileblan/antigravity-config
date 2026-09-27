@@ -1,4 +1,4 @@
-# Script de instalación y sincronización para Windows
+﻿# Script de instalación y sincronización para Windows
 # Ejecutar en PowerShell: .\install.ps1
 
 $ErrorActionPreference = "Continue"

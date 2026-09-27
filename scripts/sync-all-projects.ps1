@@ -1,4 +1,4 @@
-# Script de sincronización automática de todos los proyectos para Windows
+﻿# Script de sincronización automática de todos los proyectos para Windows
 # Ejecutar en PowerShell: .\scripts\sync-all-projects.ps1
 
 $ErrorActionPreference = "Continue"

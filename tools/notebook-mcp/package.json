@@ -1,0 +1,15 @@
+{
+  "name": "notebook-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server para conectar la lógica de orquestación tipo Notebook (Extracción de Requisitos y Generación de Prompts UI) para ByToni.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.24.0",
+    "@modelcontextprotocol/sdk": "latest",
+    "dotenv": "^18.0.4"
+  }
+}
