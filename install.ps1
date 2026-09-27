@@ -1,13 +1,13 @@
-# Script de instalación y sincronización para Windows
+# Script de instalacion y sincronizacion para Windows
 # Ejecutar en PowerShell: .\install.ps1
 
 $ErrorActionPreference = "Continue"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $GeminiConfigDir = Join-Path $env:USERPROFILE ".gemini\config"
 
-Write-Host "🚀 Sincronizando e instalando Antigravity para Windows..." -ForegroundColor Cyan
+Write-Host ">> Sincronizando e instalando Antigravity para Windows..." -ForegroundColor Cyan
 
-# 0. Actualizar el repositorio de configuración a la última versión
+# 0. Actualizar el repositorio de configuracion a la ultima version
 try {
     Push-Location $ScriptDir
     git pull origin main
@@ -20,7 +20,7 @@ New-Item -ItemType Directory -Force -Path (Join-Path $GeminiConfigDir "skills") 
 New-Item -ItemType Directory -Force -Path (Join-Path $GeminiConfigDir "rules") | Out-Null
 
 # 2. Copiar Skills
-Write-Host "📦 Instalando skills..." -ForegroundColor Yellow
+Write-Host "-> Instalando skills..." -ForegroundColor Yellow
 $skills = Get-ChildItem -Directory -Path (Join-Path $ScriptDir "skills")
 foreach ($skill in $skills) {
     $targetPath = Join-Path (Join-Path $GeminiConfigDir "skills") $skill.Name
@@ -28,27 +28,27 @@ foreach ($skill in $skills) {
         Remove-Item -Recurse -Force $targetPath
     }
     Copy-Item -Recurse -Force $skill.FullName $targetPath
-    Write-Host "  ✓ Skill: $($skill.Name)" -ForegroundColor Green
+    Write-Host "  OK Skill: $($skill.Name)" -ForegroundColor Green
 }
 
 # 3. Copiar Reglas (Rules)
-Write-Host "📜 Instalando reglas automáticas..." -ForegroundColor Yellow
+Write-Host "-> Instalando reglas automaticas..." -ForegroundColor Yellow
 $rules = Get-ChildItem -File -Path (Join-Path $ScriptDir "rules")
 foreach ($rule in $rules) {
     $targetRule = Join-Path (Join-Path $GeminiConfigDir "rules") $rule.Name
     Copy-Item -Force $rule.FullName $targetRule
-    Write-Host "  ✓ Rule: $($rule.Name)" -ForegroundColor Green
+    Write-Host "  OK Rule: $($rule.Name)" -ForegroundColor Green
 }
 
 # 4. Copiar Hooks de ciclo de vida
 $hooksFile = Join-Path $ScriptDir "hooks.json"
 if (Test-Path $hooksFile) {
     Copy-Item -Force $hooksFile (Join-Path $GeminiConfigDir "hooks.json")
-    Write-Host "  ✓ Hooks: hooks.json configurado" -ForegroundColor Green
+    Write-Host "  OK Hooks: hooks.json configurado" -ForegroundColor Green
 }
 
 # 5. Instalar dependencias MCP en Windows
-Write-Host "⚡ Instalando dependencias de MCP Tools..." -ForegroundColor Yellow
+Write-Host "-> Instalando dependencias de MCP Tools..." -ForegroundColor Yellow
 $mcpToolDir = Join-Path $ScriptDir "tools\stitch-mcp"
 if (Test-Path $mcpToolDir) {
     Push-Location $mcpToolDir
@@ -57,7 +57,7 @@ if (Test-Path $mcpToolDir) {
 }
 
 # 6. Configurar mcp_config.json para Windows
-Write-Host "🔌 Configurando servidores MCP..." -ForegroundColor Yellow
+Write-Host "-> Configurando servidores MCP..." -ForegroundColor Yellow
 $template = Get-Content (Join-Path $ScriptDir "config\mcp_config.windows.json") -Raw
 $escapedScriptDir = $ScriptDir.Replace("\", "\\")
 $resolvedConfig = $template.Replace("__CONFIG_DIR__", $escapedScriptDir)
@@ -65,7 +65,7 @@ $resolvedConfig = $template.Replace("__CONFIG_DIR__", $escapedScriptDir)
 # Resolver Token de Supabase
 $supabaseToken = $env:SUPABASE_ACCESS_TOKEN
 $existingConfigPath = Join-Path $GeminiConfigDir "mcp_config.json"
-if (!$supabaseToken -and (Test-Path $existingConfigPath)) {
+if (-not $supabaseToken -and (Test-Path $existingConfigPath)) {
     try {
         $existing = Get-Content $existingConfigPath -Raw | ConvertFrom-Json
         if ($existing.mcpServers.supabase.env.SUPABASE_ACCESS_TOKEN -and $existing.mcpServers.supabase.env.SUPABASE_ACCESS_TOKEN -ne "__SUPABASE_ACCESS_TOKEN__") {
@@ -73,7 +73,7 @@ if (!$supabaseToken -and (Test-Path $existingConfigPath)) {
         }
     } catch {}
 }
-if (!$supabaseToken) {
+if (-not $supabaseToken) {
     # Token predeterminado de Supabase
     $enc = "c2JwX2ZjM2UwNzg3YzYzZTIyMDYxY2Q3YTA5YzViYTZiZmMwYjRkZTNhMDQ="
     $supabaseToken = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($enc))
@@ -82,12 +82,12 @@ if (!$supabaseToken) {
 $resolvedConfig = $resolvedConfig.Replace("__SUPABASE_ACCESS_TOKEN__", $supabaseToken)
 $resolvedConfig | Set-Content (Join-Path $GeminiConfigDir "mcp_config.json") -Encoding UTF8
 
-# 7. Sincronizar automáticamente todos los proyectos del catálogo en el workspace
-Write-Host "📂 Sincronizando proyectos en el espacio de trabajo..." -ForegroundColor Cyan
+# 7. Sincronizar automaticamente todos los proyectos del catalogo en el workspace
+Write-Host "-> Sincronizando proyectos en el espacio de trabajo..." -ForegroundColor Cyan
 $syncProjectsScript = Join-Path $ScriptDir "scripts\sync-all-projects.ps1"
 if (Test-Path $syncProjectsScript) {
     & $syncProjectsScript
 }
 
-Write-Host "✅ ¡Antigravity en Windows sincronizado con éxito!" -ForegroundColor Green
-Write-Host "Todos los proyectos, skills y reglas están activos y al día." -ForegroundColor Cyan
+Write-Host "OK: Antigravity en Windows sincronizado con exito!" -ForegroundColor Green
+Write-Host "Todos los proyectos, skills y reglas estan activos y al dia." -ForegroundColor Cyan
