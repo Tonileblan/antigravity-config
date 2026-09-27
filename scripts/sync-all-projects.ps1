@@ -1,4 +1,4 @@
-﻿# Script de sincronización automática de todos los proyectos para Windows
+# Script de sincronización automática de todos los proyectos para Windows
 # Ejecutar en PowerShell: .\scripts\sync-all-projects.ps1
 
 $ErrorActionPreference = "Continue"
@@ -32,9 +32,21 @@ foreach ($p in $manifest.projects) {
     }
 
     if (Test-Path $targetDir) {
-        Write-Host "  🔄 Actualizando $($p.name)..." -ForegroundColor Gray
+        $gitDir = $targetDir
+        if (!(Test-Path (Join-Path $targetDir ".git"))) {
+            $subDirs = Get-ChildItem -Directory -Path $targetDir
+            foreach ($sub in $subDirs) {
+                if (Test-Path (Join-Path $sub.FullName ".git")) {
+                    $gitDir = $sub.FullName
+                    break
+                }
+            }
+        }
+
+        $dirName = Split-Path -Leaf $gitDir
+        Write-Host "  🔄 Actualizando $($p.name) ($dirName)..." -ForegroundColor Gray
         try {
-            Push-Location $targetDir
+            Push-Location $gitDir
             git pull origin $p.branch
             Pop-Location
             Write-Host "  ✓ $($p.name) al día." -ForegroundColor Green

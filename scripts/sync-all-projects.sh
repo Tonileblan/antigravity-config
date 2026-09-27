@@ -23,11 +23,24 @@ const workspaceRoot = '$WORKSPACE_ROOT';
 console.log('📦 Total de proyectos registrados:', manifest.projects.length);
 
 for (const p of manifest.projects) {
-  const targetDir = path.join(workspaceRoot, p.name);
+  let targetDir = path.join(workspaceRoot, p.name);
   if (fs.existsSync(targetDir)) {
+    let gitDir = targetDir;
+    if (!fs.existsSync(path.join(targetDir, '.git'))) {
+      const subdirs = fs.readdirSync(targetDir).filter(f => {
+        try { return fs.statSync(path.join(targetDir, f)).isDirectory(); } catch { return false; }
+      });
+      for (const s of subdirs) {
+        if (fs.existsSync(path.join(targetDir, s, '.git'))) {
+          gitDir = path.join(targetDir, s);
+          break;
+        }
+      }
+    }
+
     try {
-      console.log('  🔄 Actualizando ' + p.name + '...');
-      execSync('git -C \"' + targetDir + '\" pull --quiet origin ' + (p.branch || 'main'), { stdio: 'inherit' });
+      console.log('  🔄 Actualizando ' + p.name + ' (' + path.basename(gitDir) + ')...');
+      execSync('git -C \"' + gitDir + '\" pull --quiet origin ' + (p.branch || 'main'), { stdio: 'inherit' });
       console.log('  ✓ ' + p.name + ' al día.');
     } catch (e) {
       console.log('  ⚠️ Error actualizando ' + p.name + ' (comprueba si hay cambios locales sin guardar)');
