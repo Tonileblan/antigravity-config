@@ -23,6 +23,16 @@
       "env": {
         "SUPABASE_ACCESS_TOKEN": "__SUPABASE_ACCESS_TOKEN__"
       }
+    },
+    "vercel": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "mcp-remote",
+        "https://mcp.vercel.com"
+      ]
     }
   }
 }
