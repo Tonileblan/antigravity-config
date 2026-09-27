@@ -11,6 +11,16 @@
       "args": [
         "/Users/toni/Proyectos/Flowmind/tools/macos-control/index.js"
       ]
+    },
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "__SUPABASE_ACCESS_TOKEN__"
+      }
     }
   }
 }

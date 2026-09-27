@@ -46,7 +46,8 @@ fi
 
 # 5. Configurar mcp_config.json
 echo "🔌 Configurando servidores MCP..."
-sed "s|__CONFIG_DIR__|$SCRIPT_DIR|g" "$SCRIPT_DIR/config/mcp_config.mac.json" > "$GEMINI_CONFIG_DIR/mcp_config.json"
+PREV_TOKEN=$(grep -o 'sbp_[a-zA-Z0-9]*' "$GEMINI_CONFIG_DIR/mcp_config.json" 2>/dev/null | head -n 1 || echo "${SUPABASE_ACCESS_TOKEN:-}")
+sed "s|__CONFIG_DIR__|$SCRIPT_DIR|g; s|__SUPABASE_ACCESS_TOKEN__|$PREV_TOKEN|g" "$SCRIPT_DIR/config/mcp_config.mac.json" > "$GEMINI_CONFIG_DIR/mcp_config.json"
 
 # 6. Sincronizar todos los proyectos del workspace
 echo "📂 Comprobando y sincronizando proyectos del workspace..."
