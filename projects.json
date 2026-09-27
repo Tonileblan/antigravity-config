@@ -38,6 +38,11 @@
       "branch": "main"
     },
     {
+      "name": "EduStack-AI",
+      "repo": "https://github.com/Tonileblan/EduStack-AI.git",
+      "branch": "main"
+    },
+    {
       "name": "antigravity-config",
       "repo": "https://github.com/Tonileblan/antigravity-config.git",
       "branch": "main"
