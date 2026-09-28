@@ -670,12 +670,12 @@
           <span class="kpi-value">6</span>
           <span class="kpi-label">Directrices Maestras</span>
         </button>
-        <button type="button" onclick="switchTab('syncView')" class="kpi-chip" title="Ver los 11 Repositorios Sincronizados y monitor de paridad">
-          <span class="kpi-value" id="headerProjectsCount">11</span>
+        <button type="button" onclick="switchTab('syncView')" class="kpi-chip" title="Ver los 12 Repositorios Sincronizados y monitor de paridad">
+          <span class="kpi-value" id="headerProjectsCount">12</span>
           <span class="kpi-label">Repos Sincronizados</span>
         </button>
-        <button type="button" onclick="switchTab('skillsView')" class="kpi-chip" title="Ver los 8 Servidores MCP y Skills">
-          <span class="kpi-value">8</span>
+        <button type="button" onclick="switchTab('skillsView')" class="kpi-chip" title="Ver los 9 Servidores MCP y Skills">
+          <span class="kpi-value">9</span>
           <span class="kpi-label">MCP Skills</span>
         </button>
         <button type="button" onclick="switchTab('syncView')" class="kpi-chip" style="border-color: #A7F3D0; background: #ECFDF5;" title="Ver monitor de paridad 100% Mac ↔ Windows">
@@ -741,7 +741,7 @@
           </button>
           <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="nav-btn">
             <span>🧩 Skills &amp; MCP Tools</span>
-            <span class="nav-badge">8 MCP</span>
+            <span class="nav-badge">9 MCP</span>
           </button>
           <button id="tabBtn_sop" onclick="switchTab('sopView')" class="nav-btn">
             <span>📋 Directiva SOP &amp; Memoria</span>
@@ -749,7 +749,7 @@
           </button>
           <button id="tabBtn_sync" onclick="switchTab('syncView')" class="nav-btn">
             <span>🔄 Sync Mac ↔ Win</span>
-            <span class="nav-badge">11 REPOS</span>
+            <span class="nav-badge">12 REPOS</span>
           </button>
         </div>
       </div>
@@ -2070,7 +2070,7 @@
     "description": "Plantilla estandarizada para definir directivas específicas por módulo o aplicación subordinadas a la arquitectura general.",
     "active": true,
     "scope": "Módulos & Componentes",
-    "markdownContent": "# 📋 PLANTILLA DE DIRECTIVA SOP: [NOMBRE_CLAVE_DE_LA_APP_O_MODULO]\n\n> **ID de Directiva:** `DIR-APP-[NOMBRE_MODULO]-V1`  \n> **Ámbito / Módulo:** `src/presentation/views/...` | `src/domain/usecases/...`  \n> **Última Actualización:** `[AAAA-MM-DD]`  \n> **Estado:** `[BORRADOR | ACTIVO | DEPRECADO]`  \n> **Jerarquía:** Subordinada a las [5 Directrices Maestras de Toni](directrices/00_Directriz_Definicion_Proyecto.md) y a la [Directiva de Desarrollo SOP](rules/sop-desarrollo-app-clean-sdd.md)\n\n---\n\n## 🏛️ 0. Marco Normativo y Directrices Maestras Heredadas\nCualquier tarea o módulo desarrollado bajo esta directiva **debe cumplir obligatoriamente** con las 5 Directrices Maestras del ecosistema:\n1. **🗄️ Supabase Multi-Esquema:** Esquema dedicado (`mia_*` propio / `com_*` cliente), RLS forzoso al 100%, columna `user_id` vinculada a `auth.users(id)`.\n2. **🛡️ Seguridad & Auth:** Supabase Auth JWT, Route Guards y validación estricta Zero-Trust.\n3. **🤖 IA & Streaming SSE:** Conexiones en tiempo real, prompts aislados en capa de servicio y gestión de rate limits con backoff.\n4. **⚖️ RGPD & Branding:** Titular legal Antonio Javier García García (DNI 34799350M, Madrid), páginas legales y sello *\"By Toni\"*.\n5. **📂 Control Documental:** Registro en `Registro_Proyectos_Toni.csv` y ficha técnica `INFO_PROYECTO.md`.\n\n---\n\n## 🎯 1. Objetivos y Alcance\n*Describe qué debe lograr esta app/módulo y por qué.*\n- **Objetivo Principal:** [Descripción concisa del objetivo, ej: \"Módulo de gestión de cobros y facturación recurrente con sincronización Supabase\"].\n- **Criterio de Éxito:** [Condición exacta: \"Compila sin errores TypeScript, pasa 100% de tests y feedback en DOM sin alerts\"].\n\n---\n\n## 📥 2. Especificaciones de Entrada/Salida (I/O) y Estado\n\n### Entradas (Inputs & Eventos)\n- **Props / Parámetros de Ruta:** `[paramId: string]` - [Descripción].\n- **Eventos de Usuario:** [Clicks, formularios, gestos táctiles].\n- **Variables de Entorno (.env):** `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.\n\n### Salidas (Outputs)\n- **Renderizado UI:** Componentes en DOM accesibles y responsivos.\n- **Feedback al Usuario:** Notificación flotante (*Toast*) o Modal custom.\n- **Persistencia:** Mutaciones en esquema Supabase (`mia_*` / `com_*`).\n\n---\n\n## 🔄 3. Flujo Lógico y Clean Architecture\n\n1. **Capa de Dominio (`src/domain/`):** Entidades puras y casos de uso de negocio en TypeScript.\n2. **Capa de Datos (`src/data/`):** Repositorios Supabase, DTOs y persistencia local.\n3. **Capa de Presentación (`src/presentation/`):** Componentes UI, hooks y gestión de estado reactivo.\n\n---\n\n## 🛠️ 4. Herramientas y Librerías Permitidas (Lista Blanca)\n- **Frontend:** React, TypeScript, CSS3 Nativo, Lucide React, Vite.\n- **BaaS:** Supabase JS SDK (PostgreSQL, Auth, Storage).\n- **Testing:** Vitest / Jest, React Testing Library.\n\n---\n\n## ⚠️ 5. Restricciones, Casos Borde y Accesibilidad\n- **Cero Diálogos Nativos:** Prohibido `alert()`, `confirm()` o `prompt()`. Usar siempre Toasts en el DOM.\n- **Accesibilidad:** `aria-label` en controles interactivos, contraste ≥ 4.5:1, targets táctiles ≥ 48x48px.\n- **Aislamiento:** La UI nunca hace llamadas directas a BD; invoca casos de uso.\n\n---\n\n## 🧠 6. Protocolo de Errores y Aprendizajes (Memoria Viva)\n\n| Fecha | Error Detectado | Causa Raíz | Solución / Parche Definitivo |\n| :--- | :--- | :--- | :--- |\n| [DD/MM] | [Tipo de Error] | [Por qué ocurrió] | [Solución aplicada] |\n\n> **Nota de Implementación:** Arregla el fallo primero en el código y luego añade la regla aquí para evitar regresiones.\n\n---\n\n## 🚀 7. Comandos de Ejecución y Test\n\n```bash\n# Desarrollo local\nnpm run dev\n\n# Tests\nnpm run test\n\n# Build de producción\nnpm run build\n```\n\n---\n\n## 📋 8. Checklists\n\n### Pre-Ejecución\n- [ ] Variables de entorno configuradas (`.env`).\n- [ ] Entidades de dominio y casos de uso definidos.\n\n### Post-Ejecución\n- [ ] Compilación exitosa (`npm run build`).\n- [ ] Tests pasando al 100%.\n- [ ] Feedback visual en DOM verificado.\n- [ ] Directiva actualizada con nuevos aprendizajes.\n"
+    "markdownContent": "# 📋 PLANTILLA DE DIRECTIVA SOP: [NOMBRE_CLAVE_DE_LA_APP_O_MODULO]\n\n> **ID de Directiva:** `DIR-APP-[NOMBRE_MODULO]-V1`  \n> **Ámbito / Módulo:** `src/presentation/views/...` | `src/domain/usecases/...`  \n> **Última Actualización:** `[AAAA-MM-DD]`  \n> **Estado:** `[BORRADOR | ACTIVO | DEPRECADO]`  \n> **Jerarquía:** Subordinada a las [5 Directrices Maestras de Toni](directrices/00_Directriz_Definicion_Proyecto.md) y a la [Directiva de Desarrollo SOP](rules/sop-desarrollo-app-clean-sdd.md)\n\n---\n\n## 🏛️ 0. Marco Normativo y Directrices Maestras Heredadas\nCualquier tarea o módulo desarrollado bajo esta directiva **debe cumplir obligatoriamente** con las 5 Directrices Maestras del ecosistema:\n1. **🗄️ Supabase Multi-Esquema:** Esquema dedicado (`mia_*` propio / `com_*` cliente), RLS forzoso al 100%, columna `user_id` vinculada a `auth.users(id)`.\n2. **🛡️ Seguridad & Auth:** Supabase Auth JWT, Route Guards y validación estricta Zero-Trust.\n3. **🤖 IA & Streaming SSE:** Conexiones en tiempo real, prompts aislados en capa de servicio y gestión de rate limits con backoff.\n4. **⚖️ RGPD & Branding:** Titular legal Antonio Javier García García (DNI 34799350M, Madrid), páginas legales y sello *\"By Toni\"*.\n5. **📂 Control Documental:** Registro en `Registro_Proyectos_Toni.csv` y ficha técnica `INFO_PROYECTO.md`.\n\n---\n\n## 🎯 1. Objetivos y Alcance\n*Describe qué debe lograr esta app/módulo y por qué.*\n- **Objetivo Principal:** [Descripción concisa del objetivo, ej: \"Módulo de gestión de cobros y facturación recurrente con sincronización Supabase\"].\n- **Criterio de Éxito:** [Condición exacta: \"Compila sin errores TypeScript, pasa 100% de tests y feedback en DOM sin alerts\"].\n\n---\n\n## 📥 2. Especificaciones de Entrada/Salida (I/O) y Estado\n\n### Entradas (Inputs & Eventos)\n- **Props / Parámetros de Ruta:** `[paramId: string]` - [Descripción].\n- **Eventos de Usuario:** [Clicks, formularios, gestos táctiles].\n- **Variables de Entorno (.env):** `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.\n\n### Salidas (Outputs)\n- **Renderizado UI:** Componentes en DOM accesibles y responsivos.\n- **Feedback al Usuario:** Notificación flotante (*Toast*) o Modal custom.\n- **Persistencia:** Mutaciones en esquema Supabase (`mia_*` / `com_*`).\n\n---\n\n## 🔄 3. Flujo Lógico y Clean Architecture\n\n1. **Capa de Dominio (`src/domain/`):** Entidades puras y casos de uso de negocio en TypeScript.\n2. **Capa de Datos (`src/data/`):** Repositorios Supabase, DTOs y persistencia local.\n3. **Capa de Presentación (`src/presentation/`):** Componentes UI, hooks y gestión de estado reactivo.\n\n---\n\n## 🛠️ 4. Herramientas y Librerías Permitidas (Lista Blanca)\n- **Frontend:** React, TypeScript, CSS3 Nativo, Lucide React, Vite.\n- **BaaS:** Supabase JS SDK (PostgreSQL, Auth, Storage).\n- **Testing:** Vitest / Jest, React Testing Library.\n"
   }
 ];
 
@@ -2079,13 +2079,15 @@
     { id: 'stitch', title: 'Google Stitch (Project Nemo)', icon: '🧵', type: 'Generación UI Gemini', desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.' },
     { id: 'ui-ux-expert', title: 'UI/UX Desktop Expert', icon: '✨', type: 'Experiencia de Usuario', desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.' },
     { id: 'mobile-ui-ux-expert', title: 'Mobile UI/UX Expert', icon: '📱', type: 'Mobile & PWA', desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.' },
+    { id: 'market-opportunity-analyzer', title: 'Estudios de Mercado & Monetización', icon: '📊', type: 'Estrategia & Negocio', desc: 'Generador de estudios de mercado, micro-nichos desatendidos, monetización y planes Lean Startup.' },
     { id: 'accidental-data-loss-prevention', title: 'Data Loss Prevention', icon: '🛡️', type: 'Seguridad', desc: 'Bloqueo de comandos destructivos que provoquen pérdida irreversible de datos.' },
     { id: 'telegram', title: 'Telegram Bot MCP', icon: '✈️', type: 'Notificaciones', desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.' },
     { id: 'whatsapp', title: 'WhatsApp Baileys MCP', icon: '💬', type: 'Mensajería', desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.' },
     { id: 'supabase-mcp', title: 'Supabase MCP Management', icon: '🗄️', type: 'Base de Datos', desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.' }
   ];
 
-    const DEFAULT_PROJECTS = [
+  const DEFAULT_PROJECTS = [
+    { name: 'RetroDeck-Hub', slug: 'mia_retrodeck', schema: 'mia_retrodeck', url: 'https://retrodeck-hub.vercel.app' },
     { name: 'Control61-Web', slug: 'com_control61', schema: 'com_control61', url: 'https://control61.vercel.app' },
     { name: 'EduStack-AI', slug: 'mia_edustack', schema: 'mia_academy', url: 'https://edustack-app-ten.vercel.app' },
     { name: 'Bicicletas-Puertanueva', slug: 'com_bicicletas', schema: 'com_bicicletas', url: 'https://bicicletas-puertanueva.vercel.app' },
