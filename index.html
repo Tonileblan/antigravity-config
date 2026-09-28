@@ -1786,25 +1786,24 @@
   function loadSavedState() {
     try {
       const savedV7 = localStorage.getItem('tonigravity_state_v7');
-      const savedLegacy = localStorage.getItem('tonigravity_state_v6') || localStorage.getItem('tonigravity_state_v5');
       if (savedV7) {
         const parsed = JSON.parse(savedV7);
-        if (parsed.directives) appState.directives = parsed.directives;
+        // Ensure directives are loaded with full markdown
+        if (parsed.directives && Array.isArray(parsed.directives) && parsed.directives.length >= 6 && parsed.directives[0].markdownContent && parsed.directives[0].markdownContent.length > 50) {
+          appState.directives = parsed.directives;
+        } else {
+          appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
+        }
         if (parsed.rules) appState.rules = parsed.rules;
         if (parsed.memory) appState.memory = parsed.memory;
         if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
         if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
-      } else if (savedLegacy) {
-        const parsed = JSON.parse(savedLegacy);
-        // On upgrade from legacy, retain user's saved projects, rules, and memory while loading complete directives
-        if (parsed.rules) appState.rules = parsed.rules;
-        if (parsed.memory) appState.memory = parsed.memory;
-        if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
-        if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
-        saveAllChanges();
+      } else {
+        appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
       }
     } catch (e) {
       console.error(e);
+      appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
     }
   }
 
@@ -1830,29 +1829,81 @@
     }).join('');
   }
 
-  function renderActiveDirectiveDetails() {
-    const dir = appState.directives.find(d => d.id === appState.activeDirectiveId) || appState.directives[0];
-    document.getElementById('activeDirIcon').innerText = dir.icon;
-    document.getElementById('activeDirTitle').innerText = dir.title;
-    document.getElementById('activeDirSummary').innerText = dir.summary;
-    if (document.getElementById('activeDirFilename')) {
-      document.getElementById('activeDirFilename').innerText = dir.filename || `0${dir.number}_Directriz.md`;
+  
+  // Safe Markdown Renderer
+  function renderMarkdownSafely(text) {
+    if (!text) return '<p class="text-slate-400 italic">Sin contenido disponible.</p>';
+    try {
+      let rawHtml = '';
+      if (typeof marked !== 'undefined') {
+        if (typeof marked.parse === 'function') {
+          rawHtml = marked.parse(text);
+        } else if (typeof marked === 'function') {
+          rawHtml = marked(text);
+        } else if (marked.marked && typeof marked.marked.parse === 'function') {
+          rawHtml = marked.marked.parse(text);
+        }
+      }
+      
+      if (!rawHtml) {
+        rawHtml = text
+          .replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold text-slate-900 border-b pb-2 mb-3 mt-4">$1</h1>')
+          .replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold text-blue-900 border-b pb-1 mb-2 mt-4">$1</h2>')
+          .replace(/^### (.*$)/gim, '<h3 class="text-base font-bold text-slate-800 mb-2 mt-3">$1</h3>')
+          .replace(/^\> (.*$)/gim, '<blockquote class="p-2 bg-blue-50 border-l-4 border-blue-500 text-blue-800 my-2">$1</blockquote>')
+          .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+          .replace(/\n/gim, '<br>');
+      }
+
+      if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+        return DOMPurify.sanitize(rawHtml);
+      }
+      return rawHtml;
+    } catch (e) {
+      console.error('Error rendering markdown:', e);
+      return '<div class="p-4 bg-slate-100 rounded-xl font-mono text-xs whitespace-pre-wrap">' + text + '</div>';
     }
+  }
+
+  function renderActiveDirectiveDetails() {
+    if (!appState.directives || !appState.directives.length) {
+      appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
+    }
+    const dir = appState.directives.find(d => d.id === appState.activeDirectiveId) || appState.directives[0];
+    if (!dir) return;
+
+    appState.activeDirectiveId = dir.id;
+
+    const iconEl = document.getElementById('activeDirIcon');
+    const titleEl = document.getElementById('activeDirTitle');
+    const summaryEl = document.getElementById('activeDirSummary');
+    const filenameEl = document.getElementById('activeDirFilename');
+
+    if (iconEl) iconEl.innerText = dir.icon || '📜';
+    if (titleEl) titleEl.innerText = dir.title || 'Directriz Maestra';
+    if (summaryEl) summaryEl.innerText = dir.summary || '';
+    if (filenameEl) filenameEl.innerText = dir.filename || `0${dir.number || 0}_Directriz.md`;
 
     const rulesList = document.getElementById('activeDirRulesList');
-    rulesList.innerHTML = dir.rules.map(r => `
-      <span class="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 rounded-md text-[11px] font-medium flex items-center gap-1.5">
-        <span class="text-emerald-600 font-bold">✓</span>
-        <span>${r}</span>
-      </span>
-    `).join('');
+    if (rulesList) {
+      const rules = dir.rules || [];
+      rulesList.innerHTML = rules.map(r => `
+        <span class="px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-700 rounded-md text-[11px] font-medium flex items-center gap-1.5">
+          <span class="text-emerald-600 font-bold">✓</span>
+          <span>${r}</span>
+        </span>
+      `).join('');
+    }
 
     const previewContainer = document.getElementById('directivePreviewContainer');
-    const sanitizedHTML = DOMPurify.sanitize(marked.parse(dir.markdownContent));
-    previewContainer.innerHTML = sanitizedHTML;
+    if (previewContainer) {
+      previewContainer.innerHTML = renderMarkdownSafely(dir.markdownContent);
+    }
+    
     const textarea = document.getElementById('directiveMarkdownTextarea');
     if (textarea) {
-      textarea.value = dir.markdownContent;
+      textarea.value = dir.markdownContent || '';
       onDirectiveTextareaInput();
     }
   }
@@ -2025,6 +2076,10 @@
       }
     });
 
+    if (tabId === 'directricesView') {
+      renderDirectivesList();
+      renderActiveDirectiveDetails();
+    }
     if (tabId === 'briefingView') updateBriefingCompiledPrompt();
     if (tabId === 'stitchView') updateStitchDesign();
   }
@@ -2121,11 +2176,12 @@
   }
 
   function copyActiveDirectivePrompt() {
-    const dir = appState.directives.find(d => d.id === appState.activeDirectiveId);
-    const prompt = `Aplica la ${dir.title}: Asegura el estricto cumplimiento de sus reglas en este desarrollo.`;
+    const dir = appState.directives.find(d => d.id === appState.activeDirectiveId) || appState.directives[0];
+    if (!dir) return;
+    const prompt = `Aplica rigurosamente la ${dir.title} (${dir.filename || 'Directriz Maestra'}):\n\n${dir.markdownContent}`;
     navigator.clipboard.writeText(prompt);
     triggerConfetti();
-    showToast('✓ Prompt copiado.');
+    showToast(`⚡ Prompt de inyección de "${dir.shortTitle || dir.title}" copiado.`);
   }
 
   function copyMasterInitPrompt() {
