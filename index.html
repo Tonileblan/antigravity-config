@@ -567,6 +567,9 @@
       gap: 0.4rem;
       width: 100%;
     }
+    .custom-inline-editor.hidden {
+      display: none !important;
+    }
     .custom-inline-editor input {
       flex: 1;
       height: 32px;
@@ -3105,14 +3108,17 @@ DOCUMENTACIÓN Y RECURSOS:
       wrapper.innerHTML = `
         <input type="text" id="${selectId}-custom-input" class="form-input" placeholder="${placeholder || 'Escribe tu opción personalizada...'}" style="flex: 1; height: 32px;">
         <button type="button" class="btn-inline-save" onclick="saveInlineCustomOption('${selectId}')" title="Guardar opción en el desplegable">✓ Listo</button>
-        <button type="button" class="btn-inline-cancel" onclick="cancelInlineCustomOption('${selectId}')" title="Cancelar y volver">✕</button>
+        <button type="button" class="btn-inline-cancel" onclick="cancelInlineCustomOption('${selectId}')" title="Cancelar y cerrar campo">✕</button>
       `;
       select.parentNode.insertBefore(wrapper, select);
       editor = wrapper;
     }
 
+    select.style.display = 'none';
     select.classList.add('hidden');
+    editor.style.display = 'flex';
     editor.classList.remove('hidden');
+
     const input = document.getElementById(selectId + '-custom-input');
     if (input) {
       input.value = '';
@@ -3159,7 +3165,11 @@ DOCUMENTACIÓN Y RECURSOS:
       select.value = previousSelectValues[selectId] || select.options[0]?.value || '';
     }
 
-    if (editor) editor.classList.add('hidden');
+    if (editor) {
+      editor.style.display = 'none';
+      editor.classList.add('hidden');
+    }
+    select.style.display = '';
     select.classList.remove('hidden');
 
     if (selectId === 'b-niche') {
@@ -3184,9 +3194,21 @@ DOCUMENTACIÓN Y RECURSOS:
       select.selectedIndex = 0;
     }
 
-    if (editor) editor.classList.add('hidden');
+    if (editor) {
+      editor.style.display = 'none';
+      editor.classList.add('hidden');
+    }
+    select.style.display = '';
     select.classList.remove('hidden');
+
+    if (selectId === 'b-niche') {
+      handleNicheChangeInternal();
+    } else if (selectId === 'b-ai') {
+      handleAIChangeInternal();
+    }
+
     updateBriefingCompiledPrompt();
+    updateStitchDesign();
   }
 
   function handleNicheChangeInternal() {
