@@ -637,6 +637,10 @@
             <span>🎨 Stitch UI Studio</span>
             <span class="nav-badge">IA UI</span>
           </button>
+          <button id="tabBtn_guides" onclick="switchTab('guidesView')" class="nav-btn">
+            <span>📚 Guías VibeStack</span>
+            <span class="nav-badge">28 APPS</span>
+          </button>
         </div>
       </div>
 
@@ -964,6 +968,87 @@
               <button onclick="copyStitchPrompt()" class="btn-action btn-primary" style="min-height: 28px;">📋 Copiar Prompt Stitch</button>
             </div>
             <textarea id="stitchPromptOutput" readonly style="flex: 1; min-height: 400px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; padding: 1.0rem; background: #0F172A; color: #A7F3D0; border: 1px solid var(--border-color); border-radius: 6px; resize: none;"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+            <!-- =======================================================================
+           TAB 3.5: GUÍAS Y APPS VIBESTACK (28 Clases & Playbooks Integrados)
+           ======================================================================= -->
+      <div id="guidesView" class="tab-content hidden">
+        <div class="directives-view-grid" style="grid-template-columns: 320px 1fr;">
+          
+          <!-- Guides List Subcolumn -->
+          <div class="directives-list-col">
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.4rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="type-xs" style="color: var(--text-muted);">28 Guías &amp; Apps VibeStack:</span>
+                <span id="guidesCountBadge" class="nav-badge">28 TOTAL</span>
+              </div>
+              <input type="text" id="guidesSearchInput" oninput="renderGuidesList()" placeholder="Buscar clase, stack, guía..." class="form-input" style="font-size: 1.15rem; padding: 0.4rem 0.8rem;">
+              <div style="display: flex; gap: 0.4rem; overflow-x: auto; padding-bottom: 0.2rem;">
+                <button type="button" onclick="setGuidesCategoryFilter('all')" id="guideCat_all" class="btn-action btn-blue" style="min-height: 22px; padding: 0.1rem 0.6rem; font-size: 1.05rem;">Todos</button>
+                <button type="button" onclick="setGuidesCategoryFilter('skool')" id="guideCat_skool" class="btn-action btn-secondary" style="min-height: 22px; padding: 0.1rem 0.6rem; font-size: 1.05rem;">🎓 Skool (19)</button>
+                <button type="button" onclick="setGuidesCategoryFilter('skills')" id="guideCat_skills" class="btn-action btn-secondary" style="min-height: 22px; padding: 0.1rem 0.6rem; font-size: 1.05rem;">⚡ Skills (5)</button>
+                <button type="button" onclick="setGuidesCategoryFilter('flutter')" id="guideCat_flutter" class="btn-action btn-secondary" style="min-height: 22px; padding: 0.1rem 0.6rem; font-size: 1.05rem;">📱 Flutter (4)</button>
+              </div>
+            </div>
+            <div id="guidesListContainer" style="display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto;">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Guide Live Reader & Actions Subcolumn -->
+          <div class="directives-viewer-col">
+            <div class="viewer-header">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                  <span id="activeGuideBadge" class="category-badge" style="background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; font-size: 1.05rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 700;">🎓 Skool</span>
+                  <h2 id="activeGuideTitle" class="type-lg" style="margin: 0;">Forja Consultor: Captador de Leads</h2>
+                  <span id="activeGuideCode" class="font-mono type-xs" style="background: var(--bg-subtle); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-light);">CLASE 01</span>
+                </div>
+                <div id="activeGuideStackTags" class="stack-tags" style="display: flex; gap: 0.4rem; margin-top: 0.4rem;">
+                  <!-- Injected tags -->
+                </div>
+              </div>
+
+              <!-- Top Actions -->
+              <div style="display: flex; gap: 0.6rem; align-items: center;">
+                <button onclick="createProjectFromActiveGuide()" class="btn-action btn-blue" title="Crear nuevo proyecto en Briefing preconfigurado con esta guía">
+                  <span>✨</span> Crear Proyecto desde Guía
+                </button>
+                <a id="activeGuideExternalLink" href="https://vibestack-studio.vercel.app" target="_blank" rel="noopener" class="btn-action btn-secondary" style="text-decoration: none;" title="Abrir en VibeStack Studio">
+                  <span>🌐</span> VibeStack ↗
+                </a>
+              </div>
+            </div>
+
+            <!-- Guide Details & Embedded Live Frame -->
+            <div class="viewer-body" style="padding: 0; display: flex; flex-direction: column; background: #F8FAFC;">
+              <div id="activeGuideSummaryBanner" style="padding: 1.0rem 1.6rem; background: #FFFFFF; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: flex-start; gap: 1.2rem;">
+                <div style="flex: 1;">
+                  <p id="activeGuideDesc" class="type-sm" style="color: var(--text-secondary); margin-bottom: 0.4rem;"></p>
+                  <div id="activeGuideBullets" class="type-xs" style="color: var(--text-muted);"></div>
+                </div>
+                <div id="activeGuideVideoInfo" style="background: var(--bg-subtle); border: 1px solid var(--border-light); padding: 0.6rem 0.8rem; border-radius: 6px; font-family: 'JetBrains Mono'; font-size: 1.1rem; color: var(--text-secondary); white-space: nowrap;"></div>
+              </div>
+              
+              <!-- Embedded Live Interactive Guide Iframe -->
+              <div style="flex: 1; min-height: 0; position: relative;">
+                <iframe id="activeGuideIframe" src="https://vibestack-studio.vercel.app/forja-consultor-explicacion.html" style="width: 100%; height: 100%; border: none; background: #FFFFFF;" title="Visor de Guía"></iframe>
+              </div>
+            </div>
+
+            <!-- Viewer Footer Actions -->
+            <div class="viewer-footer">
+              <div style="display: flex; gap: 0.6rem;">
+                <button onclick="copyActiveGuidePrompt()" class="btn-action btn-secondary">📋 Copiar Prompt de la Guía</button>
+                <a id="activeGuideMdLink" href="#" target="_blank" class="btn-action btn-secondary" style="text-decoration: none;">📄 Ver Markdown</a>
+              </div>
+              <button onclick="createProjectFromActiveGuide()" class="btn-action btn-blue">✨ Inicializar en Briefing →</button>
+            </div>
+
           </div>
 
         </div>
@@ -1333,7 +1418,514 @@
   }
 ];
 
-      const DEFAULT_RULES = [
+      const DEFAULT_VIBE_GUIDES = [
+    {
+      id: "CLASE-01",
+      code: "CLASE 01",
+      title: "Forja Consultor: Lead Magnets IA",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Pipeline de captación de leads de alto valor que convierte visitantes en clientes potenciales calificados mediante diagnóstico dinámico.",
+      bullets: [
+        "Diagnóstico dinámico en 4 etapas automatizadas",
+        "Generación interactiva de propuestas comerciales",
+        "Integración CRM directa con captura de datos"
+      ],
+      stack: ["HTML5", "JavaScript", "CRM", "Vibe Coding"],
+      video: "01 Creando nuestro consultor.mp4",
+      html: "forja-consultor-explicacion.html",
+      md: "Forja-Consultor-Lead-Magnets-IA.md"
+    },
+    {
+      id: "CLASE-02",
+      code: "CLASE 02",
+      title: "Reel Engine: Guiones Virales",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Sistema de prompts encadenados para producir guiones de alta retención para Instagram Reels y TikTok estructurados por arquetipos.",
+      bullets: [
+        "Estructura probada: Gancho / Retención / Llamada a la Acción (CTA)",
+        "Adaptación por nicho y arquetipos de audiencia",
+        "Pipeline de generación acelerada de guiones en lote"
+      ],
+      stack: ["Prompt Chaining", "IA Generativa", "TikTok", "Reels"],
+      video: "02 Reel Engine.mp4",
+      html: "forja-reel-engine-explicacion.html",
+      md: "Reel-Engine-Sistema-Reels-IA.md"
+    },
+    {
+      id: "CLASE-03",
+      code: "CLASE 03",
+      title: "Forja Reel Editor: Edición con Remotion",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Entorno de producción de vídeo programático con React y Remotion para subtítulos y transiciones dinámicas.",
+      bullets: [
+        "Renderizado programático de composiciones de vídeo a 60fps",
+        "Subtitulado dinámico sincronizado palabra por palabra",
+        "Integración con Web Audio API y transiciones fluidas"
+      ],
+      stack: ["Remotion", "React", "TypeScript", "Web Audio"],
+      video: "03 Como hacer tu propio editor de video.mp4",
+      html: "reel-edita-explicacion.html",
+      md: "Forja-Reel-Editor-Videos-IA.md"
+    },
+    {
+      id: "CLASE-04",
+      code: "CLASE 04",
+      title: "Claude + Obsidian: Segundo Cerebro",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Conexión de Claude con tus bóvedas de Obsidian para clasificar, conectar y sintetizar notas de conocimiento automáticamente.",
+      bullets: [
+        "Metodología Zettelkasten y generación de enlaces bidireccionales",
+        "Extracción automática de resúmenes ejecutivos e ideas clave",
+        "Indexación semántica de base de conocimiento personal"
+      ],
+      stack: ["Obsidian", "Claude", "Markdown", "Zettelkasten"],
+      video: "04 Como conectar con obsidian.mp4",
+      html: "claude-obsidian-segundo-cerebro.html",
+      md: "Claude-Obsidian-Segundo-Cerebro-Guia.md"
+    },
+    {
+      id: "CLASE-05",
+      code: "CLASE 05",
+      title: "Gemma 4: IA Local con Ollama",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Ejecución de modelos abiertos en tu propia máquina con Ollama para dotar de inteligencia a tus agentes sin coste por token ni fugas de datos.",
+      bullets: [
+        "Privacidad total y 0€ de coste operativo por token",
+        "Integración en flujos de trabajo locales y CLI",
+        "Configuración de parámetros de temperatura y contexto"
+      ],
+      stack: ["Ollama", "Gemma 4", "Local LLM", "Privacidad"],
+      video: "05 Como tener tu propio modelo de IA.mp4",
+      html: "gemma4-guia-completa.html",
+      md: "Gemma4-IA-Local-Para-Tus-Agentes.md"
+    },
+    {
+      id: "CLASE-06",
+      code: "CLASE 06",
+      title: "OpenCode Swarm de Agentes",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Orquestación de enjambres de agentes de desarrollo en consola que resuelven tareas complejas en paralelo.",
+      bullets: [
+        "Descomposición autónoma de tareas y épicas",
+        "Consolidación automática de ramas de Git y testing",
+        "Ejecución multi-agente en terminal sin bloqueos"
+      ],
+      stack: ["OpenCode", "CLI", "Multi-Agent", "Git"],
+      video: "06 Como usar los agentes de opencode.mp4",
+      html: "OpenCode-Swarm-Avanzado-Guia-Completa.html",
+      md: "OpenCode-Swarm-Avanzado-Guia-Completa.md"
+    },
+    {
+      id: "CLASE-14",
+      code: "CLASE 14",
+      title: "De n8n a App Web: Ticketing Supabase",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Migración de automatizaciones de n8n a una plataforma web moderna con base de datos relacional Supabase y control de acceso RLS.",
+      bullets: [
+        "Esquema relacional PostgreSQL con Row-Level Security",
+        "Sincronización bidireccional en tiempo real vía Webhooks",
+        "Panel web de gestión de incidencias y tickets"
+      ],
+      stack: ["Supabase", "PostgreSQL", "n8n", "Webhooks", "RLS"],
+      video: "14 De n8n a una app web.mp4",
+      html: "De-N8N-a-App-Web-Ticketing-Supabase.html",
+      md: "De-N8N-a-App-Web-Ticketing-Supabase.md"
+    },
+    {
+      id: "CLASE-16",
+      code: "CLASE 16",
+      title: "Antigravity PRO: Estructura de Agentes",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Arquitectura de agentes con reglas modulares, skills especializados y control de contexto determinista en Antigravity IDE.",
+      bullets: [
+        "Estructuración de carpetas skills/ y rules/ de alta precisión",
+        "Integración de servidores MCP y subagentes dedicados",
+        "Eliminación de degradación de contexto y control de tokens"
+      ],
+      stack: ["Antigravity", "MCP", "Skills", "Rules", "Clean Arch"],
+      video: "16 Estructurando tus agentes.mp4",
+      html: "Antigravity-PRO-Agentes-Bien-Estructurados.html",
+      md: "Antigravity-PRO-Agentes-Bien-Estructurados.md"
+    },
+    {
+      id: "CLASE-17",
+      code: "CLASE 17",
+      title: "Portfolio de Activos en Tiempo Real",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Dashboard financiero interactivo que monitoriza criptomonedas, acciones y ETFs con cotizaciones en vivo y gráficos reactivos.",
+      bullets: [
+        "Conexión con APIs bursátiles y de exchanges en vivo",
+        "Cálculo de balances, rendimiento y métricas de riesgo",
+        "Renderizado de componentes gráficos de alta respuesta"
+      ],
+      stack: ["React", "APIs Financieras", "Chart.js", "Criptos"],
+      video: "17 Panel de control criptos y acciones.mp4",
+      html: "Portfolio-Activos-Tiempo-Real-Dashboard.html",
+      md: "Portfolio-Activos-Tiempo-Real-Dashboard.md"
+    },
+    {
+      id: "CLASE-19",
+      code: "CLASE 19",
+      title: "FYZON Recruitment: Filtrado de Talento",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Sistema de selección y filtrado automático combinando Google AI Studio con n8n y simulador de lógica.",
+      bullets: [
+        "Evaluación tripartita automática de candidatos",
+        "Test situacional n8n con grabación de vídeo",
+        "App ID: 15JQf9xwEKqhqY_iaiIL0g1Fxgxq-0qj2"
+      ],
+      stack: ["Google AI Studio", "n8n", "Evaluación IA", "Sheets"],
+      video: "19 El sistema definitivo para filtrar talento.mp4",
+      html: "FYZON-Recruitment-n8n-Specialist.html",
+      md: "FYZON-Recruitment-n8n-Specialist.md"
+    },
+    {
+      id: "CLASE-19B",
+      code: "CLASE 19B",
+      title: "Sistema Definitivo de Filtrado (Sheets + n8n)",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Pipeline integral de captación y evaluación técnica de candidatos con Google Sheets, n8n y scoring automático.",
+      bullets: [
+        "Registro de respuestas en tiempo real en Google Sheets",
+        "Disparo de correos personalizados según puntuación técnica",
+        "Automatización completa de selección sin intervención manual"
+      ],
+      stack: ["Google Sheets", "n8n", "Scoring", "Automatización"],
+      video: "19 El sistema definitivo para filtrar talento.mp4",
+      html: "Sistema-Definitivo-Filtrar-Talento-AI-Studio-n8n.html",
+      md: "Sistema-Definitivo-Filtrar-Talento-AI-Studio-n8n.md"
+    },
+    {
+      id: "CLASE-20",
+      code: "CLASE 20",
+      title: "Consultor Web: Chat + Voz + Informe PDF",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Consultoría express multimodal en web con generación automática de informes estratégicos descargables en PDF.",
+      bullets: [
+        "Chat de texto y voz bidireccional de latencia ultra baja",
+        "Generación automática en cliente de informe PDF estructurado",
+        "Captura de leads y sincronización con Wixyn CRM"
+      ],
+      stack: ["Google AI Studio", "Voz Multimodal", "PDF Generation", "Wixyn"],
+      video: "20 Consultor Web Chat + Voz + PDF.mp4",
+      html: "Consultor-Web-Chat-Voz-Informe-PDF.html",
+      md: "Consultor-Web-Chat-Voz-Informe-PDF.md"
+    },
+    {
+      id: "CLASE-21",
+      code: "CLASE 21",
+      title: "Camarero Virtual & Cocina en Tiempo Real",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "App para restaurantes con pedidos QR, asistente de voz interactivo y panel KDS en vivo para cocina.",
+      bullets: [
+        "Pedidos conversacionales asistidos por Gemini Live",
+        "Panel KDS interactivo con control de comandas en cocina",
+        "App ID: 1OEt1XjSZeprvwbFIDtpcB4XCTZwL_xgZ"
+      ],
+      stack: ["Gemini Live", "KDS", "QR Code", "Restauración"],
+      video: "21 Camarero virtual y cocina tiempo real.mp4",
+      html: "Camarero-Virtual-Cocina-Tiempo-Real.html",
+      md: "Camarero-Virtual-Cocina-Tiempo-Real.md"
+    },
+    {
+      id: "CLASE-22",
+      code: "CLASE 22",
+      title: "Aplicación de Visagismo con Claude Code",
+      category: "skool",
+      categoryLabel: "🎓 Skool",
+      badgeClass: "badge-skool",
+      desc: "Construcción integral de un asesor facial con reserva, cuestionario, subida guiada de fotos e informe morfopsicológico.",
+      bullets: [
+        "Flujo completo: Reserva, Cuestionario, Análisis de Fotos, Informe",
+        "Plan de próximas visitas y recomendaciones personalizadas",
+        "Estructura modular de proyecto construida con Claude Code"
+      ],
+      stack: ["Claude Code", "Visagismo", "Morfopsicología", "React"],
+      video: "22 Asi construi una aplicacion de visagismo.mp4",
+      html: "Aplicacion-Visagismo-IA-Claude-Code.html",
+      md: "Aplicacion-Visagismo-IA-Claude-Code.md"
+    },
+    {
+      id: "GUIA-01",
+      code: "GUÍA 01",
+      title: "De Idea Conceptual a App Flutter",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Metodología paso a paso para convertir ideas en aplicaciones nativas multiplataforma (iOS y Android) con Clean Architecture.",
+      bullets: [
+        "Arquitectura de 3 capas: Domain, Data y Presentation",
+        "Gestión de estado reactivo con Riverpod & Supabase Auth",
+        "Integración continua y despliegue rápido con Claude Code"
+      ],
+      stack: ["Flutter", "Dart", "Riverpod", "Supabase", "Clean Arch"],
+      video: "—",
+      html: "Guia-Maestra-Idea-a-App-Flutter.html",
+      md: "Guia-Maestra-Idea-a-App-Flutter.md"
+    },
+    {
+      id: "GUIA-02",
+      code: "GUÍA 02",
+      title: "De Aplicación Web a App Flutter",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Estrategias y patrones para portar aplicaciones web existentes a código Flutter nativo reutilizando lógica de negocio.",
+      bullets: [
+        "Mapeo de componentes del DOM web a Widgets nativos Flutter",
+        "Persistencia offline y caché local con base de datos Hive",
+        "Notificaciones push nativas en segundo plano con FCM"
+      ],
+      stack: ["Flutter", "REST APIs", "WebView", "Push FCM", "Hive"],
+      video: "—",
+      html: "Guia-Maestra-Web-a-App-Flutter.html",
+      md: "Guia-Maestra-Web-a-App-Flutter.md"
+    },
+    {
+      id: "GUIA-03",
+      code: "GUÍA 03",
+      title: "De eCommerce Web a App Flutter",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Guía exhaustiva para crear tiendas móviles con checkout nativo, pasarela Stripe y catálogo reactivo sincronizado.",
+      bullets: [
+        "Catálogo de productos con caché inteligente e imágenes lazy",
+        "Pasarelas de pago integradas: Apple Pay, Google Pay y Stripe",
+        "Analítica móvil y métricas de conversión en tiempo real"
+      ],
+      stack: ["Flutter", "Stripe", "GraphQL", "Isar DB", "eCommerce"],
+      video: "—",
+      html: "Guia-Maestra-Ecommerce-a-App-Flutter.html",
+      md: "Guia-Maestra-Ecommerce-a-App-Flutter.md"
+    },
+    {
+      id: "GUIA-04",
+      code: "GUÍA 04",
+      title: "Fábrica de Contenido: De Idea a Vídeo",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Pipeline end-to-end para crear guiones, locuciones con IA y renderizar vídeos virales en lote con Remotion.",
+      bullets: [
+        "Locución de voz natural con ElevenLabs y sincronización",
+        "Subtitulado automatizado dinámico por palabras",
+        "Renderizado en lote en formato vertical 9:16 (1080x1920)"
+      ],
+      stack: ["Remotion", "React", "ElevenLabs", "Batch Render"],
+      video: "—",
+      html: "Fabrica-de-Contenido-De-Idea-a-Video.html",
+      md: "Fabrica-de-Contenido-De-Idea-a-Video.md"
+    },
+    {
+      id: "GUIA-05",
+      code: "GUÍA 05",
+      title: "Documentación Maestra de Remotion",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Manual de referencia para programar animaciones, composiciones y renderizar vídeo programático con React.",
+      bullets: [
+        "Uso de hooks clave: useCurrentFrame, interpolate, spring",
+        "Validación de props dinámicas de composición con Zod",
+        "Despliegue de renderizado serverless en AWS Lambda y Docker"
+      ],
+      stack: ["Remotion", "React", "Zod", "Web Audio API", "Docker"],
+      video: "—",
+      html: "Remotion-Docs-Guia-Completa.html",
+      md: "Remotion-Docs-Guia-Completa.md"
+    },
+    {
+      id: "GUIA-06",
+      code: "GUÍA 06",
+      title: "Arquitecto de Landing Pages",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Prompt estructural para programar páginas de aterrizaje de alta conversión con copywriting persuasivo y componentes UX.",
+      bullets: [
+        "Marco persuasivo PAS (Problema, Agitación, Solución)",
+        "Jerarquía visual, prueba social y elementos de urgencia ética",
+        "Componentes esenciales: FAQ, Pricing, Hero y Comparativas"
+      ],
+      stack: ["Copywriting PAS", "HTML5", "CSS3", "UX Design"],
+      video: "—",
+      html: "Arquitecto-de-Landing-Pages-Prompt-Maestro.html",
+      md: "Arquitecto-de-Landing-Pages-Prompt-Maestro.md"
+    },
+    {
+      id: "GUIA-07",
+      code: "GUÍA 07",
+      title: "YFinance: Datos Financieros con Python",
+      category: "master",
+      categoryLabel: "📘 Guía",
+      badgeClass: "badge-master",
+      desc: "Manual para descargar históricos, balances, opciones e indicadores técnicos con la biblioteca yfinance en Python.",
+      bullets: [
+        "Descarga de cotizaciones, ratios bursátiles y estados contables",
+        "Análisis técnico con pandas y visualización de gráficos",
+        "Integración en dashboards web y bots de alertas"
+      ],
+      stack: ["Python", "yfinance", "pandas", "Matplotlib", "Finanzas"],
+      video: "—",
+      html: "YFinance-Guia-Maestra-Datos-Financieros.html",
+      md: "YFinance-Guia-Maestra-Datos-Financieros.md"
+    },
+    {
+      id: "PROMPT-01",
+      code: "PROMPT 01",
+      title: "Galería & Showcase Remotion",
+      category: "prompts",
+      categoryLabel: "⚡ Prompts",
+      badgeClass: "badge-prompts",
+      desc: "Colección de prompts listos para usar que generan composiciones de vídeo, barras y tipografías cinéticas en React.",
+      bullets: [
+        "Efectos visuales: Glow, Kinetic Typography y Countdowns",
+        "Barras de progreso animadas y gráficos temporales",
+        "Plantillas optimizadas para anuncios y reels dinámicos"
+      ],
+      stack: ["Remotion", "Prompts", "Kinetic Typography", "Showcase"],
+      video: "—",
+      html: "Remotion-Prompts-Showcase-Galeria.html",
+      md: "Remotion-Prompts-Showcase-Galeria.md"
+    },
+    {
+      id: "PROMPT-02",
+      code: "PROMPT 02",
+      title: "Claude Code: 156+ App Templates",
+      category: "prompts",
+      categoryLabel: "⚡ Prompts",
+      badgeClass: "badge-prompts",
+      desc: "Buscador y directorio de 156 plantillas de aplicaciones listas para inicializar con un comando en Claude Code.",
+      bullets: [
+        "Catálogo: Web Apps, SaaS, Dashboards, Landing Pages y Mobile",
+        "Prompts de scaffolding listos para copiar con un clic",
+        "Configuración predeterminada para Vite, Supabase y Docker"
+      ],
+      stack: ["Claude Code", "156 Templates", "Vite", "Next.js"],
+      video: "—",
+      html: "Claude-Code-Skills-App-Templates.html",
+      md: "Claude-Code-Skills-App-Templates.md"
+    },
+    {
+      id: "PROMPT-03",
+      code: "PROMPT 03",
+      title: "Skills Oficiales de Anthropic (19 Skills)",
+      category: "prompts",
+      categoryLabel: "⚡ Prompts",
+      badgeClass: "badge-prompts",
+      desc: "Guía completa de las 19 habilidades oficiales de Anthropic para Claude con especificación de herramientas MCP.",
+      bullets: [
+        "Definición de parámetros, esquemas JSON y ejemplos de llamada",
+        "Integración directa en Antigravity y Claude Code",
+        "Herramientas para análisis de datos, visualización y testing"
+      ],
+      stack: ["Claude MCP", "Anthropic", "JSON Tool Calling", "MCP"],
+      video: "—",
+      html: "Anthropic-Official-Skills-Catalogo.html",
+      md: "Anthropic-Official-Skills-Catalogo.md"
+    },
+    {
+      id: "PROMPT-04",
+      code: "PROMPT 04",
+      title: "Agentic Awesome Skills (2,474+ Skills)",
+      category: "prompts",
+      categoryLabel: "⚡ Prompts",
+      badgeClass: "badge-prompts",
+      desc: "El repositorio más completo con más de 2,474 habilidades y conectores universales para agentes IA bajo el protocolo MCP.",
+      bullets: [
+        "Conectores con APIs externas, bases de datos y herramientas web",
+        "Compatibilidad con Claude, OpenAI y Google Gemini",
+        "Auto-descubrimiento dinámico de herramientas contextuales"
+      ],
+      stack: ["MCP Protocol", "2474 Skills", "Universal Connectors"],
+      video: "—",
+      html: "Agentic-Awesome-Skills-Guia-Completa.html",
+      md: "Agentic-Awesome-Skills-Guia-Completa.md"
+    },
+    {
+      id: "ARQ-01",
+      code: "ARQ 01",
+      title: "Ecosistema IA: El Cerebro Digital",
+      category: "architecture",
+      categoryLabel: "🏛️ Arquitectura",
+      badgeClass: "badge-arch",
+      desc: "Blueprint del sistema de memoria centralizada que interconecta todos tus proyectos, agentes y bases de datos.",
+      bullets: [
+        "Capas desacopladas: Ingesta, Procesamiento y Entrega",
+        "Vector Stores en Supabase y Búsqueda Semántica Híbrida RAG",
+        "Sincronización bidireccional entre Obsidian, Supabase y Claude"
+      ],
+      stack: ["Obsidian", "RAG", "Claude", "Supabase", "Cerebro Digital"],
+      video: "—",
+      html: "Arquitectura-Ecosistema-IA-El-Cerebro-Digital.html",
+      md: "Arquitectura-Ecosistema-IA-El-Cerebro-Digital.md"
+    },
+    {
+      id: "ARQ-02",
+      code: "ARQ 02",
+      title: "Orquestación con Antigravity & Stitch",
+      category: "architecture",
+      categoryLabel: "🏛️ Arquitectura",
+      badgeClass: "badge-arch",
+      desc: "Flujo de trabajo para prototipar interfaces visualmente con Google Stitch e integrarlas en Antigravity IDE.",
+      bullets: [
+        "Generación visual con Gemini 2.5 Flash y Project Nemo",
+        "Importación directa a componentes React y Tailwind CSS",
+        "Sincronización en caliente entre diseño y código fuente"
+      ],
+      stack: ["Google Stitch", "Antigravity", "Gemini 2.5", "React UI"],
+      video: "—",
+      html: "Guia-Maestra-Orquestacion-Web-Antigravity-Stitch.html",
+      md: "Guia-Maestra-Orquestacion-Web-Antigravity-Stitch.md"
+    },
+    {
+      id: "ARQ-03",
+      code: "ARQ 03",
+      title: "Pencil: Frontend en Canvas con IA",
+      category: "architecture",
+      categoryLabel: "🏛️ Arquitectura",
+      badgeClass: "badge-arch",
+      desc: "Prototipado visual en un lienzo infinito que se convierte automáticamente en código frontend React y Tailwind.",
+      bullets: [
+        "Manipulación de archivos nativos .pen en canvas infinito",
+        "Exportación a código React y Tailwind CSS estructurado",
+        "Integración con protocolo MCP en Antigravity para edición visual"
+      ],
+      stack: ["Pencil dev", ".pen Canvas", "React", "MCP Tool"],
+      video: "—",
+      html: "Pencil-Frontend-Automatico-IA-Guia-Completa.html",
+      md: "Pencil-Frontend-Automatico-IA-Guia-Completa.md"
+    }
+  ];
+
+  const DEFAULT_RULES = [
   {
     "id": "rule_sop_clean_sdd",
     "filename": "00-sop-desarrollo-app-clean-sdd.md",
@@ -1506,6 +2098,8 @@
     memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
     activeDirectiveId: 'dir_supabase',
     activeRuleId: 'rule_sop_clean_sdd',
+    activeGuideId: 'CLASE-01',
+    guidesCategoryFilter: 'all',
     ruleViewMode: 'preview',
     directiveViewMode: 'preview',
     stitchDesign: {
@@ -1555,6 +2149,183 @@
   }
 
   // Render Directives List
+  
+  // ============================================================================
+  // VIBESTACK GUIDES & PLAYBOOKS (28 APPS & CLASSES INTEGRATED)
+  // ============================================================================
+  function setGuidesCategoryFilter(cat) {
+    appState.guidesCategoryFilter = cat;
+    ['all', 'skool', 'skills', 'flutter'].forEach(c => {
+      const btn = document.getElementById(`guideCat_${c}`);
+      if (btn) {
+        if (c === cat) {
+          btn.className = 'btn-action btn-blue';
+        } else {
+          btn.className = 'btn-action btn-secondary';
+        }
+      }
+    });
+    renderGuidesList();
+  }
+
+  function renderGuidesList() {
+    const container = document.getElementById('guidesListContainer');
+    const search = document.getElementById('guidesSearchInput')?.value.toLowerCase().trim() || '';
+    if (!container) return;
+
+    const guides = DEFAULT_VIBE_GUIDES || [];
+    const cat = appState.guidesCategoryFilter || 'all';
+
+    const filtered = guides.filter(g => {
+      // Category filter
+      if (cat !== 'all') {
+        if (cat === 'skool' && g.category !== 'skool') return false;
+        if (cat === 'skills' && g.category !== 'skills') return false;
+        if (cat === 'flutter' && g.category !== 'flutter') return false;
+      }
+      // Search filter
+      if (search) {
+        const text = (g.title + ' ' + g.code + ' ' + g.desc + ' ' + (g.stack || []).join(' ')).toLowerCase();
+        return text.includes(search);
+      }
+      return true;
+    });
+
+    const countEl = document.getElementById('guidesCountBadge');
+    if (countEl) countEl.innerText = `${filtered.length} DISPONIBLES`;
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div style="padding: 2.0rem; text-align: center; color: var(--text-muted); font-size: 1.2rem;">
+          🔍 No se encontraron guías con esa búsqueda.
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(g => {
+      const isActive = g.id === appState.activeGuideId;
+      return `
+        <div onclick="selectGuide('${g.id}')" class="dir-item-card ${isActive ? 'active' : ''}">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span class="category-badge ${g.badgeClass}" style="font-size: 0.95rem; padding: 0.1rem 0.5rem; border-radius: 4px; background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE;">${g.categoryLabel}</span>
+            <span class="font-mono type-xs" style="color: var(--text-muted); font-weight: 700;">${g.code}</span>
+          </div>
+          <h4 class="type-sm" style="font-weight: 700; color: ${isActive ? 'var(--color-primary-dark)' : 'var(--text-primary)'}; margin-bottom: 0.2rem;">${g.title}</h4>
+          <p class="type-xs" style="color: var(--text-secondary); line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${g.desc}</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem;">
+            ${(g.stack || []).slice(0, 3).map(s => `<span class="stack-tag" style="font-size: 0.95rem; padding: 0.1rem 0.4rem; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 3px; color: var(--text-muted);">${s}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function selectGuide(id) {
+    appState.activeGuideId = id;
+    renderGuidesList();
+    renderActiveGuideDetails();
+  }
+
+  function renderActiveGuideDetails() {
+    const guides = DEFAULT_VIBE_GUIDES || [];
+    const guide = guides.find(g => g.id === appState.activeGuideId) || guides[0];
+    if (!guide) return;
+
+    appState.activeGuideId = guide.id;
+
+    const titleEl = document.getElementById('activeGuideTitle');
+    const codeEl = document.getElementById('activeGuideCode');
+    const badgeEl = document.getElementById('activeGuideBadge');
+    const descEl = document.getElementById('activeGuideDesc');
+    const bulletsEl = document.getElementById('activeGuideBullets');
+    const videoEl = document.getElementById('activeGuideVideoInfo');
+    const stackEl = document.getElementById('activeGuideStackTags');
+    const iframeEl = document.getElementById('activeGuideIframe');
+    const extLink = document.getElementById('activeGuideExternalLink');
+    const mdLink = document.getElementById('activeGuideMdLink');
+
+    if (titleEl) titleEl.innerText = guide.title;
+    if (codeEl) codeEl.innerText = guide.code;
+    if (badgeEl) badgeEl.innerText = guide.categoryLabel;
+    if (descEl) descEl.innerText = guide.desc;
+
+    if (bulletsEl) {
+      bulletsEl.innerHTML = (guide.bullets || []).map(b => `<div style="margin-bottom: 0.2rem;">✓ ${b}</div>`).join('');
+    }
+
+    if (videoEl) {
+      if (guide.video && guide.video !== '—') {
+        videoEl.style.display = 'block';
+        videoEl.innerText = `📁 Descargas: ${guide.video}`;
+      } else {
+        videoEl.style.display = 'none';
+      }
+    }
+
+    if (stackEl) {
+      stackEl.innerHTML = (guide.stack || []).map(s => `<span class="stack-tag" style="background: #F1F5F9; border: 1px solid #E2E8F0; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 1.05rem; font-weight: 500;">${s}</span>`).join('');
+    }
+
+    const liveUrl = `https://vibestack-studio.vercel.app/${guide.html}`;
+    if (iframeEl) {
+      if (iframeEl.src !== liveUrl) {
+        iframeEl.src = liveUrl;
+      }
+    }
+
+    if (extLink) extLink.href = liveUrl;
+    if (mdLink) mdLink.href = `https://github.com/Tonileblan/vibestack-studio/blob/main/${guide.md}`;
+  }
+
+  function createProjectFromActiveGuide() {
+    const guides = DEFAULT_VIBE_GUIDES || [];
+    const guide = guides.find(g => g.id === appState.activeGuideId);
+    if (!guide) return;
+
+    createNewProjectDraft();
+    const cleanName = guide.title.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]+/g, '-').replace(/^-+|-+$/g, '');
+    const cleanSlug = 'mia_' + guide.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 20);
+
+    const nameInput = document.getElementById('b-name');
+    if (nameInput) nameInput.value = cleanName;
+    const slugInput = document.getElementById('b-slug');
+    if (slugInput) slugInput.value = cleanSlug;
+    const probInput = document.getElementById('b-problem');
+    if (probInput) probInput.value = guide.desc;
+
+    updateBriefingCompiledPrompt();
+    switchTab('briefingView');
+    showToast(`✨ Proyecto inicializado a partir de "${guide.title}".`);
+  }
+
+  function copyActiveGuidePrompt() {
+    const guides = DEFAULT_VIBE_GUIDES || [];
+    const guide = guides.find(g => g.id === appState.activeGuideId);
+    if (!guide) return;
+
+    const promptText = `================================================================================
+GUÍA / PLAYBOOK MAESTRO: ${guide.title} (${guide.code})
+Categoría: ${guide.categoryLabel}
+Stack: ${(guide.stack || []).join(', ')}
+================================================================================
+
+DESCRIPCIÓN:
+${guide.desc}
+
+CAPACIDADES / PUNTOS CLAVE:
+${(guide.bullets || []).map(b => `- ${b}`).join('\n')}
+
+DOCUMENTACIÓN Y RECURSOS:
+- Guía Web: https://vibestack-studio.vercel.app/${guide.html}
+- Documento Markdown: ${guide.md}
+`;
+
+    navigator.clipboard.writeText(promptText).then(() => {
+      showToast(`📋 Prompt de "${guide.title}" copiado al portapapeles.`);
+    });
+  }
+
   function renderDirectivesList() {
     const container = document.getElementById('directivesListContainer');
     container.innerHTML = appState.directives.map(dir => {
@@ -2087,7 +2858,7 @@
 
   // Tab Switcher
   function switchTab(tabId) {
-    const tabs = ['directricesView', 'briefingView', 'stitchView', 'rulesView', 'skillsView', 'sopView', 'syncView'];
+    const tabs = ['directricesView', 'briefingView', 'stitchView', 'guidesView', 'rulesView', 'skillsView', 'sopView', 'syncView'];
     tabs.forEach(t => {
       const content = document.getElementById(t);
       const btn = document.getElementById(`tabBtn_${t.replace('View', '')}`);
@@ -2129,6 +2900,10 @@
       }
       if (tabId === 'stitchView') {
         updateStitchDesign();
+      }
+      if (tabId === 'guidesView') {
+        renderGuidesList();
+        renderActiveGuideDetails();
       }
     } catch (e) {
       console.error('Error during tab switch:', e);
