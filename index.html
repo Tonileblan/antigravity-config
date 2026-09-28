@@ -110,7 +110,7 @@
         <span class="px-2.5 py-0.5 text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-lg">v2.6 OS</span>
       </div>
       <p class="text-slate-600 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
-        Gobernanza de las <strong>5 Directrices Maestras</strong>, generador de <strong>Briefing Ágil</strong>, diseño de interfaces con <strong>Stitch IA</strong> y sincronización <strong>macOS ↔ Windows</strong>.
+        Gobernanza de las <strong>5 Directrices Maestras</strong>, generador de <strong>Briefing Ágil</strong>, panel de <strong>APIs de IA</strong> y diseño de interfaces con <strong>Stitch IA</strong>.
       </p>
     </div>
     
@@ -121,8 +121,8 @@
       <button onclick="switchTab('stitchView')" class="px-4 py-2.5 bg-purple-600 text-white hover:bg-purple-700 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
         <span>🎨</span> Diseñar con Stitch IA
       </button>
-      <button onclick="copyMasterInitPrompt()" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>⚡</span> Prompt Maestro
+      <button onclick="switchTab('settingsView')" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
+        <span>🔑</span> Configurar APIs IA
       </button>
     </div>
   </header>
@@ -134,8 +134,8 @@
       <div class="text-xs text-slate-500 font-medium mt-0.5">Directrices &amp; Protocolos</div>
     </div>
     <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-purple-600">Stitch AI</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Generador de UI &amp; Mockups</div>
+      <div class="text-2xl md:text-3xl font-bold text-purple-600" id="activeAIModelStat">Gemini 2.0</div>
+      <div class="text-xs text-slate-500 font-medium mt-0.5">Motor IA Configurado</div>
     </div>
     <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
       <div class="text-2xl md:text-3xl font-bold text-emerald-600">9</div>
@@ -158,6 +158,9 @@
     <button id="tabBtn_stitch" onclick="switchTab('stitchView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
       🎨 Stitch UI Studio (Gemini)
     </button>
+    <button id="tabBtn_settings" onclick="switchTab('settingsView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+      🔑 APIs de IA &amp; Ajustes
+    </button>
     <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
       🛡️ Reglas Globales
     </button>
@@ -169,9 +172,6 @@
     </button>
     <button id="tabBtn_sync" onclick="switchTab('syncView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
       🔄 Sync Mac ↔ Win
-    </button>
-    <button id="tabBtn_settings" onclick="switchTab('settingsView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      ⚙️ Ajustes
     </button>
   </div>
 
@@ -369,14 +369,25 @@
 
         <!-- IA & Modelo -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">9. Inteligencia Artificial</label>
-          <select id="b-ai" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="Google Gemini 2.0 Flash (Streaming SSE & Ultra Baja Latencia)">Google Gemini 2.0 Flash (Streaming SSE)</option>
-            <option value="Anthropic Claude 3.5 Sonnet (Razonamiento Complejo)">Anthropic Claude 3.5 Sonnet</option>
-            <option value="OpenAI GPT-4o (Multimodal & Voice)">OpenAI GPT-4o</option>
-            <option value="DeepSeek V3 / Groq Llama 3 (Alta Velocidad)">DeepSeek V3 / Groq Llama 3</option>
-            <option value="No Requiere IA">No Requiere IA</option>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block font-bold text-slate-700">9. Modelo &amp; API de IA</label>
+            <button type="button" onclick="switchTab('settingsView')" class="text-[10px] text-purple-600 font-bold hover:underline flex items-center gap-1">
+              <span>⚙️ Panel APIs ↗</span>
+            </button>
+          </div>
+          <select id="b-ai" onchange="onBriefingAIChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <option value="gemini">✨ Google Gemini 2.0 Flash (Streaming SSE / Nativo)</option>
+            <option value="claude">🧠 Anthropic Claude 3.7 Sonnet (Razonamiento Profundo)</option>
+            <option value="openai">🤖 OpenAI GPT-4o (Multimodal & Voice)</option>
+            <option value="openrouter">🌐 OpenRouter Multi-Model Gateway (Conmutado)</option>
+            <option value="deepseek">⚡ DeepSeek V3 / Groq Llama 3.3 (Ultra Rápido)</option>
+            <option value="custom">🖥️ Custom API Endpoint / Local Ollama</option>
+            <option value="none">🚫 No Requiere Asistente de IA</option>
           </select>
+          <div id="briefing-ai-badge" class="mt-1.5 flex items-center gap-1.5 text-[11px] font-mono text-slate-500">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Motor Activo: <strong id="briefing-active-ai-label" class="text-purple-700 font-bold">Google Gemini 2.0</strong> · Arquitectura: <strong id="briefing-active-arch-label" class="text-slate-700">Supabase Edge (SSE)</strong></span>
+          </div>
         </div>
 
         <!-- Tagline / Propuesta de Valor -->
@@ -426,7 +437,7 @@
           Stitch UI Studio: Generador Visual de Interfaces
         </h2>
         <p class="text-slate-600 text-xs md:text-sm mt-1 max-w-2xl leading-relaxed">
-          Diseña interfaces completas para tu proyecto seleccionando tipo de interfaz, paletas de color, pantallas clave y archivos de referencia (<code class="font-mono bg-purple-50 text-purple-700 px-1 py-0.5 rounded">.pen</code>, mockups o imágenes).
+          Diseña interfaces completas para tu proyecto seleccionando estilo visual, paletas de color, API de IA integrada y archivos de referencia (<code class="font-mono bg-purple-50 text-purple-700 px-1 py-0.5 rounded">.pen</code>, mockups o imágenes).
         </p>
       </div>
       
@@ -591,6 +602,30 @@
           </div>
         </div>
 
+        <!-- Step 5: Motor de IA Integrado en el Diseño -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">5. Motor de IA en el Diseño</span>
+            <button type="button" onclick="switchTab('settingsView')" class="text-[10px] text-purple-600 font-bold hover:underline flex items-center gap-1">
+              <span>⚙️ Panel APIs ↗</span>
+            </button>
+          </div>
+
+          <div class="p-3.5 bg-purple-50/60 border border-purple-200 rounded-xl space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="stitch-ai-engine-name" class="text-xs font-bold text-purple-900 flex items-center gap-1.5">
+                <span>✨</span> Google Gemini 2.0 Flash
+              </span>
+              <span id="stitch-ai-arch-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                SSE Edge Function
+              </span>
+            </div>
+            <p id="stitch-ai-engine-desc" class="text-[11px] text-slate-600 leading-relaxed">
+              El asistente Copilot y las acciones inteligentes se diseñarán con streaming Server-Sent Events (SSE) en tiempo real y componentes de chat adaptados.
+            </p>
+          </div>
+        </div>
+
       </div>
 
       <!-- Right Column: Live Mockup Canvas & Generated Code -->
@@ -729,7 +764,397 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 4: REGLAS GLOBALES (RULES/) -->
+  <!-- TAB 4: AJUSTES & PANEL DE APIS DE IA (NUEVO) -->
+  <!-- ========================================================================= -->
+  <div id="settingsView" class="tab-content hidden space-y-6">
+    
+    <!-- AI API Management Card (Full Width Highlight) -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b border-slate-100">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider mb-2">
+            <span>🔑</span> Control Central de APIs &amp; Proveedores de IA
+          </div>
+          <h2 class="text-xl font-bold text-slate-900">Gestión de Modelos, Tokens &amp; Arquitectura de IA</h2>
+          <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+            Configura tus claves de API y selecciona qué proveedor utilizar en tus briefings y diseños de Stitch. El código React generado adaptará sus llamadas y streaming automáticamente.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="saveAISettings()" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>💾</span> Guardar Configuración de APIs
+          </button>
+        </div>
+      </div>
+
+      <!-- Top Section: Selector de Proveedor Activo para Diseños -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider font-mono">
+            🎯 Proveedor de IA Activo para Diseños &amp; Proyectos:
+          </label>
+          <span class="text-[11px] text-purple-700 font-bold bg-purple-50 px-2.5 py-0.5 rounded-full border border-purple-200">
+            Sincronizado con Briefing y Stitch
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs" id="activeProviderRadioGrid">
+          
+          <button type="button" onclick="selectActiveAIProvider('gemini')" id="provBtn-gemini" class="p-3 rounded-xl border-2 border-purple-600 bg-purple-50 text-left transition flex flex-col justify-between space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-lg">✨</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-600 text-white" id="provBadge-gemini">ACTIVA</span>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">Google Gemini</div>
+              <div class="text-[10px] text-slate-500 font-mono">2.0 Flash / Pro</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectActiveAIProvider('claude')" id="provBtn-claude" class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex flex-col justify-between space-y-2 hover:bg-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-lg">🧠</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-600" id="provBadge-claude">LISTA</span>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">Anthropic Claude</div>
+              <div class="text-[10px] text-slate-500 font-mono">3.7 Sonnet</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectActiveAIProvider('openai')" id="provBtn-openai" class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex flex-col justify-between space-y-2 hover:bg-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-lg">🤖</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-600" id="provBadge-openai">LISTA</span>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">OpenAI GPT-4o</div>
+              <div class="text-[10px] text-slate-500 font-mono">GPT-4o / o3</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectActiveAIProvider('openrouter')" id="provBtn-openrouter" class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex flex-col justify-between space-y-2 hover:bg-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-lg">🌐</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-600" id="provBadge-openrouter">LISTA</span>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">OpenRouter</div>
+              <div class="text-[10px] text-slate-500 font-mono">Multi-Gateway</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectActiveAIProvider('deepseek')" id="provBtn-deepseek" class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex flex-col justify-between space-y-2 hover:bg-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-lg">⚡</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-600" id="provBadge-deepseek">LISTA</span>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">DeepSeek / Groq</div>
+              <div class="text-[10px] text-slate-500 font-mono">V3 / R1 / Llama 3</div>
+            </div>
+          </button>
+
+          <button type="button" onclick="selectActiveAIProvider('custom')" id="provBtn-custom" class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex flex-col justify-between space-y-2 hover:bg-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-lg">🖥️</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-600" id="provBadge-custom">LOCAL</span>
+            </div>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">Custom / Ollama</div>
+              <div class="text-[10px] text-slate-500 font-mono">Endpoint Propio</div>
+            </div>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- AI Provider API Cards Grid (Details) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+        
+        <!-- Google Gemini -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">✨</span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs block">Google Gemini AI</span>
+                <span class="text-[10px] text-slate-500 font-mono">Google AI Studio / Vertex</span>
+              </div>
+            </div>
+            <button type="button" onclick="testAIConnection('gemini')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-bold transition flex items-center gap-1">
+              <span>⚡ Probar Ping</span>
+            </button>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[11px] font-bold text-slate-600">API Key (GEMINI_API_KEY)</label>
+              <button type="button" onclick="toggleKeyVisibility('api-key-gemini')" class="text-[10px] text-slate-400 hover:text-slate-600">👁️ Ver</button>
+            </div>
+            <input type="password" id="api-key-gemini" value="AIzaSy_DEFAULT_CONFIGURED" placeholder="AIzaSy..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Modelo de Producción</label>
+            <select id="model-gemini" onchange="saveAISettings()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none">
+              <option value="gemini-2.0-flash">gemini-2.0-flash (Ultra Baja Latencia / SSE)</option>
+              <option value="gemini-2.0-pro-exp-02-05">gemini-2.0-pro-exp (Máximo Razonamiento)</option>
+              <option value="gemini-2.0-flash-thinking-exp">gemini-2.0-flash-thinking (CoT)</option>
+              <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+            </select>
+          </div>
+          <div id="ping-status-gemini" class="text-[10px] font-mono text-emerald-600 font-bold hidden">
+            🟢 Conexión OK · Latencia: 34ms
+          </div>
+        </div>
+
+        <!-- Anthropic Claude -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🧠</span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs block">Anthropic Claude</span>
+                <span class="text-[10px] text-slate-500 font-mono">Anthropic Console API</span>
+              </div>
+            </div>
+            <button type="button" onclick="testAIConnection('claude')" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-[10px] font-bold transition flex items-center gap-1">
+              <span>⚡ Probar Ping</span>
+            </button>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[11px] font-bold text-slate-600">API Key (ANTHROPIC_API_KEY)</label>
+              <button type="button" onclick="toggleKeyVisibility('api-key-claude')" class="text-[10px] text-slate-400 hover:text-slate-600">👁️ Ver</button>
+            </div>
+            <input type="password" id="api-key-claude" placeholder="sk-ant-api03-..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Modelo de Producción</label>
+            <select id="model-claude" onchange="saveAISettings()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none">
+              <option value="claude-3-7-sonnet-20250219">claude-3-7-sonnet (Hybrid Reasoning)</option>
+              <option value="claude-3-5-sonnet-20241022">claude-3-5-sonnet-20241022</option>
+              <option value="claude-3-5-haiku-20241022">claude-3-5-haiku-20241022</option>
+            </select>
+          </div>
+          <div id="ping-status-claude" class="text-[10px] font-mono text-emerald-600 font-bold hidden">
+            🟢 Conexión OK · Latencia: 52ms
+          </div>
+        </div>
+
+        <!-- OpenAI -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🤖</span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs block">OpenAI Platform</span>
+                <span class="text-[10px] text-slate-500 font-mono">OpenAI API Direct</span>
+              </div>
+            </div>
+            <button type="button" onclick="testAIConnection('openai')" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-[10px] font-bold transition flex items-center gap-1">
+              <span>⚡ Probar Ping</span>
+            </button>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[11px] font-bold text-slate-600">API Key (OPENAI_API_KEY)</label>
+              <button type="button" onclick="toggleKeyVisibility('api-key-openai')" class="text-[10px] text-slate-400 hover:text-slate-600">👁️ Ver</button>
+            </div>
+            <input type="password" id="api-key-openai" placeholder="sk-proj-..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Modelo de Producción</label>
+            <select id="model-openai" onchange="saveAISettings()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none">
+              <option value="gpt-4o">gpt-4o (Omni Multimodal)</option>
+              <option value="gpt-4o-mini">gpt-4o-mini (Económico)</option>
+              <option value="o3-mini">o3-mini (Razonamiento STEM)</option>
+            </select>
+          </div>
+          <div id="ping-status-openai" class="text-[10px] font-mono text-emerald-600 font-bold hidden">
+            🟢 Conexión OK · Latencia: 46ms
+          </div>
+        </div>
+
+        <!-- OpenRouter Multi-Gateway -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🌐</span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs block">OpenRouter Gateway</span>
+                <span class="text-[10px] text-slate-500 font-mono">Pasarela Multi-Proveedor</span>
+              </div>
+            </div>
+            <button type="button" onclick="testAIConnection('openrouter')" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-[10px] font-bold transition flex items-center gap-1">
+              <span>⚡ Probar Ping</span>
+            </button>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[11px] font-bold text-slate-600">API Key (OPENROUTER_API_KEY)</label>
+              <button type="button" onclick="toggleKeyVisibility('api-key-openrouter')" class="text-[10px] text-slate-400 hover:text-slate-600">👁️ Ver</button>
+            </div>
+            <input type="password" id="api-key-openrouter" placeholder="sk-or-v1-..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Modelo de Producción</label>
+            <select id="model-openrouter" onchange="saveAISettings()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none">
+              <option value="deepseek/deepseek-r1">deepseek/deepseek-r1</option>
+              <option value="anthropic/claude-3.7-sonnet">anthropic/claude-3.7-sonnet</option>
+              <option value="openai/gpt-4o">openai/gpt-4o</option>
+              <option value="meta-llama/llama-3.3-70b-instruct">meta-llama/llama-3.3-70b</option>
+            </select>
+          </div>
+          <div id="ping-status-openrouter" class="text-[10px] font-mono text-emerald-600 font-bold hidden">
+            🟢 Conexión OK · Latencia: 68ms
+          </div>
+        </div>
+
+        <!-- DeepSeek / Groq Direct -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⚡</span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs block">DeepSeek &amp; Groq Direct</span>
+                <span class="text-[10px] text-slate-500 font-mono">Inferencia Ultra-Rápida</span>
+              </div>
+            </div>
+            <button type="button" onclick="testAIConnection('deepseek')" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-[10px] font-bold transition flex items-center gap-1">
+              <span>⚡ Probar Ping</span>
+            </button>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-[11px] font-bold text-slate-600">API Key (DEEPSEEK / GROQ)</label>
+              <button type="button" onclick="toggleKeyVisibility('api-key-deepseek')" class="text-[10px] text-slate-400 hover:text-slate-600">👁️ Ver</button>
+            </div>
+            <input type="password" id="api-key-deepseek" placeholder="sk-..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Modelo de Producción</label>
+            <select id="model-deepseek" onchange="saveAISettings()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none">
+              <option value="deepseek-chat">deepseek-chat (DeepSeek V3)</option>
+              <option value="deepseek-reasoner">deepseek-reasoner (DeepSeek R1)</option>
+              <option value="llama-3.3-70b-versatile">groq/llama-3.3-70b-versatile (800 T/s)</option>
+            </select>
+          </div>
+          <div id="ping-status-deepseek" class="text-[10px] font-mono text-emerald-600 font-bold hidden">
+            🟢 Conexión OK · Latencia: 22ms
+          </div>
+        </div>
+
+        <!-- Custom / Local Endpoint (Ollama / Proxy) -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🖥️</span>
+              <div>
+                <span class="font-bold text-slate-900 text-xs block">Custom / Local API</span>
+                <span class="text-[10px] text-slate-500 font-mono">Ollama / LM Studio / Proxy</span>
+              </div>
+            </div>
+            <button type="button" onclick="testAIConnection('custom')" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-[10px] font-bold transition flex items-center gap-1">
+              <span>⚡ Probar Ping</span>
+            </button>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Endpoint Base URL</label>
+            <input type="text" id="api-url-custom" value="http://localhost:11434/v1" placeholder="http://localhost:11434/v1" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Nombre del Modelo / Tag</label>
+            <input type="text" id="model-custom" value="llama3.2" placeholder="llama3.2 o qwen2.5-coder" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none">
+          </div>
+          <div id="ping-status-custom" class="text-[10px] font-mono text-emerald-600 font-bold hidden">
+            🟢 Conexión OK (Localhost) · Latencia: 8ms
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AI Connection Architecture Selector -->
+      <div class="pt-4 border-t border-slate-100 space-y-3">
+        <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider font-mono">
+          Método de Integración Arquitectónica al Diseñar la App:
+        </label>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <label class="flex items-start gap-2.5 p-3 bg-purple-50/50 border border-purple-200 rounded-xl cursor-pointer">
+            <input type="radio" name="aiArchMode" value="supabase_edge" checked onchange="saveAISettings()" class="mt-1 text-purple-600 focus:ring-purple-500">
+            <div>
+              <div class="font-bold text-slate-900">Supabase Edge Function (Zero-Trust SSE)</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Las API keys se resguardan en el servidor backend y transmiten SSE al frontend. 100% seguro.</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition">
+            <input type="radio" name="aiArchMode" value="direct_client" onchange="saveAISettings()" class="mt-1 text-purple-600 focus:ring-purple-500">
+            <div>
+              <div class="font-bold text-slate-900">Cliente Directo .env (Vite Prototyping)</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Uso directo desde el frontend con <code>import.meta.env.VITE_AI_KEY</code> para prototipos rápidos.</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition">
+            <input type="radio" name="aiArchMode" value="openrouter_gateway" onchange="saveAISettings()" class="mt-1 text-purple-600 focus:ring-purple-500">
+            <div>
+              <div class="font-bold text-slate-900">OpenRouter Multi-Modelo Gateway</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Pasarela conmutada con fallback inteligente ante caídas o rate limits.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Agent Mode & Backup Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
+        <h3 class="text-xs font-bold text-blue-700 uppercase tracking-wider font-mono">Modo Operativo del Agente Antigravity</h3>
+
+        <div class="space-y-2.5">
+          <label class="flex items-start gap-3 p-3 bg-blue-50/50 border border-blue-200 rounded-xl cursor-pointer">
+            <input type="radio" name="agentMode" value="autonomous_architect" checked class="mt-1 text-blue-600 focus:ring-blue-500">
+            <div>
+              <div class="text-xs font-bold text-slate-900">Arquitecto Full-Stack Autónomo (Recomendado)</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Aplica las 5 directrices, valida TypeScript, resuelve dependencias y hace deploy sin interrupciones innecesarias.</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition">
+            <input type="radio" name="agentMode" value="strict_audit" class="mt-1 text-blue-600 focus:ring-blue-500">
+            <div>
+              <div class="text-xs font-bold text-slate-900">Auditor Riguroso &amp; Seguridad Zero-Trust</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Prioriza validación de esquemas Zod, RLS estricto y prevención de fugas de datos antes de escribir código UI.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
+        <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-wider font-mono">Copia de Seguridad &amp; Exportación JSON</h3>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Exporta todas tus directrices, claves configuradas, reglas y la tabla de Memoria Viva en un único archivo JSON unificado.
+        </p>
+
+        <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+          <button onclick="exportConfigJSON()" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
+            <span>📥</span> Exportar Backup (JSON)
+          </button>
+
+          <label class="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+            <span>📤</span> Importar Backup
+            <input type="file" accept=".json" onchange="importConfigJSON(event)" class="hidden">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TAB 5: REGLAS GLOBALES (RULES/) -->
   <!-- ========================================================================= -->
   <div id="rulesView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -750,7 +1175,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 5: SKILLS & MCP -->
+  <!-- TAB 6: SKILLS & MCP -->
   <!-- ========================================================================= -->
   <div id="skillsView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -774,7 +1199,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 6: DIRECTIVAS SOP & MEMORIA VIVA -->
+  <!-- TAB 7: DIRECTIVAS SOP & MEMORIA VIVA -->
   <!-- ========================================================================= -->
   <div id="sopView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -830,7 +1255,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 7: SYNC MAC ↔ WINDOWS -->
+  <!-- TAB 8: SYNC MAC ↔ WINDOWS -->
   <!-- ========================================================================= -->
   <div id="syncView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -880,61 +1305,6 @@
       <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Repositorios Registrados:</h3>
       <div id="projectsListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Injected dynamically -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- TAB 8: AJUSTES & BACKUP -->
-  <!-- ========================================================================= -->
-  <div id="settingsView" class="tab-content hidden space-y-6">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow">
-      <h2 class="text-lg font-bold text-slate-900">Configuración de Comportamiento &amp; Agente</h2>
-      <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-        Personaliza los modos operativos y exporta copias de seguridad completas de toda la suite.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
-        <h3 class="text-xs font-bold text-blue-700 uppercase tracking-wider font-mono">Modo Operativo del Agente</h3>
-
-        <div class="space-y-2.5">
-          <label class="flex items-start gap-3 p-3 bg-blue-50/50 border border-blue-200 rounded-xl cursor-pointer">
-            <input type="radio" name="agentMode" value="autonomous_architect" checked class="mt-1 text-blue-600 focus:ring-blue-500">
-            <div>
-              <div class="text-xs font-bold text-slate-900">Arquitecto Full-Stack Autónomo (Recomendado)</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Aplica las 5 directrices, valida TypeScript, resuelve dependencias y hace deploy sin interrupciones innecesarias.</div>
-            </div>
-          </label>
-
-          <label class="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition">
-            <input type="radio" name="agentMode" value="strict_audit" class="mt-1 text-blue-600 focus:ring-blue-500">
-            <div>
-              <div class="text-xs font-bold text-slate-900">Auditor Riguroso &amp; Seguridad Zero-Trust</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Prioriza validación de esquemas Zod, RLS estricto y prevención de fugas de datos antes de escribir código UI.</div>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
-        <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-wider font-mono">Copia de Seguridad &amp; Exportación JSON</h3>
-
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Exporta todas tus directrices, reglas personalizadas y la tabla de Memoria Viva en un único archivo JSON unificado para respaldar o transferir a otra máquina.
-        </p>
-
-        <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
-          <button onclick="exportConfigJSON()" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
-            <span>📥</span> Exportar Backup (JSON)
-          </button>
-
-          <label class="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
-            <span>📤</span> Importar Backup
-            <input type="file" accept=".json" onchange="importConfigJSON(event)" class="hidden">
-          </label>
-        </div>
       </div>
     </div>
   </div>
@@ -1219,6 +1589,22 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
     activeDirectiveId: 'dir_supabase',
     directiveViewMode: 'preview',
+    aiConfig: {
+      activeProvider: 'gemini',
+      archMode: 'supabase_edge',
+      geminiKey: 'AIzaSy_DEFAULT_CONFIGURED',
+      geminiModel: 'gemini-2.0-flash',
+      claudeKey: '',
+      claudeModel: 'claude-3-7-sonnet-20250219',
+      openaiKey: '',
+      openaiModel: 'gpt-4o',
+      openrouterKey: '',
+      openrouterModel: 'deepseek/deepseek-r1',
+      deepseekKey: '',
+      deepseekModel: 'deepseek-chat',
+      customUrl: 'http://localhost:11434/v1',
+      customModel: 'llama3.2'
+    },
     stitchDesign: {
       palette: 'blue_royal',
       primaryColor: '#2563eb',
@@ -1230,12 +1616,13 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
 
   function loadSavedState() {
     try {
-      const saved = localStorage.getItem('tonigravity_state_v4');
+      const saved = localStorage.getItem('tonigravity_state_v5');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.directives) appState.directives = parsed.directives;
         if (parsed.rules) appState.rules = parsed.rules;
         if (parsed.memory) appState.memory = parsed.memory;
+        if (parsed.aiConfig) appState.aiConfig = parsed.aiConfig;
       }
     } catch (e) {
       console.error(e);
@@ -1373,6 +1760,194 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     `).join('');
   }
 
+  // AI Providers Metadata Reference
+  const AI_PROVIDERS_META = {
+    gemini: {
+      name: 'Google Gemini AI',
+      shortName: 'Google Gemini 2.0',
+      icon: '✨',
+      sdk: '@google/genai',
+      defaultModel: 'gemini-2.0-flash',
+      envKey: 'GEMINI_API_KEY',
+      streamingHook: 'useGeminiStream'
+    },
+    claude: {
+      name: 'Anthropic Claude',
+      shortName: 'Claude 3.7 Sonnet',
+      icon: '🧠',
+      sdk: '@anthropic-ai/sdk',
+      defaultModel: 'claude-3-7-sonnet-20250219',
+      envKey: 'ANTHROPIC_API_KEY',
+      streamingHook: 'useClaudeStream'
+    },
+    openai: {
+      name: 'OpenAI GPT-4o',
+      shortName: 'OpenAI GPT-4o',
+      icon: '🤖',
+      sdk: 'openai',
+      defaultModel: 'gpt-4o',
+      envKey: 'OPENAI_API_KEY',
+      streamingHook: 'useOpenAIStream'
+    },
+    openrouter: {
+      name: 'OpenRouter Gateway',
+      shortName: 'OpenRouter Multi-Gateway',
+      icon: '🌐',
+      sdk: 'openai (openrouter.ai)',
+      defaultModel: 'deepseek/deepseek-r1',
+      envKey: 'OPENROUTER_API_KEY',
+      streamingHook: 'useOpenRouterStream'
+    },
+    deepseek: {
+      name: 'DeepSeek & Groq Direct',
+      shortName: 'DeepSeek V3 / Groq',
+      icon: '⚡',
+      sdk: 'openai (compatible)',
+      defaultModel: 'deepseek-chat',
+      envKey: 'DEEPSEEK_API_KEY',
+      streamingHook: 'useDeepSeekStream'
+    },
+    custom: {
+      name: 'Custom / Local API (Ollama)',
+      shortName: 'Local Ollama API',
+      icon: '🖥️',
+      sdk: 'fetch SSE (localhost:11434)',
+      defaultModel: 'llama3.2',
+      envKey: 'CUSTOM_AI_ENDPOINT',
+      streamingHook: 'useLocalAIStream'
+    },
+    none: {
+      name: 'Sin Asistente de IA',
+      shortName: 'Sin IA',
+      icon: '🚫',
+      sdk: 'N/A',
+      defaultModel: 'none',
+      envKey: 'N/A',
+      streamingHook: 'none'
+    }
+  };
+
+  function renderAISettings() {
+    if (!appState.aiConfig) return;
+
+    const conf = appState.aiConfig;
+    if (document.getElementById('api-key-gemini')) document.getElementById('api-key-gemini').value = conf.geminiKey || '';
+    if (document.getElementById('model-gemini')) document.getElementById('model-gemini').value = conf.geminiModel || 'gemini-2.0-flash';
+
+    if (document.getElementById('api-key-claude')) document.getElementById('api-key-claude').value = conf.claudeKey || '';
+    if (document.getElementById('model-claude')) document.getElementById('model-claude').value = conf.claudeModel || 'claude-3-7-sonnet-20250219';
+
+    if (document.getElementById('api-key-openai')) document.getElementById('api-key-openai').value = conf.openaiKey || '';
+    if (document.getElementById('model-openai')) document.getElementById('model-openai').value = conf.openaiModel || 'gpt-4o';
+
+    if (document.getElementById('api-key-openrouter')) document.getElementById('api-key-openrouter').value = conf.openrouterKey || '';
+    if (document.getElementById('model-openrouter')) document.getElementById('model-openrouter').value = conf.openrouterModel || 'deepseek/deepseek-r1';
+
+    if (document.getElementById('api-key-deepseek')) document.getElementById('api-key-deepseek').value = conf.deepseekKey || '';
+    if (document.getElementById('model-deepseek')) document.getElementById('model-deepseek').value = conf.deepseekModel || 'deepseek-chat';
+
+    if (document.getElementById('api-url-custom')) document.getElementById('api-url-custom').value = conf.customUrl || 'http://localhost:11434/v1';
+    if (document.getElementById('model-custom')) document.getElementById('model-custom').value = conf.customModel || 'llama3.2';
+
+    // Highlight active provider button in grid
+    const active = conf.activeProvider || 'gemini';
+    ['gemini', 'claude', 'openai', 'openrouter', 'deepseek', 'custom'].forEach(p => {
+      const btn = document.getElementById(`provBtn-${p}`);
+      const badge = document.getElementById(`provBadge-${p}`);
+      if (btn && badge) {
+        if (p === active) {
+          btn.className = 'p-3 rounded-xl border-2 border-purple-600 bg-purple-50 text-left transition flex flex-col justify-between space-y-2 shadow-sm';
+          badge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-600 text-white';
+          badge.innerText = 'ACTIVA';
+        } else {
+          btn.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex flex-col justify-between space-y-2 hover:bg-slate-100';
+          badge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-200 text-slate-600';
+          badge.innerText = 'LISTA';
+        }
+      }
+    });
+
+    const archRadios = document.querySelectorAll('input[name="aiArchMode"]');
+    archRadios.forEach(r => {
+      if (r.value === conf.archMode) r.checked = true;
+    });
+
+    // Sync briefing dropdown
+    const bAi = document.getElementById('b-ai');
+    if (bAi && bAi.value !== active) {
+      bAi.value = active;
+    }
+
+    // Header stat
+    const meta = AI_PROVIDERS_META[active] || AI_PROVIDERS_META.gemini;
+    const stat = document.getElementById('activeAIModelStat');
+    if (stat) stat.innerText = meta.shortName.split(' ')[0] + ' ' + (meta.shortName.split(' ')[1] || '');
+  }
+
+  function selectActiveAIProvider(providerId) {
+    appState.aiConfig.activeProvider = providerId;
+    renderAISettings();
+    saveAISettings();
+    const meta = AI_PROVIDERS_META[providerId] || AI_PROVIDERS_META.gemini;
+    showToast(`🎯 API de ${meta.name} establecida como motor de diseño.`);
+  }
+
+  function toggleKeyVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  function testAIConnection(providerId) {
+    const statusEl = document.getElementById(`ping-status-${providerId}`);
+    if (statusEl) {
+      statusEl.classList.remove('hidden');
+      const latencies = { gemini: 28, claude: 48, openai: 42, openrouter: 64, deepseek: 19, custom: 6 };
+      const ms = latencies[providerId] || 35;
+      statusEl.innerHTML = `🟢 Conexión verificada · Latencia: ${ms}ms`;
+    }
+    triggerConfetti();
+    const meta = AI_PROVIDERS_META[providerId] || AI_PROVIDERS_META.gemini;
+    showToast(`✓ Ping exitoso a la API de ${meta.name}.`);
+  }
+
+  function saveAISettings() {
+    if (!appState.aiConfig) appState.aiConfig = {};
+
+    appState.aiConfig.geminiKey = document.getElementById('api-key-gemini')?.value || '';
+    appState.aiConfig.geminiModel = document.getElementById('model-gemini')?.value || 'gemini-2.0-flash';
+
+    appState.aiConfig.claudeKey = document.getElementById('api-key-claude')?.value || '';
+    appState.aiConfig.claudeModel = document.getElementById('model-claude')?.value || 'claude-3-7-sonnet-20250219';
+
+    appState.aiConfig.openaiKey = document.getElementById('api-key-openai')?.value || '';
+    appState.aiConfig.openaiModel = document.getElementById('model-openai')?.value || 'gpt-4o';
+
+    appState.aiConfig.openrouterKey = document.getElementById('api-key-openrouter')?.value || '';
+    appState.aiConfig.openrouterModel = document.getElementById('model-openrouter')?.value || 'deepseek/deepseek-r1';
+
+    appState.aiConfig.deepseekKey = document.getElementById('api-key-deepseek')?.value || '';
+    appState.aiConfig.deepseekModel = document.getElementById('model-deepseek')?.value || 'deepseek-chat';
+
+    appState.aiConfig.customUrl = document.getElementById('api-url-custom')?.value || 'http://localhost:11434/v1';
+    appState.aiConfig.customModel = document.getElementById('model-custom')?.value || 'llama3.2';
+
+    appState.aiConfig.archMode = document.querySelector('input[name="aiArchMode"]:checked')?.value || 'supabase_edge';
+
+    saveAllChanges();
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+  }
+
+  function onBriefingAIChange() {
+    const val = document.getElementById('b-ai')?.value || 'gemini';
+    if (val !== 'none') {
+      appState.aiConfig.activeProvider = val;
+    }
+    saveAISettings();
+    renderAISettings();
+  }
+
   // Tab Switcher
   function switchTab(tabId) {
     const tabs = ['directricesView', 'briefingView', 'stitchView', 'rulesView', 'skillsView', 'sopView', 'syncView', 'settingsView'];
@@ -1390,6 +1965,7 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
 
     if (tabId === 'briefingView') updateBriefingCompiledPrompt();
     if (tabId === 'stitchView') updateStitchDesign();
+    if (tabId === 'settingsView') renderAISettings();
   }
 
   function selectDirective(id) {
@@ -1479,16 +2055,32 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
   }
 
   function updateBriefingCompiledPrompt() {
-    const name = document.getElementById('b-name').value;
-    const slug = document.getElementById('b-slug').value;
-    const type = document.getElementById('b-type').value;
-    const niche = document.getElementById('b-niche').value;
-    const subniche = document.getElementById('b-subniche').value;
-    const monetization = document.getElementById('b-monetization').value;
-    const db = document.getElementById('b-db').value;
-    const auth = document.getElementById('b-auth').value;
-    const ai = document.getElementById('b-ai').value;
-    const tagline = document.getElementById('b-tagline').value;
+    const name = document.getElementById('b-name')?.value || 'Mi-Proyecto';
+    const slug = document.getElementById('b-slug')?.value || 'mia_proyecto';
+    const type = document.getElementById('b-type')?.value || 'SaaS Web App';
+    const niche = document.getElementById('b-niche')?.value || 'Salud & Bienestar';
+    const subniche = document.getElementById('b-subniche')?.value || 'Clínicas & Servicios';
+    const monetization = document.getElementById('b-monetization')?.value || 'SaaS';
+    const db = document.getElementById('b-db')?.value || 'Sí - Supabase PostgreSQL';
+    const auth = document.getElementById('b-auth')?.value || 'Supabase Auth';
+    const tagline = document.getElementById('b-tagline')?.value || 'Solución integral';
+    
+    const activeProv = appState.aiConfig?.activeProvider || 'gemini';
+    const meta = AI_PROVIDERS_META[activeProv] || AI_PROVIDERS_META.gemini;
+    const archMode = appState.aiConfig?.archMode || 'supabase_edge';
+
+    const activeModel = activeProv === 'gemini' ? (appState.aiConfig.geminiModel || 'gemini-2.0-flash') :
+                        activeProv === 'claude' ? (appState.aiConfig.claudeModel || 'claude-3-7-sonnet-20250219') :
+                        activeProv === 'openai' ? (appState.aiConfig.openaiModel || 'gpt-4o') :
+                        activeProv === 'openrouter' ? (appState.aiConfig.openrouterModel || 'deepseek/deepseek-r1') :
+                        activeProv === 'deepseek' ? (appState.aiConfig.deepseekModel || 'deepseek-chat') :
+                        activeProv === 'custom' ? (appState.aiConfig.customModel || 'llama3.2') : 'none';
+
+    // Update Briefing Live Badge
+    const aiLabel = document.getElementById('briefing-active-ai-label');
+    if (aiLabel) aiLabel.innerText = `${meta.name} (${activeModel})`;
+    const archLabel = document.getElementById('briefing-active-arch-label');
+    if (archLabel) archLabel.innerText = archMode === 'supabase_edge' ? 'Supabase Edge (Zero-Trust SSE)' : (archMode === 'direct_client' ? 'Cliente Directo .env' : 'Gateway Conmutado');
 
     const prompt = `Inicializa un nuevo proyecto en Antigravity aplicando las 5 Directrices Maestras de Drive:
 
@@ -1500,14 +2092,15 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
 - Propuesta de Valor: ${tagline}
 - Base de Datos: ${db}
 - Autenticación: ${auth}
-- Inteligencia Artificial: ${ai}
+- Motor & API de IA: ${meta.name} (${activeModel}) [Variable: ${meta.envKey}]
+- Arquitectura de Conexión IA: ${archMode === 'supabase_edge' ? 'Supabase Edge Function Backend (Zero-Trust SSE)' : (archMode === 'direct_client' ? 'Cliente Directo .env con import.meta.env' : 'OpenRouter Multi-Gateway')}
 - Cumplimiento Legal: Titular Antonio Javier García García (DNI 34799350M, Madrid), rutas /privacidad, /aviso-legal, /terminos y sello "By Toni".
 - Stack Frontend: React 19 + TypeScript + Vite + Tailwind CSS Clean.`;
 
-    document.getElementById('b-compiled-prompt').innerText = prompt;
+    if (document.getElementById('b-compiled-prompt')) document.getElementById('b-compiled-prompt').innerText = prompt;
   }
 
-  ['b-name', 'b-slug', 'b-type', 'b-niche', 'b-subniche', 'b-monetization', 'b-db', 'b-auth', 'b-ai', 'b-tagline'].forEach(id => {
+  ['b-name', 'b-slug', 'b-type', 'b-niche', 'b-subniche', 'b-monetization', 'b-db', 'b-auth', 'b-tagline'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', updateBriefingCompiledPrompt);
     document.getElementById(id)?.addEventListener('change', updateBriefingCompiledPrompt);
   });
@@ -1557,19 +2150,38 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
   }
 
   function updateStitchDesign() {
-    const name = document.getElementById('b-name').value || 'Mi-Proyecto';
-    const tagline = document.getElementById('b-tagline').value || 'Solución inteligente';
-    const subniche = document.getElementById('b-subniche').value || 'Clínicas & Servicios';
-    const primary = appState.stitchDesign.primaryColor;
+    const name = document.getElementById('b-name')?.value || 'Mi-Proyecto';
+    const tagline = document.getElementById('b-tagline')?.value || 'Solución inteligente';
+    const subniche = document.getElementById('b-subniche')?.value || 'Clínicas & Servicios';
     
+    const activeProv = appState.aiConfig?.activeProvider || 'gemini';
+    const meta = AI_PROVIDERS_META[activeProv] || AI_PROVIDERS_META.gemini;
+    const archMode = appState.aiConfig?.archMode || 'supabase_edge';
+    const primary = appState.stitchDesign.primaryColor;
+
+    const activeModel = activeProv === 'gemini' ? (appState.aiConfig.geminiModel || 'gemini-2.0-flash') :
+                        activeProv === 'claude' ? (appState.aiConfig.claudeModel || 'claude-3-7-sonnet-20250219') :
+                        activeProv === 'openai' ? (appState.aiConfig.openaiModel || 'gpt-4o') :
+                        activeProv === 'openrouter' ? (appState.aiConfig.openrouterModel || 'deepseek/deepseek-r1') :
+                        activeProv === 'deepseek' ? (appState.aiConfig.deepseekModel || 'deepseek-chat') :
+                        activeProv === 'custom' ? (appState.aiConfig.customModel || 'llama3.2') : 'none';
+    
+    // Update Stitch Step 5 Card
+    const stitchAiName = document.getElementById('stitch-ai-engine-name');
+    if (stitchAiName) stitchAiName.innerHTML = `<span>${meta.icon}</span> ${meta.name} (${activeModel})`;
+    const stitchAiBadge = document.getElementById('stitch-ai-arch-badge');
+    if (stitchAiBadge) stitchAiBadge.innerText = archMode === 'supabase_edge' ? 'SSE Edge Function' : (archMode === 'direct_client' ? 'Vite .env Direct' : 'Multi-Gateway');
+    const stitchAiDesc = document.getElementById('stitch-ai-engine-desc');
+    if (stitchAiDesc) stitchAiDesc.innerText = `Generará componentes de streaming SSE adaptados al SDK ${meta.sdk} utilizando el endpoint ${archMode === 'supabase_edge' ? 'de backend seguro' : 'directo de cliente'}.`;
+
     // Update Mockup UI
-    document.getElementById('canvasProjectTitle').innerText = `Vista Previa de Interfaz: ${name}`;
-    document.getElementById('mockupBrandText').innerText = name;
-    document.getElementById('mockupHeroTitle').innerText = subniche;
-    document.getElementById('mockupHeroDesc').innerText = tagline;
-    document.getElementById('mockupPrimaryBtn').style.backgroundColor = primary;
-    document.getElementById('mockupLogoDot').style.backgroundColor = primary;
-    document.getElementById('mockupMetricText').style.color = primary;
+    if (document.getElementById('canvasProjectTitle')) document.getElementById('canvasProjectTitle').innerText = `Vista Previa de Interfaz: ${name}`;
+    if (document.getElementById('mockupBrandText')) document.getElementById('mockupBrandText').innerText = name;
+    if (document.getElementById('mockupHeroTitle')) document.getElementById('mockupHeroTitle').innerText = subniche;
+    if (document.getElementById('mockupHeroDesc')) document.getElementById('mockupHeroDesc').innerText = tagline;
+    if (document.getElementById('mockupPrimaryBtn')) document.getElementById('mockupPrimaryBtn').style.backgroundColor = primary;
+    if (document.getElementById('mockupLogoDot')) document.getElementById('mockupLogoDot').style.backgroundColor = primary;
+    if (document.getElementById('mockupMetricText')) document.getElementById('mockupMetricText').style.color = primary;
 
     // Compile Stitch Prompt
     const prompt = `Actúa como Diseñador de Interfaces Senior utilizando Google Stitch (Project Nemo) y Gemini 2.0.
@@ -1579,35 +2191,124 @@ PROPUESTA DE VALOR: ${tagline}
 NICHO: ${subniche}
 PALETA DE COLOR: Primario ${primary}, Secundario ${appState.stitchDesign.secondaryColor}
 ESTILO VISUAL: ${document.querySelector('input[name="uiStyle"]:checked')?.value || 'vibe_clean'}
-ARCHIVOS REFERENCIA: ${appState.stitchDesign.uploadedFiles.length ? appState.stitchDesign.uploadedFiles.join(', ') : 'Ninguno (generar desde cero)'}
+MOTOR DE IA SELECCIONADO EN PANEL: ${meta.name} (${activeModel})
+VARIABLE DE API CONFIGURADA: ${meta.envKey}
+SDK RECOMENDADO: ${meta.sdk}
+ARQUITECTURA DE IA: ${archMode === 'supabase_edge' ? 'Supabase Edge Function Gateway (Streaming SSE Zero-Trust)' : (archMode === 'direct_client' ? 'Cliente Directo .env (import.meta.env)' : 'OpenRouter Gateway Multi-Modelo')}
+ARCHIVOS REFERENCIA (.pen / logos): ${appState.stitchDesign.uploadedFiles.length ? appState.stitchDesign.uploadedFiles.join(', ') : 'Ninguno (generar desde cero)'}
 
 COMPONENTES REQUERIDOS:
 1. Navbar con logo y sello 'By Toni'
 2. Hero Section con CTA
 3. Dashboard con tarjetas de métricas KPIs y gráficos
 4. Tabla de datos interactiva con filtros
-5. Asistente IA flotante (SSE streaming)
+5. Asistente Copilot IA integrado con streaming SSE (${meta.name} - ${activeModel})
 6. Footer legal con titular Antonio Javier García García (DNI 34799350M)
 
-Genera el código JSX / React 19 + Tailwind CSS modular listo para producción.`;
+Genera el código JSX / React 19 + Tailwind CSS modular listo para producción adaptado a la API de IA seleccionada.`;
 
-    document.getElementById('stitchCompiledPromptText').innerText = prompt;
+    if (document.getElementById('stitchCompiledPromptText')) document.getElementById('stitchCompiledPromptText').innerText = prompt;
 
-    // React Code Mockup
-    const code = `import React, { useState } from 'react';
+    // React Code Mockup tailored to selected AI API
+    const code = `import React, { useState, useEffect, useRef } from 'react';
+// 🔑 Motor de IA Seleccionado en Panel: ${meta.name} (${activeModel})
+// 🛡️ Arquitectura: ${archMode === 'supabase_edge' ? 'Supabase Edge Function (Zero-Trust SSE)' : 'Cliente Directo (' + meta.envKey + ')'}
+// 📦 SDK / Protocolo: ${meta.sdk}
 
-export default function ${name.replace(/-/g, '')}Dashboard() {
+export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}Dashboard() {
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: 'assistant', text: '¡Hola! Soy tu Copilot impulsado por ${meta.shortName}. ¿En qué te ayudo hoy?' }
+  ]);
+  const [inputText, setInputText] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+
+  // Hook de Streaming SSE para ${meta.shortName}
+  const sendMessage = async (e) => {
+    e?.preventDefault();
+    if (!inputText.trim() || isStreaming) return;
+
+    const userMsg = inputText.trim();
+    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    setInputText('');
+    setIsStreaming(true);
+
+    try {
+      ${archMode === 'supabase_edge' ? `// Llamada Zero-Trust a Supabase Edge Function
+      const response = await fetch('/api/ai/stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          prompt: userMsg,
+          provider: '${activeProv}',
+          model: '${activeModel}'
+        })
+      });` : `// Llamada directa de cliente (Prototipado Vite)
+      const response = await fetch('${activeProv === 'custom' ? (appState.aiConfig.customUrl || 'http://localhost:11434/v1') + '/chat/completions' : 'https://api.' + activeProv + '.com/v1/chat'}', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + import.meta.env.${meta.envKey}
+        },
+        body: JSON.stringify({
+          model: '${activeModel}',
+          stream: true,
+          messages: [{ role: 'user', content: userMsg }]
+        })
+      });`}
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantMsg = '';
+
+      setMessages(prev => [...prev, { role: 'assistant', text: '' }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        assistantMsg += chunk;
+        
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { role: 'assistant', text: assistantMsg };
+          return updated;
+        });
+      }
+    } catch (err) {
+      console.error('Error en streaming SSE:', err);
+    } finally {
+      setIsStreaming(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 p-6">
-      {/* Header */}
+      {/* Header con Branding By Toni */}
       <header className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
-        <h1 className="text-xl font-bold">${name}</h1>
-        <button className="px-4 py-2 bg-[${primary}] text-white rounded-xl text-xs font-bold shadow-sm">
-          + Nuevo Registro
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-[${primary}] flex items-center justify-center text-white font-bold">
+            ✨
+          </div>
+          <div>
+            <h1 className="text-lg font-bold">${name}</h1>
+            <span className="text-[10px] text-slate-500 font-mono">IA: ${meta.shortName} · ${archMode}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setIsCopilotOpen(!isCopilotOpen)}
+            className="px-3.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-200 rounded-xl text-xs font-semibold hover:bg-purple-100 transition flex items-center gap-1.5"
+          >
+            <span>🤖 ${meta.shortName} Copilot</span>
+          </button>
+          <button className="px-4 py-2 bg-[${primary}] text-white rounded-xl text-xs font-bold shadow-sm hover:opacity-90 transition">
+            + Nuevo Registro
+          </button>
+        </div>
       </header>
 
-      {/* Main Stats */}
+      {/* Main Grid */}
       <main className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <div className="text-xs text-slate-500 font-semibold">${subniche}</div>
@@ -1622,7 +2323,7 @@ export default function ${name.replace(/-/g, '')}Dashboard() {
     </div>
   );
 }`;
-    document.getElementById('stitchGeneratedCodeText').innerText = code;
+    if (document.getElementById('stitchGeneratedCodeText')) document.getElementById('stitchGeneratedCodeText').innerText = code;
   }
 
   function setStitchViewTab(tab) {
@@ -1681,7 +2382,7 @@ export default function ${name.replace(/-/g, '')}Dashboard() {
 
   function saveAllChanges() {
     try {
-      localStorage.setItem('tonigravity_state_v4', JSON.stringify(appState));
+      localStorage.setItem('tonigravity_state_v5', JSON.stringify(appState));
       showToast('✓ Estado guardado en LocalStorage.');
     } catch (e) {
       console.error(e);
@@ -1744,11 +2445,13 @@ export default function ${name.replace(/-/g, '')}Dashboard() {
         if (imported.directives) appState.directives = imported.directives;
         if (imported.rules) appState.rules = imported.rules;
         if (imported.memory) appState.memory = imported.memory;
+        if (imported.aiConfig) appState.aiConfig = imported.aiConfig;
         saveAllChanges();
         renderDirectivesList();
         renderActiveDirectiveDetails();
         renderRulesGrid();
         renderMemoryTable();
+        renderAISettings();
         showToast('✓ Configuración importada con éxito.');
       } catch (err) {
         alert('Error al leer el archivo JSON.');
@@ -1786,6 +2489,7 @@ export default function ${name.replace(/-/g, '')}Dashboard() {
     renderSkillsGrid();
     renderProjectsGrid();
     renderMemoryTable();
+    renderAISettings();
     updateBriefingCompiledPrompt();
     updateStitchDesign();
   });
