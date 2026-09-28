@@ -303,7 +303,7 @@
     }
 
     /* DIRECTIVES VIEW (Two-Pane) */
-    .directives-view-grid {
+    .directives-view-grid, .rules-view-grid {
       display: grid;
       grid-template-columns: 280px 1fr;
       height: 100%;
@@ -311,7 +311,7 @@
       overflow: hidden;
     }
 
-    .directives-list-col {
+    .directives-list-col, .rules-list-col {
       border-right: 1px solid var(--border-color);
       padding: 1.2rem;
       overflow-y: auto;
@@ -321,7 +321,7 @@
       background: #F8FAFC;
     }
 
-    .dir-item-card {
+    .dir-item-card, .rule-item-card {
       padding: 0.8rem 1rem;
       border-radius: 6px;
       border: 1px solid var(--border-light);
@@ -330,17 +330,17 @@
       transition: all 0.15s;
     }
 
-    .dir-item-card:hover {
+    .dir-item-card:hover, .rule-item-card:hover {
       border-color: var(--border-color);
       background: #F1F5F9;
     }
 
-    .dir-item-card.active {
+    .dir-item-card.active, .rule-item-card.active {
       background: var(--color-blue-bg);
       border-color: #93C5FD;
     }
 
-    .directives-viewer-col {
+    .directives-viewer-col, .rules-viewer-col {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -534,7 +534,7 @@
       body { height: auto; overflow-y: auto; }
       .app-container { height: auto; }
       .dashboard-body { grid-template-columns: 1fr; }
-      .directives-view-grid, .briefing-view-grid { grid-template-columns: 1fr; }
+      .directives-view-grid, .rules-view-grid, .briefing-view-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -947,17 +947,83 @@
       </div>
 
       <!-- =======================================================================
-           TAB 4: REGLAS GLOBALES (rules/)
+           TAB 4: REGLAS GLOBALES (rules/ - Lector & Editor)
            ======================================================================= -->
-      <div id="rulesView" class="tab-content hidden tab-scroll-pane">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
-          <div>
-            <h2 class="type-lg">Reglas Globales Activas en Antigravity</h2>
-            <p class="type-sm" style="color: var(--text-muted);">Ubicación: <code class="font-mono">~/.gemini/config/rules/</code> y <code class="font-mono">antigravity-config/rules/</code></p>
+      <div id="rulesView" class="tab-content hidden">
+        <div class="rules-view-grid">
+          
+          <!-- Rules List Subcolumn -->
+          <div class="rules-list-col">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span class="type-xs" style="color: var(--text-muted);">Reglas en rules/ :</span>
+              <button onclick="createNewRulePrompt()" class="btn-action btn-secondary" style="min-height: 24px; padding: 0.1rem 0.6rem; font-size: 1.1rem;" title="Crear nueva regla global">+ Nueva</button>
+            </div>
+            <div id="rulesListContainer" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <!-- Injected dynamically -->
+            </div>
           </div>
-        </div>
-        <div id="rulesGridContainer" class="cards-grid">
-          <!-- Injected dynamically -->
+
+          <!-- Rule Viewer & Editor Subcolumn -->
+          <div class="rules-viewer-col">
+            <div class="viewer-header">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                  <span id="activeRuleIcon" style="font-size: 1.8rem;">🥇</span>
+                  <h2 id="activeRuleTitle" class="type-lg">Regla Global: SOP Clean SDD</h2>
+                  <span id="activeRuleFilename" class="font-mono type-xs" style="background: var(--bg-subtle); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-light);">00-sop-desarrollo-app-clean-sdd.md</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-top: 0.2rem;">
+                  <p id="activeRuleDescription" class="type-sm" style="color: var(--text-secondary);">Directiva de máxima prioridad para desarrollo de software.</p>
+                  <span id="activeRuleScopeBadge" class="font-mono type-xs" style="background: #EFF6FF; color: #1E40AF; padding: 0.1rem 0.5rem; border-radius: 4px; border: 1px solid #BFDBFE;">Global</span>
+                </div>
+              </div>
+
+              <!-- View Mode Toggle & Status -->
+              <div style="display: flex; align-items: center; gap: 0.8rem;">
+                <label class="switch" style="transform: scale(0.85);" title="Activar/Desactivar regla">
+                  <input type="checkbox" id="activeRuleToggle" onchange="toggleActiveRuleFromHeader()">
+                  <span class="slider round"></span>
+                </label>
+                <div style="display: flex; gap: 0.4rem; background: var(--bg-subtle); padding: 0.2rem; border-radius: 6px; border: 1px solid var(--border-light);">
+                  <button onclick="setRuleViewMode('preview')" id="ruleViewMode-preview" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.8rem;">📖 Lectura</button>
+                  <button onclick="setRuleViewMode('editor')" id="ruleViewMode-editor" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.8rem;">✏️ Editor</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview Mode -->
+            <div id="rulePreviewContainer" class="viewer-body prose-light">
+              <!-- Rendered Markdown injected -->
+            </div>
+
+            <!-- Editor Mode -->
+            <div id="ruleEditorContainer" class="viewer-body hidden" style="display: flex; flex-direction: column; gap: 0.8rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-muted);" class="font-mono">
+                <span>Editor Markdown de Regla Global:</span>
+                <span id="ruleEditorWordCount">0 caracteres</span>
+              </div>
+              <textarea id="ruleMarkdownTextarea" oninput="onRuleTextareaInput()" style="flex: 1; min-height: 380px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; padding: 1.0rem; background: #0F172A; color: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; resize: none;"></textarea>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button onclick="deleteActiveRuleIfCustom()" id="btnDeleteCustomRule" class="btn-action btn-secondary" style="color: var(--color-error); border-color: #FECACA; display: none;">🗑️ Eliminar Regla</button>
+                <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-left: auto;">
+                  <button onclick="resetActiveRuleToDefault()" class="btn-action btn-secondary">🔄 Restablecer</button>
+                  <button onclick="setRuleViewMode('preview')" class="btn-action btn-secondary">Cancelar</button>
+                  <button onclick="saveActiveRuleEdit()" class="btn-action btn-primary">✓ Guardar Cambios</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Viewer Footer Actions -->
+            <div class="viewer-footer">
+              <div style="display: flex; gap: 0.6rem;">
+                <button onclick="copyActiveRuleMarkdown()" class="btn-action btn-secondary">📋 Copiar MD</button>
+                <button onclick="downloadActiveRuleMarkdown()" class="btn-action btn-secondary">📥 Descargar .md</button>
+              </div>
+              <button onclick="copyActiveRulePrompt()" class="btn-action btn-blue">⚡ Inyectar Prompt</button>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
@@ -1243,40 +1309,52 @@
   }
 ];
 
-    const DEFAULT_RULES = [
-    {
-      id: 'rule_sop_clean_sdd',
-      filename: '00-sop-desarrollo-app-clean-sdd.md',
-      title: '🥇 SOP: Clean Architecture & SDD',
-      description: 'Regla #1 de máxima prioridad: 3 capas estrictas (domain, data, presentation), WCAG 2.1 AA, base 10px rem, cero alerts y RLS obligatorio.',
-      active: true,
-      scope: 'Global (Todo el Ecosistema)'
-    },
-    {
-      id: 'rule_master_directives',
-      filename: '5-directrices-maestras.md',
-      title: '🏛️ Las 5 Directrices Maestras de Toni',
-      description: 'Aplica obligatoriamente las normas de Supabase (mia_/com_), Auth JWT, IA Streaming SSE, RGPD Toni (DNI 34799350M) y Control Drive.',
-      active: true,
-      scope: 'Global (Todas las Apps & Tareas)'
-    },
-    {
-      id: 'rule_auto_sync',
-      filename: 'auto-sync.md',
-      title: '🔄 Auto-Sync Mac & Windows',
-      description: 'Comprobación de commits remotos antes de empezar, sincronización fast-forward y auto-commit al terminar hitos.',
-      active: true,
-      scope: 'Multi-Machine (Git & Skills)'
-    },
-    {
-      id: 'rule_directiva_ejemplo',
-      filename: 'directiva-ejemplo.md',
-      title: '📋 Plantilla Directiva SOP Modular',
-      description: 'Plantilla estandarizada para definir directivas específicas por módulo o aplicación subordinadas a la arquitectura general.',
-      active: true,
-      scope: 'Módulos & Componentes'
-    }
-  ];
+      const DEFAULT_RULES = [
+  {
+    "id": "rule_sop_clean_sdd",
+    "filename": "00-sop-desarrollo-app-clean-sdd.md",
+    "title": "🥇 SOP: Clean Architecture & SDD",
+    "shortTitle": "1. SOP Clean SDD",
+    "icon": "🥇",
+    "description": "Regla #1 de máxima prioridad: 3 capas estrictas (domain, data, presentation), WCAG 2.1 AA, base 10px rem, cero alerts y RLS obligatorio.",
+    "active": true,
+    "scope": "Global (Todo el Ecosistema)",
+    "markdownContent": "# 📐 DIRECTIVA DE MÁXIMA PRIORIDAD: SOP_DESARROLLO_APP_CLEAN_SDD\n\n*ID:* DIR-APP-2026-V1    \n*Agente / Script Asociado:* `scripts/app_builder_agent.py` / `Antigravity Agent Manager`    \n*Última Actualización:* 2026-09-24    \n*Estado:* ACTIVO (PRIORIDAD MÁXIMA OBLIGATORIA)\n\n---\n\n### 1. Objetivos y Alcance\n\n- **Objetivo Principal:** Guiar al agente autónomo de desarrollo en la concepción, maquetación, programación y validación de aplicaciones móviles y web accesibles, escalables y mantenibles, aplicando Spec-Driven Development (SDD) y Clean Architecture.  \n- **Criterio de Éxito:** La aplicación compila sin advertencias ni errores, pasa el 100% de la suite de pruebas unitarias y de integración, cumple con las pautas de accesibilidad (EN 301 549 / WCAG 2.1 AA) y no utiliza diálogos nativos (`alert`, `confirm`, `prompt`), proporcionando todo el feedback de forma visual en el DOM o la interfaz.\n\n---\n\n### 2. Especificaciones de Entrada/Salida (I/O)\n\n#### Entradas (Inputs)\n\n- **Argumentos Requeridos:**    \n  - `--spec`: Ruta al documento de especificación funcional en Markdown (`docs/code-documentation/business-requirements.md` o `dog-app-spec-v3.md`).  \n  - `--stack`: Definición del stack tecnológico autorizado (ej. `React + CSS3 Nativo + Supabase` o `Flutter + Clean Architecture`).  \n- **Variables de Entorno (`.env`):**    \n  - `SUPABASE_URL`: Endpoint de la instancia de base de datos / BaaS.  \n  - `SUPABASE_ANON_KEY`: Clave pública para autenticación y políticas RLS.  \n- **Archivos Fuente y Reglas:**    \n  - `.antigravityrules`: Reglas persistentes de arquitectura, zonas intocables y comandos permitidos.  \n  - `docs/design/`: Carpeta con activos visuales, paleta de colores y mockups de referencia.\n\n#### Salidas (Outputs)\n\n- **Artefactos Generados:**    \n  - `src/`: Código fuente organizado en tres capas estrictas (`domain/`, `data/`, `presentation/`).  \n  - `tests/`: Pruebas unitarias, de integración y UI.  \n  - `docs/code-documentation/architecture-overview.md`: Mapa de arquitectura actualizado.  \n- **Retorno de Consola:**    \n  - JSON con reporte de compilación, porcentaje de cobertura de tests y resultado del validador (`PASS` / `FAIL`).\n\n---\n\n### 3. Flujo Lógico (Algoritmo de Desarrollo por Pasos)\n\n#### Paso 1: Análisis de Requisitos y Elicitación (SDD)\n\n- Leer la especificación del proyecto (`business-requirements.md`).  \n- Descomponer las historias de usuario en criterios de aceptación evaluables (`- [ ]`).  \n- Si existe cualquier ambigüedad en los requisitos, detener el flujo y formular preguntas aclaratorias al usuario antes de escribir código.\n\n#### Paso 2: Diseño de Arquitectura por Capas (Clean Architecture)\n\n- **Capa de Dominio (`src/domain/`):** Definir entidades puras, casos de uso e interfaces de repositorio sin dependencias externas.  \n- **Capa de Datos (`src/data/`):** Implementar modelos DTO, cliente BaaS (ej. Supabase SDK) y repositorios que implementen las interfaces de dominio.  \n- **Capa de Presentación (`src/presentation/`):** Crear vistas/pantallas, componentes UI modulares y gestión de estado.\n\n#### Paso 3: Construcción Incremental y TDD (Bucle Edit-Test-Fix)\n\n- Avanzar en incrementos pequeños (una pantalla o caso de uso por iteración).  \n- Escribir o verificar primero los tests unitarios correspondientes a la capa de dominio/datos.  \n- Ejecutar la suite de pruebas tras cada cambio. Si un test falla, aplicar parches focalizados hasta obtener luz verde antes de continuar.\n\n#### Paso 4: Validación de UI/UX, Accesibilidad y Feedback en el DOM\n\n- Asegurar que todas las medidas de fuentes y espaciados utilicen `rem` con base de `10px` (`html { font-size: 62.5%; }`).  \n- Verificar que no se utilicen llamadas a `alert()`, `confirm()` o `prompt()`. Todo mensaje debe ser una notificación flotante (toast) o un modal custom en el DOM/UI.  \n- Comprobar etiquetas accesibles (`aria-label`, `contentDescription`), contrastes mínimos de color (4.5:1) y áreas táctiles de al menos `48x48dp`.\n\n#### Paso 5: Persistencia, Seguridad (RLS) y Publicación\n\n- Configurar políticas de Row Level Security (RLS) en el backend (Supabase/PostgreSQL) para asegurar el aislamiento multiusuario (`auth.uid() = user_id`).  \n- Registrar el resumen de la iteración y confirmar la compilación.\n\n---\n\n### 4. Herramientas y Librerías (Lista Blanca)\n\n- **Frontend Core:** React, HTML5 Semántico, CSS3 Nativo (Flexbox, CSS Grid Layout).  \n- **Estilos y Dimensionamiento:** CSS Variables en `:root`, unidades `rem` base 10px.  \n- **Backend & BaaS:** Supabase JS SDK (Auth, Database PostgreSQL, Storage).  \n- **Testing & Calidad:** Vitest / Jest, Testing Library, ESLint / Linter oficial.\n\n---\n\n### 5. Restricciones y Casos Borde (Edge Cases)\n\n#### Limitaciones Conocidas\n\n- **Aislamiento de Estado:** Las vistas de la capa de presentación no deben realizar llamadas directas a APIs o SDKs de base de datos; deben hacerlo siempre a través de los casos de uso.  \n- **Anidamiento de Selectores:** Evitar sentencias de control anidadas profundas o estilos CSS sobrecargados; priorizar legibilidad y simplicidad.\n\n#### Errores Comunes y Soluciones (Anti-patrones)\n\n- **Error:** Uso de `alert()` o `prompt()` nativo para solicitar datos o mostrar errores.    \n  - **Solución:** Implementar un componente de notificación visual en React/DOM con soporte para lector de pantalla (`aria-live=\"polite\"`).  \n- **Error:** Contexto de chat demasiado largo que provoca alucinaciones o degradación de arquitectura.    \n  - **Solución:** Aplicar el protocolo de contexto corto (reiniciar sesión de chat, cargar solo los archivos con `@` e indicar el objetivo concreto).\n\n#### Validaciones Requeridas\n\n- Validación de campos obligatorios en formularios con mensajes de error explícitos en el DOM.  \n- Comprobación de conectividad y gestión de tiempos de espera (network timeouts).\n\n---\n\n### 6. Protocolo de Errores y Aprendizajes (Memoria Viva)\n\n| Fecha | Error Detectado | Causa Raíz | Solución/Parche Aplicado |  \n| :--- | :--- | :--- | :--- |  \n| 24/09 | Importación de librería externa de UI no autorizada | Violación de la regla de cero dependencias externas | Eliminación del paquete y refactorización a CSS3 nativo con Flexbox/Grid |  \n| 24/09 | Fallo de lectura por pantalla en botón gráfico | Falta de atributo `aria-label` / `contentDescription` | Añadido etiquetado semántico obligatorio en todos los componentes interactivos |  \n| 24/09 | Mutación accidental de datos entre usuarios | Faltaban políticas de Row Level Security (RLS) | Configurado RLS en Supabase forzando `auth.uid() = user_id` |\n\n> **Nota de Implementación:** Si encuentras un nuevo error durante la ejecución, corrígelo en el código y documenta inmediatamente el caso en esta tabla para prevenir regresiones futuras.\n\n---\n\n### 7. Ejemplos de Uso\n\n```bash\n# Invocación de creación de andamiaje y verificación  \npython scripts/app_builder_agent.py --spec docs/code-documentation/business-requirements.md --action scaffold\n\n# Ejecución de pruebas unitarias y validación de tipos  \nnpm run test:unit  \nnpm run type-check\n\n# Ejecución de validación de accesibilidad y linter  \nnpm run lint\n```\n\n---\n\n### 8. Checklist de Pre-Ejecución\n\n- [ ] Archivo `.antigravityrules` presente en la raíz del proyecto.  \n- [ ] Especificación funcional (`business-requirements.md` / PRD) redactada y validada.  \n- [ ] Variables de entorno configuradas (`SUPABASE_URL`, `SUPABASE_ANON_KEY`).  \n- [ ] Estructura de tres capas (`src/domain/`, `src/data/`, `src/presentation/`) inicializada.\n\n---\n\n### 9. Checklist Post-Ejecución\n\n- [ ] Cobertura de pruebas unitarias aprobada (>80% en Dominio y Datos).  \n- [ ] Cero advertencias de linter y compilación exitosa.  \n- [ ] Feedback visual en el DOM comprobado (sin `alert`, `confirm` ni `prompt`).  \n- [ ] Accesibilidad verificada (foco visible, contraste, etiquetas semánticas).  \n- [ ] Políticas RLS en Supabase activadas y verificadas.  \n- [ ] Directiva actualizada con nuevos aprendizajes si hubo incidencias.\n"
+  },
+  {
+    "id": "rule_master_directives",
+    "filename": "5-directrices-maestras.md",
+    "title": "🏛️ Las 5 Directrices Maestras de Toni",
+    "shortTitle": "2. 5 Directrices Maestras",
+    "icon": "🏛️",
+    "description": "Aplica obligatoriamente las normas de Supabase (mia_/com_), Auth JWT, IA Streaming SSE, RGPD Toni (DNI 34799350M) y Control Drive.",
+    "active": true,
+    "scope": "Global (Todas las Apps & Tareas)",
+    "markdownContent": "# 🏛️ Las 5 Directrices Maestras de Desarrollo (Ecosistema Toni)\n\n## Ámbito de Aplicación\nEsta regla rige **obligatoriamente** sobre cualquier aplicación web, móvil, backend o tarea desarrollada por Antigravity en macOS y Windows.\nCualquier tarea, script o desarrollo derivado de `Directiva-ejemplo.md` (o directivas SOP específicas) está **estrictamente subordinado** a estas 5 directrices fundamentales.\n\n---\n\n### 1. 🗄️ Arquitectura de Datos y Supabase (PostgreSQL)\n- **Aislamiento por Esquema Dedicado:** NUNCA crear tablas en el esquema `public`.\n  - Proyectos Propios / I+D: Prefijo `mia_*` (ej. `mia_bytoniproyect`, `mia_vitatrading`, `mia_academy`).\n  - Proyectos Comerciales / Clientes: Prefijo `com_*` (ej. `com_bicicletas`, `com_control61`).\n- **RLS Obligatorio (100% Cobertura):** Toda tabla creada debe tener activado `ALTER TABLE <schema>.<table> ENABLE ROW LEVEL SECURITY;`.\n- **Identificador de Usuario:** Toda tabla con pertenencia de usuario debe incluir `user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE DEFAULT auth.uid()`.\n- **Políticas CRUD:** Políticas granulares `SELECT`, `INSERT`, `UPDATE`, `DELETE` vinculadas a `auth.uid() = user_id`.\n- **Migraciones SQL:** Todo cambio o esquema debe registrarse en `supabase/migrations/YYYYMMDD_init_<esquema>.sql`.\n\n---\n\n### 2. 🛡️ Seguridad, Autenticación y Route Guards\n- **Supabase Auth:** Uso estándar de sesiones JWT con gestión de refresh tokens.\n- **Route Guards:** Proteger componentes y rutas privadas (`/dashboard`, `/perfil`, `/admin`, etc.) mediante guards o middleware que impidan el renderizado sin sesión autenticada.\n- **Validación Zero-Trust:** Validar todas las entradas de usuario y APIs con esquemas tipados (Zod / TypeScript).\n- **Cero Secretos en el Frontend:** NUNCA exponer `service_role`, claves maestras o tokens secretos en el bundle cliente (`VITE_`, `NEXT_PUBLIC_`). Usar Edge Functions o backend para privilegios elevados.\n\n---\n\n### 3. 🤖 Inteligencia Artificial, Streaming SSE y Agentes\n- **Streaming en Tiempo Real:** Toda interacción conversacional o generación de contenidos con LLMs debe implementarse mediante Streaming SSE (Server-Sent Events) carácter a carácter con estados de carga fluidos.\n- **Desacoplamiento de Prompts:** Los prompts del sistema nunca se mezclan con componentes visuales; residen en capas de servicio dedicadas (`src/services/` o `src/data/sources/`).\n- **Resiliencia & Rate Limiting:** Manejo de límites de tasa con reintentos exponenciales y posibilidad de alternar entre proveedores (Gemini, Claude, OpenAI, DeepSeek).\n\n---\n\n### 4. ⚖️ Privacidad, RGPD y Branding \"By Toni\"\n- **Titular Legal Obligatorio:** En cualquier aplicación comercial, pública o que procese datos personales:\n  - **Titular:** Antonio Javier García García\n  - **DNI:** 34799350M\n  - **Domicilio:** Madrid (España)\n- **Rutas Legales:** Generar automáticamente las páginas `/privacidad`, `/aviso-legal` y `/terminos`.\n- **Consentimiento:** Banner de cookies conforme a normativa AEPD.\n- **Branding Oficial:** Incluir en el pie de página de toda aplicación el sello distintivo: **\"By Toni\"**.\n\n---\n\n### 5. 📂 Registro Central y Control en Google Drive\n- **Registro Maestro:** Mantener actualizado el inventario en `Registro_Proyectos_Toni.csv`.\n- **Ficha Técnica `INFO_PROYECTO.md`:** Generar y mantener la ficha técnica del proyecto detallando arquitectura, esquemas, cumplimiento de directrices y comandos de arranque local.\n"
+  },
+  {
+    "id": "rule_auto_sync",
+    "filename": "auto-sync.md",
+    "title": "🔄 Auto-Sync Mac & Windows",
+    "shortTitle": "3. Auto-Sync Git",
+    "icon": "🔄",
+    "description": "Comprobación de commits remotos antes de empezar, sincronización fast-forward y auto-commit al terminar hitos.",
+    "active": true,
+    "scope": "Multi-Machine (Git & Skills)",
+    "markdownContent": "---\ntitle: Antigravity Cross-Machine Auto-Sync Rule\ntrigger: always_on\n---\n\n# 🔄 Antigravity Cross-Machine Configuration & Skill Sync\n\n## Objective\nEnsure seamless parity between macOS and Windows environments across skills, MCP servers, and project repositories.\n\n## 1. Global Customizations & Skills Sync (`antigravity-config`)\n- **Startup Check:** On session start, verify and pull the latest changes from `https://github.com/Tonileblan/antigravity-config`.\n- **Platform Execution:**\n  - On macOS: Runs `install.sh` if new skills/rules are detected.\n  - On Windows: Runs `install.ps1` if new skills/rules are detected.\n- **Skill Propagation:** Whenever a new skill or rule is modified or added, commit and push to `antigravity-config` automatically so the other machine receives it.\n\n## 2. Active Project Workspace Sync (Code & Canvas Designs)\n- **Pre-Flight Check:** Whenever a task or conversation starts inside a project repository (e.g. `Control61-Web`, `Bicicletas-Puertanueva`, etc.):\n  - Check if remote tracking branch (`origin/main`) has newer commits.\n  - Perform a fast fast-forward pull so the workspace is 100% updated with changes made on the other machine.\n- **Auto-Commit & Push:** When completing significant milestones (like UI suites, `.pen` canvas changes, or feature implementations), propose or push changes to keep the remote branch up-to-date.\n"
+  },
+  {
+    "id": "rule_directiva_ejemplo",
+    "filename": "directiva-ejemplo.md",
+    "title": "📋 Plantilla Directiva SOP Modular",
+    "shortTitle": "4. Plantilla Modular",
+    "icon": "📋",
+    "description": "Plantilla estandarizada para definir directivas específicas por módulo o aplicación subordinadas a la arquitectura general.",
+    "active": true,
+    "scope": "Módulos & Componentes",
+    "markdownContent": "# 📋 PLANTILLA DE DIRECTIVA SOP: [NOMBRE_CLAVE_DE_LA_APP_O_MODULO]\n\n> **ID de Directiva:** `DIR-APP-[NOMBRE_MODULO]-V1`  \n> **Ámbito / Módulo:** `src/presentation/views/...` | `src/domain/usecases/...`  \n> **Última Actualización:** `[AAAA-MM-DD]`  \n> **Estado:** `[BORRADOR | ACTIVO | DEPRECADO]`  \n> **Jerarquía:** Subordinada a las [5 Directrices Maestras de Toni](directrices/00_Directriz_Definicion_Proyecto.md) y a la [Directiva de Desarrollo SOP](rules/sop-desarrollo-app-clean-sdd.md)\n\n---\n\n## 🏛️ 0. Marco Normativo y Directrices Maestras Heredadas\nCualquier tarea o módulo desarrollado bajo esta directiva **debe cumplir obligatoriamente** con las 5 Directrices Maestras del ecosistema:\n1. **🗄️ Supabase Multi-Esquema:** Esquema dedicado (`mia_*` propio / `com_*` cliente), RLS forzoso al 100%, columna `user_id` vinculada a `auth.users(id)`.\n2. **🛡️ Seguridad & Auth:** Supabase Auth JWT, Route Guards y validación estricta Zero-Trust.\n3. **🤖 IA & Streaming SSE:** Conexiones en tiempo real, prompts aislados en capa de servicio y gestión de rate limits con backoff.\n4. **⚖️ RGPD & Branding:** Titular legal Antonio Javier García García (DNI 34799350M, Madrid), páginas legales y sello *\"By Toni\"*.\n5. **📂 Control Documental:** Registro en `Registro_Proyectos_Toni.csv` y ficha técnica `INFO_PROYECTO.md`.\n\n---\n\n## 🎯 1. Objetivos y Alcance\n*Describe qué debe lograr esta app/módulo y por qué.*\n- **Objetivo Principal:** [Descripción concisa del objetivo, ej: \"Módulo de gestión de cobros y facturación recurrente con sincronización Supabase\"].\n- **Criterio de Éxito:** [Condición exacta: \"Compila sin errores TypeScript, pasa 100% de tests y feedback en DOM sin alerts\"].\n\n---\n\n## 📥 2. Especificaciones de Entrada/Salida (I/O) y Estado\n\n### Entradas (Inputs & Eventos)\n- **Props / Parámetros de Ruta:** `[paramId: string]` - [Descripción].\n- **Eventos de Usuario:** [Clicks, formularios, gestos táctiles].\n- **Variables de Entorno (.env):** `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.\n\n### Salidas (Outputs)\n- **Renderizado UI:** Componentes en DOM accesibles y responsivos.\n- **Feedback al Usuario:** Notificación flotante (*Toast*) o Modal custom.\n- **Persistencia:** Mutaciones en esquema Supabase (`mia_*` / `com_*`).\n\n---\n\n## 🔄 3. Flujo Lógico y Clean Architecture\n\n1. **Capa de Dominio (`src/domain/`):** Entidades puras y casos de uso de negocio en TypeScript.\n2. **Capa de Datos (`src/data/`):** Repositorios Supabase, DTOs y persistencia local.\n3. **Capa de Presentación (`src/presentation/`):** Componentes UI, hooks y gestión de estado reactivo.\n\n---\n\n## 🛠️ 4. Herramientas y Librerías Permitidas (Lista Blanca)\n- **Frontend:** React, TypeScript, CSS3 Nativo, Lucide React, Vite.\n- **BaaS:** Supabase JS SDK (PostgreSQL, Auth, Storage).\n- **Testing:** Vitest / Jest, React Testing Library.\n\n---\n\n## ⚠️ 5. Restricciones, Casos Borde y Accesibilidad\n- **Cero Diálogos Nativos:** Prohibido `alert()`, `confirm()` o `prompt()`. Usar siempre Toasts en el DOM.\n- **Accesibilidad:** `aria-label` en controles interactivos, contraste ≥ 4.5:1, targets táctiles ≥ 48x48px.\n- **Aislamiento:** La UI nunca hace llamadas directas a BD; invoca casos de uso.\n\n---\n\n## 🧠 6. Protocolo de Errores y Aprendizajes (Memoria Viva)\n\n| Fecha | Error Detectado | Causa Raíz | Solución / Parche Definitivo |\n| :--- | :--- | :--- | :--- |\n| [DD/MM] | [Tipo de Error] | [Por qué ocurrió] | [Solución aplicada] |\n\n> **Nota de Implementación:** Arregla el fallo primero en el código y luego añade la regla aquí para evitar regresiones.\n\n---\n\n## 🚀 7. Comandos de Ejecución y Test\n\n```bash\n# Desarrollo local\nnpm run dev\n\n# Tests\nnpm run test\n\n# Build de producción\nnpm run build\n```\n\n---\n\n## 📋 8. Checklists\n\n### Pre-Ejecución\n- [ ] Variables de entorno configuradas (`.env`).\n- [ ] Entidades de dominio y casos de uso definidos.\n\n### Post-Ejecución\n- [ ] Compilación exitosa (`npm run build`).\n- [ ] Tests pasando al 100%.\n- [ ] Feedback visual en DOM verificado.\n- [ ] Directiva actualizada con nuevos aprendizajes.\n"
+  }
+];
 
   const DEFAULT_SKILLS = [
     { id: 'pencil-dev', title: 'Pencil Visual AI', icon: '🎨', type: 'Diseño & Canvas', desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.' },
@@ -1403,6 +1481,8 @@
     currentProjectId: 'proj_clinica_dental',
     memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
     activeDirectiveId: 'dir_supabase',
+    activeRuleId: 'rule_sop_clean_sdd',
+    ruleViewMode: 'preview',
     directiveViewMode: 'preview',
     stitchDesign: {
       palette: 'blue_royal',
@@ -1428,7 +1508,11 @@
         } else {
           appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
         }
-        if (parsed.rules) appState.rules = parsed.rules;
+        if (parsed.rules && Array.isArray(parsed.rules) && parsed.rules.length >= 4 && parsed.rules[0].markdownContent && parsed.rules[0].markdownContent.length > 50) {
+          appState.rules = parsed.rules;
+        } else {
+          appState.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+        }
         if (parsed.memory) appState.memory = parsed.memory;
         if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
         if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
@@ -1539,6 +1623,262 @@
     if (textarea) {
       textarea.value = dir.markdownContent || '';
       onDirectiveTextareaInput();
+    }
+  }
+
+  
+  // ============================================================================
+  // RULES MASTER VIEWER & LIVE MARKDOWN EDITOR (rules/)
+  // ============================================================================
+  function renderRulesList() {
+    const container = document.getElementById('rulesListContainer');
+    if (!container) return;
+    if (!appState.rules || !appState.rules.length) {
+      appState.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+    }
+    container.innerHTML = appState.rules.map(rule => {
+      const isActive = rule.id === appState.activeRuleId;
+      return `
+        <div onclick="selectRule('${rule.id}')" class="rule-item-card ${isActive ? 'active' : ''}">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 0.8rem;">
+              <span style="font-size: 1.6rem;">${rule.icon || '🛡️'}</span>
+              <div>
+                <h4 class="type-sm" style="font-weight: 700; color: ${isActive ? 'var(--color-primary-dark)' : 'var(--text-primary)'};">${rule.shortTitle || rule.title}</h4>
+                <div class="font-mono type-xs" style="color: var(--text-muted);">${rule.filename}</div>
+              </div>
+            </div>
+            <label class="switch" style="transform: scale(0.75);" onclick="event.stopPropagation();" title="Activar/Desactivar regla">
+              <input type="checkbox" ${rule.active ? 'checked' : ''} onchange="toggleRuleActive('${rule.id}', event)">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--border-light);" class="type-xs">
+            <span style="color: var(--text-secondary);">${rule.scope || 'Global'}</span>
+            <span class="nav-badge" style="font-size: 0.95rem; ${rule.active ? 'background: #ECFDF5; color: #059669; border-color: #A7F3D0;' : 'background: #F1F5F9; color: #64748B;'}">${rule.active ? 'ACTIVA' : 'INACTIVA'}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function selectRule(id) {
+    appState.activeRuleId = id;
+    renderRulesList();
+    renderActiveRuleDetails();
+  }
+
+  function renderActiveRuleDetails() {
+    if (!appState.rules || !appState.rules.length) {
+      appState.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+    }
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId) || appState.rules[0];
+    if (!rule) return;
+
+    appState.activeRuleId = rule.id;
+
+    const iconEl = document.getElementById('activeRuleIcon');
+    const titleEl = document.getElementById('activeRuleTitle');
+    const descEl = document.getElementById('activeRuleDescription');
+    const filenameEl = document.getElementById('activeRuleFilename');
+    const scopeBadgeEl = document.getElementById('activeRuleScopeBadge');
+    const toggleEl = document.getElementById('activeRuleToggle');
+    const btnDelete = document.getElementById('btnDeleteCustomRule');
+
+    if (iconEl) iconEl.innerText = rule.icon || '🛡️';
+    if (titleEl) titleEl.innerText = rule.title || 'Regla Global';
+    if (descEl) descEl.innerText = rule.description || '';
+    if (filenameEl) filenameEl.innerText = rule.filename || `${rule.id}.md`;
+    if (scopeBadgeEl) scopeBadgeEl.innerText = rule.scope || 'Global';
+    if (toggleEl) toggleEl.checked = !!rule.active;
+
+    if (btnDelete) {
+      const isDefault = DEFAULT_RULES.some(d => d.id === rule.id);
+      btnDelete.style.display = isDefault ? 'none' : 'block';
+    }
+
+    const previewContainer = document.getElementById('rulePreviewContainer');
+    if (previewContainer) {
+      previewContainer.innerHTML = renderMarkdownSafely(rule.markdownContent);
+    }
+    
+    const textarea = document.getElementById('ruleMarkdownTextarea');
+    if (textarea) {
+      textarea.value = rule.markdownContent || '';
+      onRuleTextareaInput();
+    }
+  }
+
+  function setRuleViewMode(mode) {
+    appState.ruleViewMode = mode;
+    const preview = document.getElementById('rulePreviewContainer');
+    const editor = document.getElementById('ruleEditorContainer');
+    const btnPreview = document.getElementById('ruleViewMode-preview');
+    const btnEditor = document.getElementById('ruleViewMode-editor');
+
+    if (mode === 'preview') {
+      if (preview) preview.classList.remove('hidden');
+      if (editor) editor.classList.add('hidden');
+      if (btnPreview) {
+        btnPreview.classList.remove('btn-secondary');
+        btnPreview.classList.add('btn-primary');
+      }
+      if (btnEditor) {
+        btnEditor.classList.remove('btn-primary');
+        btnEditor.classList.add('btn-secondary');
+      }
+    } else {
+      if (preview) preview.classList.add('hidden');
+      if (editor) editor.classList.remove('hidden');
+      if (btnEditor) {
+        btnEditor.classList.remove('btn-secondary');
+        btnEditor.classList.add('btn-primary');
+      }
+      if (btnPreview) {
+        btnPreview.classList.remove('btn-primary');
+        btnPreview.classList.add('btn-secondary');
+      }
+    }
+  }
+
+  function onRuleTextareaInput() {
+    const textarea = document.getElementById('ruleMarkdownTextarea');
+    const wordCount = document.getElementById('ruleEditorWordCount');
+    if (textarea && wordCount) {
+      const len = textarea.value.length;
+      const words = textarea.value.split(/\s+/).filter(Boolean).length;
+      wordCount.innerText = `${len} caracteres · ${words} palabras`;
+    }
+  }
+
+  function toggleActiveRuleFromHeader() {
+    const toggle = document.getElementById('activeRuleToggle');
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (rule && toggle) {
+      rule.active = toggle.checked;
+      renderRulesList();
+      saveAllChanges();
+      showToast(`Regla "${rule.title}" ${rule.active ? 'activada' : 'desactivada'}.`);
+    }
+  }
+
+  function toggleRuleActive(id, event) {
+    if (event) event.stopPropagation();
+    const rule = appState.rules.find(r => r.id === id);
+    if (rule) {
+      rule.active = !rule.active;
+      renderRulesList();
+      if (appState.activeRuleId === id) {
+        const toggleEl = document.getElementById('activeRuleToggle');
+        if (toggleEl) toggleEl.checked = rule.active;
+      }
+      saveAllChanges();
+      showToast(`Regla "${rule.title}" ${rule.active ? 'activada' : 'desactivada'}.`);
+    }
+  }
+
+  function saveActiveRuleEdit() {
+    const textarea = document.getElementById('ruleMarkdownTextarea');
+    if (!textarea) return;
+    const newMarkdown = textarea.value;
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (rule) {
+      rule.markdownContent = newMarkdown;
+      renderActiveRuleDetails();
+      setRuleViewMode('preview');
+      saveAllChanges();
+      showToast('✓ Cambios guardados en la regla global.');
+    }
+  }
+
+  function resetActiveRuleToDefault() {
+    const orig = DEFAULT_RULES.find(d => d.id === appState.activeRuleId);
+    const current = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (orig && current) {
+      if (confirm('¿Deseas restablecer esta regla global a su contenido original de fábrica?')) {
+        current.markdownContent = orig.markdownContent;
+        renderActiveRuleDetails();
+        saveAllChanges();
+        showToast('✓ Regla restablecida al original.');
+      }
+    } else {
+      showToast('Esta es una regla personalizada, no tiene original por defecto.');
+    }
+  }
+
+  function copyActiveRuleMarkdown() {
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (!rule || !rule.markdownContent) return;
+    navigator.clipboard.writeText(rule.markdownContent).then(() => {
+      showToast(`📋 Markdown de "${rule.title}" copiado al portapapeles.`);
+    });
+  }
+
+  function downloadActiveRuleMarkdown() {
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (!rule) return;
+    const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(rule.markdownContent || '');
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = rule.filename || `${rule.id}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast(`📥 ${a.download} descargada.`);
+  }
+
+  function copyActiveRulePrompt() {
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (!rule) return;
+    const promptText = `================================================================================\nDIRECTIVA / REGLA GLOBAL ACTIVA: ${rule.title}\nArchivo: rules/${rule.filename}\nÁmbito: ${rule.scope}\n================================================================================\n\n${rule.markdownContent}\n`;
+    navigator.clipboard.writeText(promptText).then(() => {
+      showToast(`⚡ Prompt de "${rule.title}" copiado para inyección.`);
+    });
+  }
+
+  function createNewRulePrompt() {
+    const title = prompt('Introduce el título de la nueva regla global:', 'Nueva Regla Técnica');
+    if (!title) return;
+    const filename = prompt('Nombre de archivo en rules/ (ej: 06-seguridad-api.md):', `${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.md`);
+    if (!filename) return;
+
+    const newId = 'rule_' + Date.now();
+    const newRule = {
+      id: newId,
+      filename: filename.endsWith('.md') ? filename : `${filename}.md`,
+      title: title,
+      shortTitle: title,
+      icon: '🛡️',
+      description: 'Regla personalizada agregada desde Tonigravity Studio.',
+      active: true,
+      scope: 'Global / Específica',
+      markdownContent: `# 🛡️ ${title}\n\n> **Archivo:** \`rules/${filename}\`  \n> **Estado:** ACTIVO  \n\n---\n\n## 1. Propósito y Alcance\nEscribe aquí la especificación de la nueva regla...\n`
+    };
+
+    appState.rules.push(newRule);
+    appState.activeRuleId = newId;
+    renderRulesList();
+    renderActiveRuleDetails();
+    setRuleViewMode('editor');
+    saveAllChanges();
+    showToast(`✓ Nueva regla "${title}" creada. ¡Ahora puedes redactarla!`);
+  }
+
+  function deleteActiveRuleIfCustom() {
+    const rule = appState.rules.find(r => r.id === appState.activeRuleId);
+    if (!rule) return;
+    const isDefault = DEFAULT_RULES.some(d => d.id === rule.id);
+    if (isDefault) {
+      showToast('❌ Las reglas del sistema base no se pueden eliminar.');
+      return;
+    }
+    if (confirm(`¿Estás seguro de eliminar la regla personalizada "${rule.title}"?`)) {
+      appState.rules = appState.rules.filter(r => r.id !== rule.id);
+      appState.activeRuleId = appState.rules[0]?.id || 'rule_sop_clean_sdd';
+      renderRulesList();
+      renderActiveRuleDetails();
+      saveAllChanges();
+      showToast('🗑️ Regla personalizada eliminada.');
     }
   }
 
@@ -1713,6 +2053,10 @@
     if (tabId === 'directricesView') {
       renderDirectivesList();
       renderActiveDirectiveDetails();
+    }
+    if (tabId === 'rulesView') {
+      renderRulesList();
+      renderActiveRuleDetails();
     }
     if (tabId === 'briefingView') updateBriefingCompiledPrompt();
     if (tabId === 'stitchView') updateStitchDesign();
