@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tonigravity Studio • Hub de Directrices, Briefing Ágil &amp; Diseño Stitch IA</title>
+  <title>Tonigravity Studio • Hub Ejecutivo de Gobernanza, Briefing & Stitch IA</title>
   
   <!-- Favicon & Icons -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -12,31 +12,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <!-- External Libraries -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -45,1515 +21,1062 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <style>
+    /* ==========================================================================
+       SYSTEM DIRECTIVE DESIGN SYSTEM: 0% NON-DATA PIXELS, 10PX REM, WCAG 2.2 AA
+       ========================================================================== */
+    :root {
+      font-size: 62.5%; /* Base 10px Rem */
+      
+      --bg-canvas: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F1F5F9;
+      --border-color: #CBD5E1;
+      --border-light: #E2E8F0;
+      
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      
+      --color-blue: #2563EB;
+      --color-blue-bg: #EFF6FF;
+      --color-purple: #7C3AED;
+      --color-purple-bg: #FAF5FF;
+      --color-emerald: #059669;
+      --color-emerald-bg: #ECFDF5;
+      --color-amber: #D97706;
+      --color-amber-bg: #FFFBEB;
+      --color-focus: #0284C7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #f8fafc;
-      color: #0f172a;
-      line-height: 1.5;
+      font-size: 1.4rem;
+      line-height: 1.45;
+      color: var(--text-primary);
+      background-color: var(--bg-canvas);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       -webkit-font-smoothing: antialiased;
     }
-    .font-mono {
+
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* TYPOGRAPHY HIERARCHY */
+    .type-xl { font-size: 2.0rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+    .type-lg { font-size: 1.5rem; font-weight: 600; line-height: 1.3; }
+    .type-md { font-size: 1.3rem; font-weight: 500; line-height: 1.4; }
+    .type-sm { font-size: 1.2rem; font-weight: 500; line-height: 1.4; }
+    .type-xs { font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* LAYOUT: SINGLE VIEWPORT DASHBOARD */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 1680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.0rem 1.4rem;
+      gap: 1.0rem;
+    }
+
+    /* TOP EXECUTIVE HEADER (Z/F Anchor) */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.4rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.8rem 1.4rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+    }
+
+    .brand-title-box h1 {
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .kpi-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      border-left: 2px solid var(--border-light);
+      padding-left: 1.4rem;
+    }
+
+    .kpi-chip {
+      display: flex;
+      flex-direction: column;
+      padding: 0.3rem 0.8rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+    }
+
+    .kpi-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .kpi-label {
+      font-size: 1.0rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    /* ACTION BUTTONS (Touch accessible >= 44px) */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px;
+      min-height: 36px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--text-primary);
+      color: #FFFFFF;
+      border: 1px solid var(--text-primary);
+    }
+    .btn-primary:hover { background: #1E293B; }
+
+    .btn-blue {
+      background: var(--color-blue);
+      color: #FFFFFF;
+      border: 1px solid var(--color-blue);
+    }
+    .btn-blue:hover { background: #1D4ED8; }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover { background: var(--bg-subtle); color: var(--text-primary); }
+
+    /* DASHBOARD BODY (270px Sidebar + Main Viewport) */
+    .dashboard-body {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 1.0rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* LEFT SIDEBAR */
+    .app-sidebar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .nav-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 0.6rem;
+    }
+
+    .nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    .nav-btn.active {
+      background: var(--color-blue-bg);
+      border-color: #BFDBFE;
+      color: var(--color-blue);
+    }
+
+    .nav-badge {
+      font-size: 1.0rem;
       font-family: 'JetBrains Mono', monospace;
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
     }
-    .card-shadow {
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    .nav-btn.active .nav-badge {
+      background: #FFFFFF;
+      border-color: #BFDBFE;
+      color: var(--color-blue);
+      font-weight: 700;
     }
-    .card-shadow-hover:hover {
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      transform: translateY(-2px);
+
+    /* MINI ACTIVE DRAFT CARD */
+    .mini-active-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
     }
-    /* Markdown Preview Prose */
-    .prose-light h1 { font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-    .prose-light h2 { font-size: 1.2rem; font-weight: 700; color: #1e40af; margin-top: 1.25rem; margin-bottom: 0.5rem; }
-    .prose-light h3 { font-size: 1.05rem; font-weight: 600; color: #334155; margin-top: 1rem; margin-bottom: 0.5rem; }
-    .prose-light p { margin-bottom: 0.75rem; line-height: 1.6; color: #334155; }
-    .prose-light ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #334155; }
-    .prose-light ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #334155; }
-    .prose-light li { margin-bottom: 0.25rem; }
-    .prose-light code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: #f1f5f9; color: #0284c7; padding: 0.2rem 0.4rem; border-radius: 0.375rem; border: 1px solid #e2e8f0; }
-    .prose-light pre { background: #0f172a; color: #f8fafc; padding: 0.85rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1rem; }
-    .prose-light pre code { background: transparent; padding: 0; color: #38bdf8; border: none; }
-    .prose-light blockquote { border-left: 3px solid #3b82f6; padding-left: 0.85rem; color: #64748b; margin: 0.75rem 0; font-style: italic; background: #f8fafc; padding: 0.5rem 0.85rem; border-radius: 0 0.5rem 0.5rem 0; }
-    .prose-light table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.875rem; }
-    .prose-light th { background: #f1f5f9; color: #0f172a; text-align: left; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; font-weight: 700; }
-    .prose-light td { padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; color: #334155; }
+
+    /* MAIN CONTENT VIEWPORT */
+    .app-main-content {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .tab-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .tab-content.hidden {
+      display: none !important;
+    }
+
+    /* DIRECTIVES VIEW (Two-Pane) */
+    .directives-view-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .directives-list-col {
+      border-right: 1px solid var(--border-color);
+      padding: 1.2rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      background: #F8FAFC;
+    }
+
+    .dir-item-card {
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-surface);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .dir-item-card:hover {
+      border-color: var(--border-color);
+      background: #F1F5F9;
+    }
+
+    .dir-item-card.active {
+      background: var(--color-blue-bg);
+      border-color: #93C5FD;
+    }
+
+    .directives-viewer-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .viewer-header {
+      padding: 1.0rem 1.6rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .viewer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.6rem;
+      background: #FFFFFF;
+    }
+
+    .viewer-footer {
+      padding: 0.8rem 1.4rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-subtle);
+      flex-shrink: 0;
+    }
+
+    /* PROSE LIGHT MARKDOWN */
+    .prose-light {
+      font-size: 1.3rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+    .prose-light h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--border-light); }
+    .prose-light h2 { font-size: 1.4rem; font-weight: 700; color: var(--color-blue); margin-top: 1.4rem; margin-bottom: 0.6rem; }
+    .prose-light h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.0rem; margin-bottom: 0.4rem; }
+    .prose-light p { margin-bottom: 0.8rem; color: var(--text-secondary); }
+    .prose-light ul, .prose-light ol { padding-left: 1.6rem; margin-bottom: 0.8rem; }
+    .prose-light li { margin-bottom: 0.3rem; }
+    .prose-light code { font-family: 'JetBrains Mono', monospace; font-size: 0.9em; background: var(--bg-subtle); color: var(--color-focus); padding: 0.2rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-light); }
+    .prose-light pre { background: #0F172A; color: #F8FAFC; padding: 1.0rem; border-radius: 6px; overflow-x: auto; margin: 0.8rem 0; }
+    .prose-light pre code { background: transparent; color: #38BDF8; border: none; padding: 0; }
+    .prose-light blockquote { border-left: 3px solid var(--color-blue); padding-left: 1.0rem; color: var(--text-muted); margin: 0.8rem 0; font-style: italic; background: var(--bg-subtle); padding: 0.6rem 1.0rem; border-radius: 0 6px 6px 0; }
+    .prose-light table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 1.2rem; }
+    .prose-light th { background: #F8FAFC; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border-color); font-weight: 700; }
+    .prose-light td { padding: 0.6rem 0.8rem; border: 1px solid var(--border-light); }
+
+    /* BRIEFING TWO-COLUMN LAYOUT */
+    .briefing-view-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .briefing-form-col {
+      padding: 1.6rem;
+      overflow-y: auto;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .briefing-preview-col {
+      padding: 1.6rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      background: #F8FAFC;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      height: 36px;
+      padding: 0 0.8rem;
+      font-size: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--color-focus);
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+    }
+
+    /* SCROLLABLE GENERIC TAB PANE */
+    .tab-scroll-pane {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.0rem;
+    }
+
+    .item-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1.2rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* MODALS */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      body { height: auto; overflow-y: auto; }
+      .app-container { height: auto; }
+      .dashboard-body { grid-template-columns: 1fr; }
+      .directives-view-grid, .briefing-view-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-<div class="max-w-7xl mx-auto space-y-6">
+<div class="app-container">
 
-  <!-- HEADER (Solo botón Proyecto Nuevo) -->
-  <header class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-    <div class="flex items-center gap-4">
-      <div class="w-11 h-11 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-sm shrink-0">
-        <svg class="w-7 h-7" viewBox="0 0 100 100">
-          <defs>
-            <linearGradient id="orbG" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#38BDF8" />
-              <stop offset="50%" stop-color="#6366F1" />
-              <stop offset="100%" stop-color="#A855F7" />
-            </linearGradient>
-          </defs>
-          <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="url(#orbG)" stroke-width="3.5" transform="rotate(-30 50 50)" />
-          <circle cx="50" cy="50" r="16" fill="url(#orbG)" />
-          <path d="M43 43 H57 M50 43 V57" stroke="#0B0F19" stroke-width="3.5" stroke-linecap="round" />
-        </svg>
+  <!-- ==========================================================================
+       BLOQUE 1 & 2: HEADER EJECUTIVO & KPIS (Z-Pattern Anchor)
+       ========================================================================== -->
+  <header class="top-bar">
+    <div class="brand-section">
+      <div class="brand-title-box">
+        <h1 class="type-xl">
+          <span>⚡</span> Tonigravity Studio
+        </h1>
       </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Tonigravity Studio
-          </h1>
-          <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-md">v2.7 OS</span>
+
+      <!-- Non-Redundant Executive KPIs -->
+      <div class="kpi-group" role="region" aria-label="Métricas Principales">
+        <div class="kpi-chip">
+          <span class="kpi-value">6</span>
+          <span class="kpi-label">Directrices Maestras</span>
         </div>
-        <p class="text-xs text-slate-500 mt-0.5">
-          Gobernanza de las <strong>5 Directrices Maestras</strong>, generador de <strong>Briefing Ágil</strong> y diseño de UI con <strong>Stitch IA</strong>.
-        </p>
+        <div class="kpi-chip">
+          <span class="kpi-value" id="headerProjectsCount">11</span>
+          <span class="kpi-label">Repos Sincronizados</span>
+        </div>
+        <div class="kpi-chip">
+          <span class="kpi-value">8</span>
+          <span class="kpi-label">MCP Skills</span>
+        </div>
+        <div class="kpi-chip" style="border-color: #A7F3D0; background: #ECFDF5;">
+          <span class="kpi-value" style="color: #059669;">✓ 100%</span>
+          <span class="kpi-label" style="color: #047857;">Paridad Mac ↔ Win</span>
+        </div>
       </div>
     </div>
-    
-    <div class="flex items-center gap-2.5 self-stretch sm:self-auto justify-end">
-      <!-- Botón Proyecto Nuevo Único -->
-      <button onclick="createNewProjectDraft(); switchTab('briefingView');" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2 transform hover:-translate-y-0.5">
-        <span class="text-sm">✨</span> Proyecto Nuevo
+
+    <!-- Quick Action Controls -->
+    <div class="top-actions">
+      <button onclick="createNewProjectDraft(); switchTab('briefingView');" class="btn-action btn-blue" title="Crear nuevo proyecto con Briefing">
+        <span>✨</span> Proyecto Nuevo
+      </button>
+      <button onclick="copyMasterInitPrompt()" class="btn-action btn-secondary" title="Copiar Prompt Maestro de Inicialización">
+        <span>⚡</span> Copiar Prompt Maestro
+      </button>
+      <button onclick="openProjectsManagerModal()" class="btn-action btn-secondary" title="Ver proyectos guardados">
+        <span>🗂️</span> Mis Proyectos (<span id="headerSavedProjectsCount">2</span>)
       </button>
     </div>
   </header>
 
-  <!-- STATS COUNTER CARDS -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-blue-600">6</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Directrices &amp; Protocolos</div>
-    </div>
-    <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-purple-600" id="headerSavedProjectsCount">2</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Proyectos Guardados</div>
-    </div>
-    <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-emerald-600">9</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Repos Sincronizados</div>
-    </div>
-    <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-amber-600">100%</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Mac ↔ Win Paridad</div>
-    </div>
-  </div>
-
-  <!-- MAIN APP LAYOUT: SIDEBAR + CONTENT (UBICADO DEBAJO DEL TITULAR) -->
-  <div id="appLayoutContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- ==========================================================================
+       DASHBOARD BODY (270px Sidebar + Main Work Viewport)
+       ========================================================================== -->
+  <main class="dashboard-body">
     
-    <!-- SIDEBAR DE NAVEGACIÓN ORGANIZADA (COLAPSIBLE) -->
-    <aside id="appSidebar" class="lg:col-span-3 space-y-4 lg:sticky lg:top-4 self-start transition-all duration-300">
+    <!-- LEFT SIDEBAR NAVEGACIÓN ORGANIZADA -->
+    <aside class="app-sidebar">
       
-      <!-- Card del Menú Lateral -->
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 card-shadow space-y-5">
-        
-        <!-- Header del Sidebar con botón de colapsar en la esquina superior derecha -->
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center gap-2 text-xs font-extrabold text-slate-800">
-            <span class="text-sm">🧭</span>
-            <span class="tracking-tight">Navegación</span>
-          </div>
-          <button onclick="toggleSidebar()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 rounded-xl transition flex items-center justify-center text-sm font-bold border border-slate-200/80 shadow-2xs shrink-0" title="Ocultar barra lateral">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <div>
+        <div class="nav-section-title">🚀 Desarrollo &amp; Proyectos</div>
+        <div class="nav-group">
+          <button id="tabBtn_directrices" onclick="switchTab('directricesView')" class="nav-btn active">
+            <span>🏛️ 5 Directrices Maestras</span>
+            <span class="nav-badge">6 DOCS</span>
+          </button>
+          <button id="tabBtn_briefing" onclick="switchTab('briefingView')" class="nav-btn">
+            <span>📐 Nuevo Proyecto &amp; Briefing</span>
+            <span class="nav-badge">10 PASOS</span>
+          </button>
+          <button id="tabBtn_stitch" onclick="switchTab('stitchView')" class="nav-btn">
+            <span>🎨 Stitch UI Studio</span>
+            <span class="nav-badge">IA UI</span>
           </button>
         </div>
+      </div>
 
-        <!-- SECCIÓN 1: DESARROLLO -->
-        <div class="space-y-1.5">
-          <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-3 py-1 font-mono flex items-center justify-between">
-            <span>🚀 Desarrollo</span>
-            <span class="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded font-bold">PROYECTOS</span>
-          </div>
-          
-          <nav class="space-y-1 text-xs">
-            <button id="tabBtn_briefing" onclick="switchTab('briefingView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">📐</span>
-                <span>Nuevo Proyecto &amp; Briefing</span>
-              </div>
-              <span class="text-[10px] font-mono text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full font-bold">10 PASOS</span>
-            </button>
-
-            <button onclick="openProjectsManagerModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">🗂️</span>
-                <span>Mis Proyectos Guardados</span>
-              </div>
-              <span id="savedProjectsCountBadge" class="text-[10px] font-mono text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full font-bold">2</span>
-            </button>
-
-            <button id="tabBtn_stitch" onclick="switchTab('stitchView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">🎨</span>
-                <span>Stitch UI Studio</span>
-              </div>
-              <span class="text-[10px] font-mono text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full font-bold">IA UI</span>
-            </button>
-          </nav>
-        </div>
-
-        <div class="border-t border-slate-100"></div>
-
-        <!-- SECCIÓN 2: CONFIGURACIONES & GOBERNANZA -->
-        <div class="space-y-1.5">
-          <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-3 py-1 font-mono flex items-center justify-between">
-            <span>⚙️ Configuración</span>
-            <span class="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-bold">GOBERNANZA</span>
-          </div>
-
-          <nav class="space-y-1 text-xs">
-            <button id="tabBtn_directrices" onclick="switchTab('directricesView')" class="tab-btn active w-full flex items-center justify-between p-2.5 rounded-xl transition text-left bg-blue-50 text-blue-900 border border-blue-200 font-bold shadow-xs">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">🏛️</span>
-                <span>5 Directrices Maestras</span>
-              </div>
-              <span class="text-[10px] font-mono text-blue-700 bg-white border border-blue-200 px-1.5 py-0.5 rounded">6 DOCS</span>
-            </button>
-
-            <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">🛡️</span>
-                <span>Reglas Globales</span>
-              </div>
-              <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">RULES/</span>
-            </button>
-
-            <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">🧩</span>
-                <span>Skills &amp; MCP</span>
-              </div>
-              <span class="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">8 MCP</span>
-            </button>
-
-            <button id="tabBtn_sop" onclick="switchTab('sopView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">📋</span>
-                <span>Directiva SOP &amp; Memoria</span>
-              </div>
-              <span class="text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">SOP</span>
-            </button>
-
-            <button id="tabBtn_sync" onclick="switchTab('syncView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
-              <div class="flex items-center gap-2.5">
-                <span class="text-base">🔄</span>
-                <span>Sync Mac ↔ Win</span>
-              </div>
-              <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">100%</span>
-            </button>
-          </nav>
-        </div>
-
-        <div class="border-t border-slate-100"></div>
-
-        <!-- Mini Active Project Card in Sidebar -->
-        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
-          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Proyecto en Edición:</div>
-          <div class="flex items-center justify-between">
-            <span id="sidebarActiveProjectName" class="text-xs font-bold text-slate-900 truncate max-w-[150px]">Clinica-Dental</span>
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          </div>
-          <button onclick="switchTab('briefingView')" class="w-full text-center py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition shadow-2xs">
-            Continuar Editando
+      <div>
+        <div class="nav-section-title">⚙️ Gobernanza &amp; Protocolos</div>
+        <div class="nav-group">
+          <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="nav-btn">
+            <span>🛡️ Reglas Globales</span>
+            <span class="nav-badge">4 RULES</span>
+          </button>
+          <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="nav-btn">
+            <span>🧩 Skills &amp; MCP Tools</span>
+            <span class="nav-badge">8 MCP</span>
+          </button>
+          <button id="tabBtn_sop" onclick="switchTab('sopView')" class="nav-btn">
+            <span>📋 Directiva SOP &amp; Memoria</span>
+            <span class="nav-badge">SOP</span>
+          </button>
+          <button id="tabBtn_sync" onclick="switchTab('syncView')" class="nav-btn">
+            <span>🔄 Sync Mac ↔ Win</span>
+            <span class="nav-badge">11 REPOS</span>
           </button>
         </div>
+      </div>
 
+      <!-- Mini Active Draft Card -->
+      <div class="mini-active-card">
+        <div class="type-xs" style="color: var(--text-muted);">Proyecto en Edición:</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong id="sidebarActiveProjectName" class="type-sm truncate" style="max-width: 170px;">Clinica-Dental</strong>
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span>
+        </div>
+        <button onclick="switchTab('briefingView')" class="btn-action btn-secondary" style="width: 100%; min-height: 28px; font-size: 1.1rem; padding: 0.2rem 0.6rem; margin-top: 0.4rem;">
+          Continuar Editando
+        </button>
+      </div>
+
+      <!-- Fast Connectors -->
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 0.4rem;">
+        <div class="nav-section-title">🔗 Ecosistema Toni</div>
+        <a href="https://vibestack-studio.vercel.app" target="_blank" rel="noopener" class="nav-btn" style="text-decoration: none;">
+          <span>⚡ VibeStack Studio</span>
+          <span class="nav-badge">28 APPS</span>
+        </a>
+        <a href="https://github.com/Tonileblan/antigravity-config" target="_blank" rel="noopener" class="nav-btn" style="text-decoration: none;">
+          <span>🐙 GitHub Repo</span>
+          <span class="nav-badge">MAIN</span>
+        </a>
       </div>
 
     </aside>
 
-    <!-- ÁREA PRINCIPAL DE CONTENIDO (Pestañas Dinámicas) -->
-    <main id="appMainContent" class="lg:col-span-9 space-y-6 transition-all duration-300">
-
-  <!-- ========================================================================= -->
-  <!-- TAB 1: DIRECTRICES MAESTRAS (LECTURA COMPLETA & EDICIÓN INTEGRAL) -->
-  <!-- ========================================================================= -->
-  <div id="directricesView" class="tab-content space-y-6">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- MAIN WORK AREA -->
+    <section class="app-main-content">
       
-      <!-- Left Column: Directives Selector -->
-      <div class="lg:col-span-4 space-y-3">
-        <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
-          <div class="flex items-center gap-2">
-            <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-            <span>Seleccionar Directriz</span>
+      <!-- =======================================================================
+           TAB 1: DIRECTRICES MAESTRAS (Lector / Editor)
+           ======================================================================= -->
+      <div id="directricesView" class="tab-content">
+        <div class="directives-view-grid">
+          
+          <!-- Directives List Subcolumn -->
+          <div class="directives-list-col">
+            <div class="type-xs" style="color: var(--text-muted); margin-bottom: 0.4rem;">Seleccionar Protocolo:</div>
+            <div id="directivesListContainer" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <!-- Injected dynamically -->
+            </div>
           </div>
-          <span class="font-mono text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded">6 Protocolos</span>
-        </div>
 
-        <div id="directivesListContainer" class="space-y-2.5">
-          <!-- Injected dynamically via JS -->
-        </div>
+          <!-- Directive Viewer & Editor Subcolumn -->
+          <div class="directives-viewer-col">
+            <div class="viewer-header">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                  <span id="activeDirIcon" style="font-size: 1.8rem;">🗄️</span>
+                  <h2 id="activeDirTitle" class="type-lg">Directriz Maestra #1: Supabase</h2>
+                  <span id="activeDirFilename" class="font-mono type-xs" style="background: var(--bg-subtle); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-light);">01_Arquitectura_Datos_Supabase.md</span>
+                </div>
+                <p id="activeDirSummary" class="type-sm" style="color: var(--text-secondary); margin-top: 0.2rem;">Esquema aislado, RLS obligatorio y foreign key user_id.</p>
+              </div>
 
-        <!-- Quick Summary Box -->
-        <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-2 text-xs">
-          <div class="font-bold text-blue-900 flex items-center gap-1.5">
-            <span>🛡️</span> Gobernanza Absoluta
+              <!-- View Mode Toggle -->
+              <div style="display: flex; gap: 0.4rem; background: var(--bg-subtle); padding: 0.2rem; border-radius: 6px; border: 1px solid var(--border-light);">
+                <button onclick="setDirectiveViewMode('preview')" id="viewMode-preview" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.8rem;">📖 Lectura</button>
+                <button onclick="setDirectiveViewMode('editor')" id="viewMode-editor" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.8rem;">✏️ Editor</button>
+              </div>
+            </div>
+
+            <!-- Preview Mode -->
+            <div id="directivePreviewContainer" class="viewer-body prose-light">
+              <!-- Rendered Markdown injected -->
+            </div>
+
+            <!-- Editor Mode -->
+            <div id="directiveEditorContainer" class="viewer-body hidden" style="display: flex; flex-direction: column; gap: 0.8rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-muted);" class="font-mono">
+                <span>Editor Markdown Antigravity:</span>
+                <span id="editorWordCount">0 caracteres</span>
+              </div>
+              <textarea id="directiveMarkdownTextarea" style="flex: 1; min-height: 380px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; padding: 1.0rem; background: #0F172A; color: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; resize: none;"></textarea>
+              <div style="display: flex; justify-content: flex-end; gap: 0.6rem;">
+                <button onclick="resetActiveDirectiveToDefault()" class="btn-action btn-secondary">🔄 Restablecer</button>
+                <button onclick="setDirectiveViewMode('preview')" class="btn-action btn-secondary">Cancelar</button>
+                <button onclick="saveActiveDirectiveEdit()" class="btn-action btn-primary">✓ Guardar Cambios</button>
+              </div>
+            </div>
+
+            <!-- Viewer Footer Actions -->
+            <div class="viewer-footer">
+              <div style="display: flex; gap: 0.6rem;">
+                <button onclick="copyActiveDirectiveMarkdown()" class="btn-action btn-secondary">📋 Copiar MD</button>
+                <button onclick="downloadActiveDirectiveMarkdown()" class="btn-action btn-secondary">📥 Descargar .md</button>
+              </div>
+              <button onclick="copyActiveDirectivePrompt()" class="btn-action btn-blue">⚡ Inyectar Prompt</button>
+            </div>
+
           </div>
-          <p class="text-blue-800 text-[11px] leading-relaxed">
-            Estas directrices se inyectan automáticamente en todas las creaciones de proyectos, garantizando código limpio, seguro y 100% legal sin configuraciones repetitivas.
-          </p>
+
         </div>
       </div>
 
-      <!-- Right Column: Full-Height Content Viewer & Live Editor -->
-      <div class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow space-y-6">
-        
-        <!-- Header of Active Directive -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 border-b border-slate-100 gap-4">
-          <div>
-            <div class="flex items-center gap-2.5">
-              <span id="activeDirIcon" class="text-3xl">🗄️</span>
+      <!-- =======================================================================
+           TAB 2: BRIEFING & NUEVO PROYECTO (10 Pasos)
+           ======================================================================= -->
+      <div id="briefingView" class="tab-content hidden">
+        <div class="briefing-view-grid">
+          
+          <!-- Left Form Column -->
+          <div class="briefing-form-col">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
               <div>
-                <h3 id="activeDirTitle" class="text-lg md:text-xl font-extrabold text-slate-900 tracking-tight">Directriz Maestra #1: Supabase</h3>
-                <span id="activeDirFilename" class="text-[10px] font-mono text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">01_Arquitectura_Datos_Supabase.md</span>
+                <h2 class="type-lg">Configurador de Nuevo Proyecto</h2>
+                <p class="type-sm" style="color: var(--text-muted);">Completa los 10 pasos ágiles. Las directrices legales y de DB se heredan automáticamente.</p>
               </div>
+              <button type="button" onclick="createNewProjectDraft()" class="btn-action btn-secondary" style="min-height: 28px;">+ Limpiar</button>
             </div>
-            <p id="activeDirSummary" class="text-xs text-slate-600 mt-2 leading-relaxed">Esquema aislado, RLS obligatorio y foreign key user_id.</p>
+
+            <div class="form-group">
+              <label class="form-label">1. Nombre del Proyecto</label>
+              <input type="text" id="b-name" value="Clinica-Dental" oninput="onProjectNameChange()" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">2. Slug / Identificador DB</label>
+              <input type="text" id="b-slug" value="com_clinicadental" class="form-input font-mono">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">3. Tipo de Proyecto</label>
+              <select id="b-type" onchange="handleCustomDropdownChange('b-type', 'b-type-custom')" class="form-select">
+                <option value="Web App (SaaS / Dashboard Pro)">Web App (SaaS / Dashboard Pro)</option>
+                <option value="Membresía / Comunidad Privada & Cursos (LMS)">Membresía / Comunidad Privada &amp; Cursos (LMS)</option>
+                <option value="Mobile App (PWA / iOS & Android / Flutter)">Mobile App (PWA / iOS &amp; Android / Flutter)</option>
+                <option value="Landing Page & Embudo de Conversión">Landing Page &amp; Embudo de Conversión</option>
+                <option value="Marketplace / Ecommerce B2B o B2C">Marketplace / E-commerce B2B o B2C</option>
+                <option value="Plataforma de Trading & Analítica Algorítmica">Plataforma de Trading &amp; Analítica Algorítmica</option>
+                <option value="Agente Autónomo / Bot Multiplataforma (WhatsApp/TG)">Agente Autónomo / Bot Multiplataforma</option>
+                <option value="Herramienta Interna / CLI & Backend">Herramienta Interna / CLI &amp; Backend</option>
+                <option value="__custom__">✏️ Escribir tipo personalizado...</option>
+              </select>
+              <input type="text" id="b-type-custom" placeholder="Escribe el tipo de app personalizado..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">4. Nicho de Mercado</label>
+              <select id="b-niche" onchange="handleNicheDropdownChange()" class="form-select">
+                <option value="Salud & Bienestar">Salud, Belleza &amp; Bienestar (Clínicas &amp; Estética)</option>
+                <option value="Educación & E-learning">Educación &amp; E-learning (EdTech / Cursos)</option>
+                <option value="Finanzas & Trading">Finanzas, Inversión &amp; Trading (FinTech)</option>
+                <option value="Hostelería & Restaurantes">Hostelería, Restaurantes &amp; Eventos (FoodTech)</option>
+                <option value="Fitness & Deportes">Fitness, Gimnasios &amp; Nutrición</option>
+                <option value="Inmobiliaria & PropTech">Inmobiliaria, Alquileres &amp; PropTech</option>
+                <option value="Productividad & Agentes IA">Productividad, IA &amp; Automatización No-Code</option>
+                <option value="Movilidad & Talleres">Movilidad, Talleres &amp; Tiendas Físicas</option>
+                <option value="Legal & Consultoría">Legal, Gestorías &amp; Consultoría Profesional</option>
+                <option value="Creadores & Media">Creadores de Contenido &amp; Creator Economy</option>
+                <option value="__custom__">✏️ Escribir nicho personalizado...</option>
+              </select>
+              <input type="text" id="b-niche-custom" placeholder="Escribe el nicho personalizado..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">5. Subnicho Específico</label>
+              <select id="b-subniche" onchange="handleCustomDropdownChange('b-subniche', 'b-subniche-custom')" class="form-select">
+                <option value="Clínicas Dentales & Odontología">Clínicas Dentales &amp; Odontología</option>
+                <option value="Fisioterapia & Osteopatía">Fisioterapia &amp; Osteopatía</option>
+                <option value="Psicología & Terapia Online">Psicología &amp; Terapia Online</option>
+                <option value="Medicina Estética & Spa">Medicina Estética &amp; Spa</option>
+                <option value="__custom__">✏️ Escribir subnicho personalizado...</option>
+              </select>
+              <input type="text" id="b-subniche-custom" placeholder="Escribe el subnicho específico..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">6A. Monetización del Desarrollador (Toni / Dev)</label>
+              <select id="b-monetization-dev" onchange="handleCustomDropdownChange('b-monetization-dev', 'b-monetization-dev-custom')" class="form-select">
+                <option value="SaaS Suscripción Recurrente (Stripe Billing mensual/anual)">SaaS Suscripción Recurrente (Stripe Billing mensual/anual)</option>
+                <option value="Setup Fee Inicial + Mantenimiento Mensual Recurrente">Setup Fee Inicial + Mantenimiento Mensual Recurrente</option>
+                <option value="Venta de Licencia de Software / Código (Lifetime / One-time)">Venta de Licencia de Software (Pago Único / One-Time)</option>
+                <option value="Comisión / Revenue Share por Transacción (Take-Rate %)">Comisión / Revenue Share por Transacción (Take-Rate %)</option>
+                <option value="Pago por Uso / Créditos de API con Margen (Tokens IA)">Pago por Uso / Créditos de API con Margen (Tokens IA)</option>
+                <option value="Freemium / Lead Magnet para Consultoría y Servicios Pro">Freemium / Lead Magnet para Consultoría y Servicios</option>
+                <option value="Uso Interno de Toni / I+D Propio (Sin Cobro Directo)">Uso Interno de Toni / I+D Propio (Sin Cobro Directo)</option>
+                <option value="__custom__">✏️ Escribir modelo de monetización dev...</option>
+              </select>
+              <input type="text" id="b-monetization-dev-custom" placeholder="Escribe cómo monetizamos como desarrolladores..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">6B. Monetización del Usuario Final (Negocio / Cliente)</label>
+              <select id="b-monetization-user" onchange="handleCustomDropdownChange('b-monetization-user', 'b-monetization-user-custom')" class="form-select">
+                <option value="Cobro de Servicios / Consultas / Citas Online integradas">Cobro de Servicios / Consultas / Citas Online integradas</option>
+                <option value="Membresía VIP / Suscripción de Contenido para sus Alumnos">Membresía VIP / Suscripción para sus Alumnos o Clientes</option>
+                <option value="Venta de Productos / E-commerce (Catálogo & Checkout)">Venta de Productos / E-commerce (Catálogo &amp; Checkout)</option>
+                <option value="Créditos / Pago por Consumo (Pay-as-you-go / Saldo)">Créditos / Pago por Consumo (Pay-as-you-go)</option>
+                <option value="Comisiones entre Compradores y Vendedores (Marketplace)">Comisiones entre Compradores y Vendedores (Marketplace)</option>
+                <option value="Cursos / Infoproductos / Descargas Digitales (LMS)">Cursos / Infoproductos / Descargas Digitales (LMS)</option>
+                <option value="Publicidad / Patrocinios / Afiliación y Sponsors">Publicidad / Patrocinios / Afiliación y Sponsors</option>
+                <option value="Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)">Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)</option>
+                <option value="__custom__">✏️ Escribir monetización del usuario...</option>
+              </select>
+              <input type="text" id="b-monetization-user-custom" placeholder="Escribe cómo genera ingresos el usuario final..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">7. Base de Datos / Persistencia</label>
+              <select id="b-db" onchange="handleCustomDropdownChange('b-db', 'b-db-custom')" class="form-select">
+                <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
+                <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
+                <option value="SQLite / DuckDB Local-First">SQLite / DuckDB Local-First</option>
+                <option value="__custom__">✏️ Escribir base de datos personalizada...</option>
+              </select>
+              <input type="text" id="b-db-custom" placeholder="Escribe la base de datos..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">8. Autenticación &amp; Roles</label>
+              <select id="b-auth" onchange="handleCustomDropdownChange('b-auth', 'b-auth-custom')" class="form-select">
+                <option value="Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]">Supabase Auth Multi-Role (Admin + Staff + Cliente)</option>
+                <option value="Supabase Auth Estándar (Email + Password)">Supabase Auth Estándar (Email + Password)</option>
+                <option value="No - Acceso Público / Sin Login">No - Acceso Público / Sin Login</option>
+                <option value="__custom__">✏️ Escribir sistema de autenticación...</option>
+              </select>
+              <input type="text" id="b-auth-custom" placeholder="Escribe el esquema de autenticación..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">9. Motor de IA / API</label>
+              <select id="b-ai" onchange="handleAIDropdownChange()" class="form-select">
+                <option value="gemini">✨ Google Gemini AI (2.0 Flash / Pro) [SSE]</option>
+                <option value="claude">🧠 Anthropic Claude (3.7 Sonnet)</option>
+                <option value="openai">🤖 OpenAI Platform (GPT-4o / o3-mini)</option>
+                <option value="openrouter">🌐 OpenRouter Gateway (Multi-Modelo)</option>
+                <option value="deepseek">⚡ DeepSeek V3 / Groq (Inferencia Rápida)</option>
+                <option value="custom">🖥️ API Local / Ollama</option>
+                <option value="none">🚫 Sin IA / Aplicación Clásica</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">10. Propuesta de Valor / Dolor Principal</label>
+              <textarea id="b-problem" rows="3" oninput="updateBriefingCompiledPrompt()" class="form-input" style="height: auto; padding: 0.6rem 0.8rem; resize: vertical;">Automatizar la gestión de citas y confirmaciones de pacientes para clínicas reduciendo ausencias de última hora.</textarea>
+            </div>
           </div>
 
-          <!-- View Mode Switcher -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium border border-slate-200 self-stretch sm:self-auto justify-center">
-            <button onclick="setDirectiveViewMode('preview')" id="viewMode-preview" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 font-bold shadow-sm transition flex items-center gap-1.5">
-              <span>📖</span> Vista Lectura
-            </button>
-            <button onclick="setDirectiveViewMode('editor')" id="viewMode-editor" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 font-semibold transition flex items-center gap-1.5">
-              <span>✏️</span> Modo Editor
-            </button>
+          <!-- Right Preview Column -->
+          <div class="briefing-preview-col">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+              <span class="type-xs" style="color: var(--text-muted);">Prompt Maestro Compilado</span>
+              <div style="display: flex; gap: 0.4rem;">
+                <button onclick="saveCurrentProjectDraft()" class="btn-action btn-secondary" style="min-height: 28px;">💾 Guardar</button>
+                <button onclick="copyBriefingPrompt()" class="btn-action btn-primary" style="min-height: 28px;">📋 Copiar Prompt</button>
+              </div>
+            </div>
+
+            <textarea id="compiledBriefingPromptTextarea" readonly style="flex: 1; min-height: 400px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; padding: 1.0rem; background: #0F172A; color: #38BDF8; border: 1px solid var(--border-color); border-radius: 6px; resize: none;"></textarea>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button onclick="exportBriefingMarkdownFile()" class="btn-action btn-secondary">📥 Descargar .md</button>
+              <button onclick="passBriefingToStitch()" class="btn-action btn-blue">🎨 Diseñar en Stitch →</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           TAB 3: STITCH UI STUDIO
+           ======================================================================= -->
+      <div id="stitchView" class="tab-content hidden">
+        <div class="briefing-view-grid">
+          
+          <div class="briefing-form-col">
+            <div class="type-lg" style="margin-bottom: 0.4rem;">Stitch UI Studio (Gemini Project Nemo)</div>
+            <p class="type-sm" style="color: var(--text-muted); margin-bottom: 0.8rem;">Generador de prompts visuales optimizados para el servidor Stitch MCP y Google Stitch.</p>
+
+            <div class="form-group">
+              <label class="form-label">Tipo de Pantalla / Componente</label>
+              <select id="st-component" onchange="updateStitchDesign()" class="form-select">
+                <option value="Dashboard Pro (KPIs, Charts, Data Table)">Dashboard Ejecutivo Pro (KPIs, Gráficos 2D, Tabla)</option>
+                <option value="Landing Page Hero & Feature Sections">Landing Page Hero &amp; Feature Sections</option>
+                <option value="Mobile Screen Flow (PWA / App View)">Mobile Screen Flow (PWA / App View)</option>
+                <option value="Formulario / Modal / Wizard Interactivo">Formulario / Modal / Wizard Interactivo</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Estilo Visual &amp; Tema</label>
+              <select id="st-theme" onchange="updateStitchDesign()" class="form-select">
+                <option value="Clean Minimalist Light (Executive Slate & Blue)">Clean Minimalist Light (Executive Slate &amp; Blue)</option>
+                <option value="Dark Glassmorphism (Deep Indigo / Cyber Glow)">Dark Glassmorphism (Deep Indigo / Cyber Glow)</option>
+                <option value="Modern High-Contrast Neutral (WCAG 2.2 AA)">Modern High-Contrast Neutral (WCAG 2.2 AA)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Instrucciones Especiales de Diseño</label>
+              <textarea id="st-notes" rows="4" oninput="updateStitchDesign()" class="form-input" style="height: auto; padding: 0.6rem 0.8rem; resize: vertical;">Diseño plano 2D, sin efectos 3D, alta densidad de información y soporte para lector de pantallas.</textarea>
+            </div>
+          </div>
+
+          <div class="briefing-preview-col">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+              <span class="type-xs" style="color: var(--text-muted);">Prompt Generado para Stitch</span>
+              <button onclick="copyStitchPrompt()" class="btn-action btn-primary" style="min-height: 28px;">📋 Copiar Prompt Stitch</button>
+            </div>
+            <textarea id="stitchPromptOutput" readonly style="flex: 1; min-height: 400px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; padding: 1.0rem; background: #0F172A; color: #A7F3D0; border: 1px solid var(--border-color); border-radius: 6px; resize: none;"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           TAB 4: REGLAS GLOBALES (rules/)
+           ======================================================================= -->
+      <div id="rulesView" class="tab-content hidden tab-scroll-pane">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <h2 class="type-lg">Reglas Globales Activas en Antigravity</h2>
+            <p class="type-sm" style="color: var(--text-muted);">Ubicación: <code class="font-mono">~/.gemini/config/rules/</code> y <code class="font-mono">antigravity-config/rules/</code></p>
+          </div>
+        </div>
+        <div id="rulesGridContainer" class="cards-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           TAB 5: SKILLS & MCP TOOLS
+           ======================================================================= -->
+      <div id="skillsView" class="tab-content hidden tab-scroll-pane">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <h2 class="type-lg">Servidores MCP &amp; Skills Registrados</h2>
+            <p class="type-sm" style="color: var(--text-muted);">Herramientas integradas para ejecución autónoma y control de contexto.</p>
+          </div>
+        </div>
+        <div id="skillsGridContainer" class="cards-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           TAB 6: DIRECTIVA SOP & MEMORIA VIVA
+           ======================================================================= -->
+      <div id="sopView" class="tab-content hidden tab-scroll-pane">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <h2 class="type-lg">Directiva SOP de Desarrollo &amp; Memoria Viva</h2>
+            <p class="type-sm" style="color: var(--text-muted);">Registro de aprendizajes y directiva técnica Clean SDD para prevenir errores recurrentes.</p>
+          </div>
+        </div>
+        
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 1.25rem;">
+            <thead>
+              <tr style="background: #F8FAFC; border-bottom: 1px solid var(--border-color); text-align: left;">
+                <th style="padding: 0.8rem 1.0rem;">Fecha</th>
+                <th style="padding: 0.8rem 1.0rem;">Error Detectado</th>
+                <th style="padding: 0.8rem 1.0rem;">Causa Raíz</th>
+                <th style="padding: 0.8rem 1.0rem;">Solución / Parche</th>
+                <th style="padding: 0.8rem 1.0rem;">Prevención</th>
+              </tr>
+            </thead>
+            <tbody id="learningMemoryTableBody">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =======================================================================
+           TAB 7: SYNC MAC ↔ WINDOWS
+           ======================================================================= -->
+      <div id="syncView" class="tab-content hidden tab-scroll-pane">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <h2 class="type-lg">Monitor de Sincronización Multiplataforma</h2>
+            <p class="type-sm" style="color: var(--text-muted);">Estado de paridad de los 11 repositorios en <code class="font-mono">projects.json</code></p>
+          </div>
+          <button onclick="simulateWorkspaceSync()" class="btn-action btn-blue">⚡ Comprobar Todos los Repos</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.0rem;">
+          <div class="item-card">
+            <span class="type-xs font-mono" style="color: var(--color-blue);">🍎 macOS (Terminal)</span>
+            <pre style="background: #0F172A; color: #38BDF8; padding: 0.8rem; border-radius: 4px; font-size: 1.15rem; font-family: 'JetBrains Mono';" class="overflow-x-auto">cd ~/Proyectos/antigravity-config && ./sync.sh</pre>
+          </div>
+          <div class="item-card">
+            <span class="type-xs font-mono" style="color: var(--color-emerald);">💻 Windows (PowerShell)</span>
+            <pre style="background: #0F172A; color: #A7F3D0; padding: 0.8rem; border-radius: 4px; font-size: 1.15rem; font-family: 'JetBrains Mono';" class="overflow-x-auto">cd C:\Proyectosntigravity-config; .\install.ps1</pre>
           </div>
         </div>
 
-        <!-- Rules Badges -->
         <div>
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Reglas Clave de Cumplimiento:</span>
-          <div id="activeDirRulesList" class="flex flex-wrap gap-1.5 mt-2">
+          <div class="type-xs" style="color: var(--text-muted); margin-bottom: 0.6rem;">Repositorios Registrados en projects.json (11 Repos):</div>
+          <div id="projectsListContainer" class="cards-grid">
             <!-- Injected dynamically -->
           </div>
         </div>
-
-        <!-- Full Document Reader (Unrestricted Height) -->
-        <div id="directivePreviewContainer" class="prose-light p-6 bg-slate-50/70 border border-slate-200 rounded-2xl leading-relaxed text-slate-800 min-h-[400px]">
-          <!-- Injected rendered Markdown -->
-        </div>
-
-        <!-- Full-Height Live Editor -->
-        <div id="directiveEditorContainer" class="hidden space-y-4">
-          <div class="flex items-center justify-between text-xs text-slate-500 font-mono">
-            <span>Editor Markdown (Soporta sintaxis completa de Antigravity):</span>
-            <span id="editorWordCount" class="text-blue-600 font-bold">0 caracteres</span>
-          </div>
-
-          <textarea id="directiveMarkdownTextarea" rows="22" oninput="onDirectiveTextareaInput()" class="w-full font-mono text-xs bg-slate-900 text-slate-100 border border-slate-800 rounded-2xl p-5 focus:outline-none focus:ring-2 focus:ring-blue-500 leading-relaxed resize-y shadow-inner"></textarea>
-          
-          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <div class="flex items-center gap-2">
-              <button onclick="resetActiveDirectiveToDefault()" class="px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition shadow-2xs">
-                🔄 Restablecer Original
-              </button>
-            </div>
-            
-            <div class="flex items-center gap-2">
-              <button onclick="setDirectiveViewMode('preview')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition">
-                Cancelar
-              </button>
-              <button onclick="saveActiveDirectiveEdit()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-md">
-                <span>✓</span> Guardar y Aplicar Cambios
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom Actions Bar -->
-        <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
-          <div class="flex flex-wrap items-center gap-2">
-            <button onclick="copyActiveDirectiveMarkdown()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition flex items-center gap-2">
-              <span>📋</span> Copiar Markdown Completo
-            </button>
-            <button onclick="downloadActiveDirectiveMarkdown()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition flex items-center gap-2">
-              <span>📥</span> Descargar .md
-            </button>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <button onclick="setDirectiveViewMode('editor')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-              <span>✏️</span> Editar este Documento
-            </button>
-            <button onclick="copyActiveDirectivePrompt()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 shadow-sm">
-              <span>⚡</span> Copiar Prompt de Inyección
-            </button>
-          </div>
-        </div>
       </div>
 
+    </section>
+
+  </main>
+
+  <!-- STATUS BAR -->
+  <footer class="status-bar">
+    <div>
+      <span>⚡ <strong>Tonigravity Studio</strong> • Gobernanza &amp; Protocolos By Toni</span>
     </div>
-  </div>
-    <!-- ========================================================================= -->
-  <!-- TAB 2: BRIEFING & NUEVO PROYECTO (EXTENDIDO) -->
-  <!-- ========================================================================= -->
-  <div id="briefingView" class="tab-content hidden space-y-6">
-    
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow space-y-6">
-      
-      <!-- Top Title & Quick Actions Header -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b border-slate-100">
-        <div>
-          <div class="flex items-center gap-2 mb-2">
-            <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider">
-              <span>📐</span> Protocolo de Definición Ágil By Toni
-            </div>
-          </div>
-          <h2 class="text-xl font-bold text-slate-900">Configurador Completo de Nuevo Proyecto</h2>
-          <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-            Define la arquitectura técnica, modelo de negocio, nicho y tipología de la app. Los aspectos legales (RGPD DNI 34799350M) y de base de datos se heredan automáticamente.
-          </p>
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <button type="button" onclick="saveCurrentProjectDraft()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-            <span>💾</span> Guardar para luego
-          </button>
-          <button type="button" onclick="openProjectsManagerModal()" class="px-4 py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-            <span>🗂️</span> Mis Proyectos (<span id="savedProjectsCountBadge">2</span>)
-          </button>
-          <button type="button" onclick="passBriefingToStitch()" class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-            <span>🎨</span> Continuar a Stitch →
-          </button>
-        </div>
-      </div>
-
-      <!-- Active Project Selector & Draft Status Bar -->
-      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-          <div class="flex items-center gap-2">
-            <span class="text-lg">📁</span>
-            <div>
-              <span class="text-[10px] font-bold text-slate-400 uppercase font-mono block">Proyecto Activo:</span>
-              <span id="activeProjectBadge" class="text-xs font-bold text-slate-900">Clinica-Dental</span>
-            </div>
-          </div>
-          <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
-          <!-- Quick Switcher Dropdown -->
-          <div class="flex-1 sm:w-64">
-            <select id="savedProjectsSelect" onchange="loadSelectedProject(this.value)" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none">
-              <!-- Populated dynamically via JS -->
-            </select>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <button type="button" onclick="createNewProjectDraft()" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm">
-            <span>+</span> Nuevo en Blanco
-          </button>
-          <button type="button" onclick="saveCurrentProjectDraft()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
-            <span>💾</span> Guardar Borrador
-          </button>
-        </div>
-      </div>
-
-      <!-- Extended Form Grid with Custom Write-In Inputs -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        
-        <!-- 1. Nombre -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">1. Nombre del Proyecto</label>
-          <input type="text" id="b-name" value="Clinica-Dental" oninput="onProjectNameChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-
-        <!-- 2. Slug -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">2. Slug / Identificador DB</label>
-          <input type="text" id="b-slug" value="com_clinicadental" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-
-        <!-- 3. Tipo de Proyecto (con Opción Escrita) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">3. Tipo de Proyecto</label>
-          <select id="b-type" onchange="handleCustomDropdownChange('b-type', 'b-type-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="Web App (SaaS / Dashboard Pro)">Web App (SaaS / Dashboard Pro)</option>
-            <option value="Membresía / Comunidad Privada & Cursos (LMS)">Membresía / Comunidad Privada &amp; Cursos (LMS)</option>
-            <option value="Mobile App (PWA / iOS & Android / Flutter)">Mobile App (PWA / iOS &amp; Android / Flutter)</option>
-            <option value="Landing Page & Embudo de Conversión">Landing Page &amp; Embudo de Conversión</option>
-            <option value="Marketplace / Ecommerce B2B o B2C">Marketplace / E-commerce B2B o B2C</option>
-            <option value="Plataforma de Trading & Analítica Algorítmica">Plataforma de Trading &amp; Analítica Algorítmica</option>
-            <option value="Agente Autónomo / Bot Multiplataforma (WhatsApp/TG)">Agente Autónomo / Bot Multiplataforma</option>
-            <option value="Herramienta Interna / CLI & Backend">Herramienta Interna / CLI &amp; Backend</option>
-            <option value="__custom__">✏️ Escribir tipo personalizado...</option>
-          </select>
-          <input type="text" id="b-type-custom" placeholder="Escribe el tipo de app personalizado..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 4. Nicho de Mercado (con Opción Escrita) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">4. Nicho de Mercado</label>
-          <select id="b-niche" onchange="handleNicheDropdownChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="Salud & Bienestar">Salud, Belleza &amp; Bienestar (Clínicas &amp; Estética)</option>
-            <option value="Educación & E-learning">Educación &amp; E-learning (EdTech / Cursos)</option>
-            <option value="Finanzas & Trading">Finanzas, Inversión &amp; Trading (FinTech)</option>
-            <option value="Hostelería & Restaurantes">Hostelería, Restaurantes &amp; Eventos (FoodTech)</option>
-            <option value="Fitness & Deportes">Fitness, Gimnasios &amp; Nutrición</option>
-            <option value="Inmobiliaria & PropTech">Inmobiliaria, Alquileres &amp; PropTech</option>
-            <option value="Productividad & Agentes IA">Productividad, IA &amp; Automatización No-Code</option>
-            <option value="Movilidad & Talleres">Movilidad, Talleres &amp; Tiendas Físicas</option>
-            <option value="Legal & Consultoría">Legal, Gestorías &amp; Consultoría Profesional</option>
-            <option value="Creadores & Media">Creadores de Contenido &amp; Creator Economy</option>
-            <option value="__custom__">✏️ Escribir nicho personalizado...</option>
-          </select>
-          <input type="text" id="b-niche-custom" placeholder="Escribe el nicho personalizado..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 5. Subnicho (Reactivo + con Opción Escrita) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">5. Subnicho Específico</label>
-          <select id="b-subniche" onchange="handleCustomDropdownChange('b-subniche', 'b-subniche-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="Clínicas Dentales & Odontología">Clínicas Dentales &amp; Odontología</option>
-            <option value="Fisioterapia & Osteopatía">Fisioterapia &amp; Osteopatía</option>
-            <option value="Psicología & Terapia Online">Psicología &amp; Terapia Online</option>
-            <option value="Medicina Estética & Spa">Medicina Estética &amp; Spa</option>
-            <option value="__custom__">✏️ Escribir subnicho personalizado...</option>
-          </select>
-          <input type="text" id="b-subniche-custom" placeholder="Escribe el subnicho específico..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 6A. Monetización del Desarrollador (¿Cómo monetizamos nosotros esta App?) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">
-            <span class="text-blue-600 font-bold">6A.</span> Monetización del Desarrollador (Toni / Dev)
-          </label>
-          <select id="b-monetization-dev" onchange="handleCustomDropdownChange('b-monetization-dev', 'b-monetization-dev-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="SaaS Suscripción Recurrente (Stripe Billing mensual/anual)">SaaS Suscripción Recurrente (Stripe Billing mensual/anual)</option>
-            <option value="Setup Fee Inicial + Mantenimiento Mensual Recurrente">Setup Fee Inicial + Mantenimiento Mensual Recurrente</option>
-            <option value="Venta de Licencia de Software / Código (Lifetime / One-time)">Venta de Licencia de Software (Pago Único / One-Time)</option>
-            <option value="Comisión / Revenue Share por Transacción (Take-Rate %)">Comisión / Revenue Share por Transacción (Take-Rate %)</option>
-            <option value="Pago por Uso / Créditos de API con Margen (Tokens IA)">Pago por Uso / Créditos de API con Margen (Tokens IA)</option>
-            <option value="Freemium / Lead Magnet para Consultoría y Servicios Pro">Freemium / Lead Magnet para Consultoría y Servicios</option>
-            <option value="Uso Interno de Toni / I+D Propio (Sin Cobro Directo)">Uso Interno de Toni / I+D Propio (Sin Cobro Directo)</option>
-            <option value="__custom__">✏️ Escribir modelo de monetización dev...</option>
-          </select>
-          <input type="text" id="b-monetization-dev-custom" placeholder="Escribe cómo monetizamos como desarrolladores..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 6B. Monetización del Usuario / Cliente Final (¿Cómo genera ingresos el negocio dentro de la App?) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">
-            <span class="text-purple-600 font-bold">6B.</span> Monetización del Usuario Final (Negocio / Cliente)
-          </label>
-          <select id="b-monetization-user" onchange="handleCustomDropdownChange('b-monetization-user', 'b-monetization-user-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-            <option value="Cobro de Servicios / Consultas / Citas Online integradas">Cobro de Servicios / Consultas / Citas Online integradas</option>
-            <option value="Membresía VIP / Suscripción de Contenido para sus Alumnos">Membresía VIP / Suscripción para sus Alumnos o Clientes</option>
-            <option value="Venta de Productos / E-commerce (Catálogo & Checkout)">Venta de Productos / E-commerce (Catálogo &amp; Checkout)</option>
-            <option value="Créditos / Pago por Consumo (Pay-as-you-go / Saldo)">Créditos / Pago por Consumo (Pay-as-you-go)</option>
-            <option value="Comisiones entre Compradores y Vendedores (Marketplace)">Comisiones entre Compradores y Vendedores (Marketplace)</option>
-            <option value="Cursos / Infoproductos / Descargas Digitales (LMS)">Cursos / Infoproductos / Descargas Digitales (LMS)</option>
-            <option value="Publicidad / Patrocinios / Afiliación y Sponsors">Publicidad / Patrocinios / Afiliación y Sponsors</option>
-            <option value="Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)">Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)</option>
-            <option value="__custom__">✏️ Escribir monetización del usuario...</option>
-          </select>
-          <input type="text" id="b-monetization-user-custom" placeholder="Escribe cómo genera ingresos el usuario final..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 7. Base de Datos (con Opción Escrita) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">7. Base de Datos / Persistencia</label>
-          <select id="b-db" onchange="handleCustomDropdownChange('b-db', 'b-db-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
-            <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
-            <option value="SQLite / DuckDB Local-First">SQLite / DuckDB Local-First</option>
-            <option value="__custom__">✏️ Escribir base de datos personalizada...</option>
-          </select>
-          <input type="text" id="b-db-custom" placeholder="Escribe la base de datos o stack de datos..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 8. Autenticación & Roles (con Opción Escrita) -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">8. Autenticación &amp; Roles</label>
-          <select id="b-auth" onchange="handleCustomDropdownChange('b-auth', 'b-auth-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]">Supabase Auth Multi-Role (Admin + Staff + Cliente)</option>
-            <option value="Supabase Auth Estándar (Email + Password)">Supabase Auth Estándar (Email + Password)</option>
-            <option value="No - Acceso Público / Sin Login">No - Acceso Público / Sin Login</option>
-            <option value="__custom__">✏️ Escribir sistema de autenticación...</option>
-          </select>
-          <input type="text" id="b-auth-custom" placeholder="Escribe el esquema de autenticación..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-        </div>
-
-        <!-- 9. Integración con IA / Configuración de API -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">9. ¿Tendrá Configuración de API / Motor de IA?</label>
-          <select id="b-ai" onchange="handleAIDropdownChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-            <option value="gemini">✨ Sí - Google Gemini AI (2.0 Flash / Pro) [SSE]</option>
-            <option value="claude">🧠 Sí - Anthropic Claude (3.7 Sonnet / Híbrido)</option>
-            <option value="openai">🤖 Sí - OpenAI Platform (GPT-4o / o3-mini)</option>
-            <option value="openrouter">🌐 Sí - OpenRouter Gateway (Multi-Modelo)</option>
-            <option value="deepseek">⚡ Sí - DeepSeek V3 / Groq (Inferencia Rápida)</option>
-            <option value="custom">🖥️ Sí - API Local / Endpoint Propio (Ollama)</option>
-            <option value="none">🚫 No - Aplicación Clásica (Sin IA ni API de Modelos)</option>
-            <option value="__custom__">✏️ Escribir otra API / Motor de IA personalizado...</option>
-          </select>
-          <input type="text" id="b-ai-custom" placeholder="Ej: Mistral Large 2 / Cohere Command R+..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-          
-          <div id="briefing-ai-config-box" class="mt-1.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 bg-purple-50/60 border border-purple-200 rounded-xl text-[11px] font-mono">
-            <div class="flex items-center gap-1.5">
-              <span id="briefing-ai-indicator-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="briefing-active-ai-label" class="text-purple-900 font-bold">Google Gemini AI (2.0 Flash)</span>
-            </div>
-            <select id="b-ai-arch" onchange="updateBriefingCompiledPrompt(); updateStitchDesign();" class="bg-white border border-purple-200 rounded-lg px-2 py-1 text-[10px] font-semibold text-purple-700 focus:outline-none">
-              <option value="supabase_edge">Supabase Edge (Zero-Trust SSE)</option>
-              <option value="direct_client">Cliente Directo .env</option>
-              <option value="openrouter_gateway">Gateway Multi-Modelo</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- 10. Estilo Visual, Color Predominante & URL de Referencia -->
-        <div class="md:col-span-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <span class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
-              <span>🎨</span> 10. Estilo Visual &amp; Determinación de Colores:
-            </span>
-            <div class="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold">
-              <button type="button" onclick="setColorMode('picker')" class="px-2.5 py-1 rounded-md text-blue-700 font-bold hover:bg-slate-50 transition">
-                🎨 Color Predominante
-              </button>
-              <button type="button" onclick="setColorMode('url')" class="px-2.5 py-1 rounded-md text-purple-700 font-bold hover:bg-slate-50 transition">
-                🌐 Sacar de URL
-              </button>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <!-- Selector Rápido de Color Predominante -->
-            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
-              <label class="block text-[11px] font-bold text-slate-700">Color Predominante:</label>
-              <div class="flex items-center gap-2">
-                <input type="color" id="briefingColorPicker" value="#2563eb" onchange="onPredominantColorChange(this.value)" class="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer p-0.5 bg-white">
-                <input type="text" id="briefingColorHex" value="#2563eb" oninput="onPredominantHexInput(this.value)" class="w-24 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold text-slate-900 uppercase">
-                <div class="flex gap-1">
-                  <button type="button" onclick="setQuickColor('#2563eb', 'Azul')" class="w-5 h-5 rounded-full bg-blue-600 shadow-2xs" title="Azul Royal"></button>
-                  <button type="button" onclick="setQuickColor('#6366f1', 'Índigo')" class="w-5 h-5 rounded-full bg-indigo-500 shadow-2xs" title="Índigo"></button>
-                  <button type="button" onclick="setQuickColor('#059669', 'Esmeralda')" class="w-5 h-5 rounded-full bg-emerald-600 shadow-2xs" title="Esmeralda"></button>
-                  <button type="button" onclick="setQuickColor('#7c3aed', 'Violeta')" class="w-5 h-5 rounded-full bg-purple-600 shadow-2xs" title="Violeta AI"></button>
-                </div>
-              </div>
-            </div>
-
-            <!-- URL de Referencia Visual para Extraer Colores -->
-            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
-              <label class="block text-[11px] font-bold text-slate-700">URL de Referencia Visual:</label>
-              <div class="flex gap-1.5">
-                <input type="url" id="briefingRefUrl" placeholder="https://stripe.com o https://dribbble.com/..." oninput="onExtractUrlInput()" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-900 focus:bg-white">
-                <button type="button" onclick="extractColorsFromUrlAction()" class="px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold rounded-lg transition shadow-2xs whitespace-nowrap">
-                  Extraer
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 11. Tagline / Propuesta de Valor -->
-        <div class="md:col-span-3">
-          <label class="block font-bold text-slate-700 mb-1">11. Propuesta de Valor / Tagline (1 Frase)</label>
-          <input type="text" id="b-tagline" value="Plataforma todo en uno para automatizar citas, historiales y recordatorios automáticos por WhatsApp." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-
-      </div>
-
-      <!-- Compiled Master Prompt Box -->
-      <div class="space-y-2 pt-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-600 uppercase font-mono">Prompt Maestro de Inicialización Compilado:</span>
-          <button onclick="copyBriefingPrompt()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
-            <span>📋 Copiar Prompt</span>
-          </button>
-        </div>
-        <pre id="b-compiled-prompt" class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-52 border border-slate-800 leading-relaxed"></pre>
-      </div>
-
-      <!-- Action Footer with Save Button -->
-      <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
-        <div class="flex flex-wrap items-center gap-2">
-          <button type="button" onclick="saveCurrentProjectDraft()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-            <span>💾</span> Guardar Proyecto para luego
-          </button>
-          <button type="button" onclick="openProjectsManagerModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-2">
-            <span>🗂️</span> Mis Proyectos Guardados
-          </button>
-        </div>
-        
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="copyBriefingPrompt()" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-            <span>⚡</span> Copiar Prompt para Antigravity
-          </button>
-          <button onclick="passBriefingToStitch()" class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
-            <span>🎨</span> Pasar al Estudio de Diseño con Stitch IA →
-          </button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- TAB 3: STITCH UI STUDIO (DISEÑO & GENERADOR DE INTERFACES IA) -->
-  <!-- ========================================================================= -->
-  <div id="stitchView" class="tab-content hidden space-y-6">
-    
-    <!-- Stitch Studio Header -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider">
-            <span>🧵</span> Google Stitch (Project Nemo) &amp; Gemini 2.0 Integration
-          </div>
-        </div>
-        <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
-          Stitch UI Studio: Generador Visual de Interfaces
-        </h2>
-        <p class="text-slate-600 text-xs md:text-sm mt-1 max-w-2xl leading-relaxed">
-          Diseña interfaces para tu proyecto seleccionando alcance (<strong>1 página específica</strong> o <strong>suite completa</strong>), paleta de color, URL de referencia visual y compilación con <strong>Stitch MCP</strong>.
-        </p>
-      </div>
-      
-      <div class="flex flex-wrap items-center gap-2">
-        <button onclick="executeStitchMCP()" class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
-          <span>⚡</span> Usar Stitch MCP (1-Clic)
-        </button>
-        <button onclick="saveCurrentProjectDraft()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-          <span>💾</span> Guardar Proyecto &amp; UI
-        </button>
-        <button onclick="openStitchWeb()" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-          <span>↗️</span> Abrir Stitch Web
-        </button>
-      </div>
-    </div>
-
-    <!-- Live MCP Status Banner -->
-    <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 border border-emerald-200 rounded-2xl p-4 card-shadow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white text-sm font-bold shadow-sm animate-pulse">
-          ✓
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h4 class="text-xs font-bold text-emerald-950">Servidor Stitch MCP Instalado &amp; Conectado</h4>
-            <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-emerald-600 text-white">ACTIVO · stdio</span>
-          </div>
-          <p class="text-[11px] text-emerald-800 mt-0.5">
-            Herramientas: <code class="font-mono bg-white/80 px-1 py-0.2 rounded text-emerald-900">stitch_generate_prompt</code>, <code class="font-mono bg-white/80 px-1 py-0.2 rounded text-emerald-900">stitch_open</code>, <code class="font-mono bg-white/80 px-1 py-0.2 rounded text-emerald-900">stitch_capture_canvas</code>, <code class="font-mono bg-white/80 px-1 py-0.2 rounded text-emerald-900">stitch_import_component</code>.
-          </p>
-        </div>
-      </div>
-      <button onclick="openStitchMCPModal()" class="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
-        <span>⚙️</span> Panel de Control MCP
-      </button>
-    </div>
-
-    <!-- Step-by-Step UI Design Workspace -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      
-      <!-- Left Config Column: Styles, Colors, References & Scope -->
-      <div class="lg:col-span-5 space-y-5">
-        
-        <!-- Step 1: Interface Style -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">1. Tipo de Interfaz / Estilo Visual</span>
-            <span class="text-[10px] font-mono text-purple-600 font-bold">ESTILO</span>
-          </div>
-
-          <div class="space-y-2" id="styleOptionsContainer">
-            <label class="flex items-center justify-between p-3 rounded-xl border border-blue-200 bg-blue-50/50 cursor-pointer">
-              <div class="flex items-center gap-2.5">
-                <input type="radio" name="uiStyle" value="vibe_clean" checked onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
-                <div>
-                  <div class="text-xs font-bold text-slate-900">Vibe Coding Clean Light</div>
-                  <div class="text-[10px] text-slate-500">Blanco nítido, slate-900, azul royal y tarjetas suaves.</div>
-                </div>
-              </div>
-              <span class="text-xs">✨</span>
-            </label>
-
-            <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition">
-              <div class="flex items-center gap-2.5">
-                <input type="radio" name="uiStyle" value="glass_dark" onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
-                <div>
-                  <div class="text-xs font-bold text-slate-900">Glassmorphism Cyber Dark</div>
-                  <div class="text-[10px] text-slate-500">Fondo oscuro, neon cian/violeta y paneles blur traslúcidos.</div>
-                </div>
-              </div>
-              <span class="text-xs">🌌</span>
-            </label>
-
-            <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition">
-              <div class="flex items-center gap-2.5">
-                <input type="radio" name="uiStyle" value="fintech_stripe" onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
-                <div>
-                  <div class="text-xs font-bold text-slate-900">FinTech Stripe Minimal</div>
-                  <div class="text-[10px] text-slate-500">Tipografía refinada, ultra legible con micro-bordes elegantes.</div>
-                </div>
-              </div>
-              <span class="text-xs">💳</span>
-            </label>
-
-            <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition">
-              <div class="flex items-center gap-2.5">
-                <input type="radio" name="uiStyle" value="mobile_ios" onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
-                <div>
-                  <div class="text-xs font-bold text-slate-900">Mobile Ergonomic iOS PWA</div>
-                  <div class="text-[10px] text-slate-500">Navegación inferior táctil, tarjetas swipeables y safe-areas.</div>
-                </div>
-              </div>
-              <span class="text-xs">📱</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Step 2: Determinación del Estilo y Gama de Color (Color Predominante vs URL de Referencia) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">2. Determinación de Estilo &amp; Colores</span>
-            <span class="text-[10px] font-mono text-blue-600 font-bold">PALETA &amp; URL</span>
-          </div>
-
-          <!-- Pestañas de Selección de Modo: Color Predominante vs Sacar de URL -->
-          <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold border border-slate-200">
-            <button type="button" onclick="setColorMode('picker')" id="colorModeBtn-picker" class="py-1.5 px-2.5 rounded-lg bg-white text-blue-700 font-bold shadow-xs transition flex items-center justify-center gap-1.5">
-              <span>🎨</span> Color Predominante
-            </button>
-            <button type="button" onclick="setColorMode('url')" id="colorModeBtn-url" class="py-1.5 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
-              <span>🌐</span> Sacar de URL
-            </button>
-          </div>
-
-          <!-- MODO A: COLOR PREDOMINANTE -->
-          <div id="colorModeContainer-picker" class="space-y-3.5">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">Color Predominante / Principal:</label>
-              <div class="flex items-center gap-3">
-                <div class="relative flex items-center">
-                  <input type="color" id="predominantColorPicker" value="#2563eb" onchange="onPredominantColorChange(this.value)" class="w-10 h-10 rounded-xl border border-slate-300 cursor-pointer p-0.5 bg-white shadow-sm">
-                </div>
-                <div class="flex-1 flex items-center gap-2">
-                  <input type="text" id="predominantColorHex" value="#2563eb" oninput="onPredominantHexInput(this.value)" placeholder="#2563eb" class="w-28 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 uppercase focus:bg-white focus:ring-2 focus:ring-blue-500">
-                  <span id="predominantColorName" class="text-[11px] text-slate-500 font-medium truncate">Azul Royal</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Paletas / Tonos Rápidos -->
-            <div>
-              <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Sugerencias Rápidas:</span>
-              <div class="grid grid-cols-4 gap-1.5">
-                <button type="button" onclick="setQuickColor('#2563eb', 'Azul Royal')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-blue-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-blue-600 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Azul</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#6366f1', 'Índigo Tech')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-indigo-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-indigo-500 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Índigo</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#059669', 'Esmeralda Mint')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-emerald-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Verde</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#7c3aed', 'Violeta AI')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-purple-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-purple-600 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Violeta</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#d97706', 'Ámbar Gold')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-amber-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-amber-500 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Ámbar</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#ec4899', 'Rosa Coral')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-pink-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-pink-500 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Rosa</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#dc2626', 'Carmesí Bold')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-red-400 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-red-600 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Rojo</span>
-                </button>
-                <button type="button" onclick="setQuickColor('#0f172a', 'Dark Slate')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-slate-800 transition flex items-center gap-1.5 text-left">
-                  <span class="w-3.5 h-3.5 rounded-full bg-slate-900 shrink-0"></span>
-                  <span class="text-[10px] font-bold text-slate-700 truncate">Slate</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Armonía de Tokens Generada Automáticamente -->
-            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-              <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                <span>Paleta Armónica Generada:</span>
-                <span class="text-blue-600 font-mono font-bold">4 Tokens CSS</span>
-              </div>
-              <div class="grid grid-cols-4 gap-2 text-center">
-                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
-                  <div id="previewTokenPrimary" class="w-full h-5 rounded-md bg-[#2563eb] mb-1 shadow-2xs"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Primario</span>
-                  <span id="previewTokenPrimaryHex" class="text-[10px] font-mono font-bold text-slate-800">#2563EB</span>
-                </div>
-                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
-                  <div id="previewTokenSecondary" class="w-full h-5 rounded-md bg-[#1e40af] mb-1 shadow-2xs"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Secundario</span>
-                  <span id="previewTokenSecondaryHex" class="text-[10px] font-mono font-bold text-slate-800">#1E40AF</span>
-                </div>
-                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
-                  <div id="previewTokenAccent" class="w-full h-5 rounded-md bg-[#38bdf8] mb-1 shadow-2xs"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Acento</span>
-                  <span id="previewTokenAccentHex" class="text-[10px] font-mono font-bold text-slate-800">#38BDF8</span>
-                </div>
-                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
-                  <div id="previewTokenSurface" class="w-full h-5 rounded-md bg-[#f8fafc] border border-slate-200 mb-1 shadow-2xs"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Fondo</span>
-                  <span id="previewTokenSurfaceHex" class="text-[10px] font-mono font-bold text-slate-800">#F8FAFC</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MODO B: SACAR COLORES DE URL DE REFERENCIA -->
-          <div id="colorModeContainer-url" class="hidden space-y-3.5">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1.5">URL de la Web de Referencia Visual:</label>
-              <div class="flex gap-2">
-                <input type="url" id="extractUrlInput" placeholder="https://stripe.com, https://linear.app, https://dribbble.com/..." oninput="onExtractUrlInput()" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500">
-                <button type="button" onclick="extractColorsFromUrlAction()" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
-                  <span>✨</span> Extraer Colores
-                </button>
-              </div>
-              <p class="text-[10px] text-slate-400 mt-1">Ingresa cualquier sitio web o enlace de diseño para extraer automáticamente su paleta armónica.</p>
-            </div>
-
-            <!-- Botones Rápidos de Marcas de Inspiración -->
-            <div>
-              <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Presets de Marcas Populares:</span>
-              <div class="flex flex-wrap gap-1.5">
-                <button type="button" onclick="setBrandUrlPreset('https://stripe.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  💳 Stripe
-                </button>
-                <button type="button" onclick="setBrandUrlPreset('https://linear.app')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  ⚡ Linear
-                </button>
-                <button type="button" onclick="setBrandUrlPreset('https://supabase.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  🟢 Supabase
-                </button>
-                <button type="button" onclick="setBrandUrlPreset('https://vercel.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  ▲ Vercel
-                </button>
-                <button type="button" onclick="setBrandUrlPreset('https://openai.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  🤖 OpenAI
-                </button>
-                <button type="button" onclick="setBrandUrlPreset('https://apple.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  🍎 Apple
-                </button>
-                <button type="button" onclick="setBrandUrlPreset('https://dribbble.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
-                  🏀 Dribbble
-                </button>
-              </div>
-            </div>
-
-            <!-- Paleta Extraída de la URL -->
-            <div id="urlExtractedPaletteCard" class="p-3.5 bg-purple-50/70 border border-purple-200 rounded-xl space-y-2.5">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-purple-900 flex items-center gap-1.5">
-                  <span>🎨</span> Paleta Extraída de la URL
-                </span>
-                <button type="button" onclick="openVisualRefUrl()" class="text-purple-700 hover:text-purple-900 text-[10px] font-semibold flex items-center gap-1">
-                  <span>↗️ Abrir Web</span>
-                </button>
-              </div>
-
-              <div class="grid grid-cols-4 gap-2 text-center">
-                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
-                  <div id="urlTokenPrimary" class="w-full h-5 rounded-md bg-[#6366f1] mb-1"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Primario</span>
-                  <span id="urlTokenPrimaryHex" class="text-[10px] font-mono font-bold text-slate-800">#6366F1</span>
-                </div>
-                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
-                  <div id="urlTokenSecondary" class="w-full h-5 rounded-md bg-[#4f46e5] mb-1"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Secundario</span>
-                  <span id="urlTokenSecondaryHex" class="text-[10px] font-mono font-bold text-slate-800">#4F46E5</span>
-                </div>
-                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
-                  <div id="urlTokenAccent" class="w-full h-5 rounded-md bg-[#a855f7] mb-1"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Acento</span>
-                  <span id="urlTokenAccentHex" class="text-[10px] font-mono font-bold text-slate-800">#A855F7</span>
-                </div>
-                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
-                  <div id="urlTokenSurface" class="w-full h-5 rounded-md bg-[#faf5ff] border border-purple-100 mb-1"></div>
-                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Fondo</span>
-                  <span id="urlTokenSurfaceHex" class="text-[10px] font-mono font-bold text-slate-800">#FAF5FF</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 3: Reference Files & Visual URL Reference -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">3. Referencias Visuales &amp; Archivos</span>
-            <span class="text-[10px] font-mono text-emerald-600 font-bold">PENCIL &amp; URL</span>
-          </div>
-
-          <!-- URL de Referencia Visual -->
-          <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-slate-700">🌐 URL de Inspiración / Referencia Visual</label>
-            <div class="flex gap-2">
-              <input type="url" id="stitchVisualRefUrl" placeholder="https://dribbble.com/shots/... o https://tu-inspiracion.com" oninput="updateStitchDesign()" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono">
-              <button type="button" onclick="openVisualRefUrl()" title="Abrir URL en navegador" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition border border-slate-200 flex items-center gap-1 shadow-sm">
-                <span>↗️</span>
-              </button>
-            </div>
-            <p class="text-[10px] text-slate-400">Pega un enlace de Dribbble, Mobbin, Awwwards, Figma o web de inspiración.</p>
-          </div>
-
-          <!-- Archivos locales (.pen / logos / imágenes) -->
-          <div class="space-y-2 pt-2 border-t border-slate-100">
-            <label class="block text-xs font-bold text-slate-700">📁 Archivos de Diseño (.pen / Logos / Mockups)</label>
-            <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center hover:border-purple-400 transition cursor-pointer bg-slate-50/50" onclick="document.getElementById('stitchFileInput').click()">
-              <input type="file" id="stitchFileInput" multiple accept=".pen,.png,.jpg,.jpeg,.svg,.json" class="hidden" onchange="handleStitchFiles(event)">
-              <span class="text-2xl">📤</span>
-              <div class="text-xs font-bold text-slate-700 mt-1">Arrastra archivos .pen, logos o imágenes</div>
-              <div class="text-[11px] text-slate-500">Compatible con Pencil dev y Stitch MCP</div>
-            </div>
-            <div id="stitchFilesList" class="text-xs space-y-1">
-              <!-- Uploaded reference files injected here -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 4: Alcance del Diseño (1 Página vs Suite Completa) & Componentes -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">4. Alcance del Diseño &amp; Pantallas</span>
-            <span class="text-[10px] font-mono text-purple-600 font-bold">ALCANCE</span>
-          </div>
-
-          <!-- Selector de Alcance: 1 Página vs Suite Completa -->
-          <div class="grid grid-cols-2 gap-2">
-            <label class="flex items-center gap-2 p-3 rounded-xl border border-blue-200 bg-blue-50/60 cursor-pointer transition" id="scopeCard_single">
-              <input type="radio" name="designScope" value="single_page" checked onchange="onDesignScopeChange()" class="text-blue-600 focus:ring-blue-500">
-              <div>
-                <div class="text-xs font-bold text-slate-900">📄 Solo 1 Página</div>
-                <div class="text-[10px] text-slate-500">Landing, Home, etc.</div>
-              </div>
-            </label>
-
-            <label class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition" id="scopeCard_suite">
-              <input type="radio" name="designScope" value="full_suite" onchange="onDesignScopeChange()" class="text-blue-600 focus:ring-blue-500">
-              <div>
-                <div class="text-xs font-bold text-slate-900">🏛️ Suite Completa</div>
-                <div class="text-[10px] text-slate-500">Todas las pantallas</div>
-              </div>
-            </label>
-          </div>
-
-          <!-- Sub-selector si se elige 1 Sola Página -->
-          <div id="singlePageTypeContainer" class="space-y-1.5 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-            <label class="block text-xs font-bold text-slate-800">Seleccionar Tipo de Página Única:</label>
-            <select id="stitchSinglePageType" onchange="handleSinglePageTypeChange()" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-purple-500">
-              <option value="Landing Page de Alta Conversión">🌟 Landing Page de Alta Conversión (Hero + CTA + Features + Pricing + Testimonios)</option>
-              <option value="Página de Inicio / Home">🏠 Página de Inicio / Home Principal</option>
-              <option value="Dashboard de Control & Analítica">📊 Dashboard de Control / KPIs &amp; Gráficos</option>
-              <option value="Página de Autenticación (Login & Registro)">🔐 Página de Autenticación / Login &amp; Registro (Zero-Trust)</option>
-              <option value="Catálogo & Listado de Servicios">🛍️ Catálogo / Listado de Servicios con Filtros</option>
-              <option value="Tabla CRUD / Gestión de Datos">📑 Tabla de Gestión de Datos / CRUD Admin</option>
-              <option value="Pricing / Planes de Precios & Checkout">💳 Pricing / Planes de Precios &amp; Pasarela Stripe</option>
-              <option value="Configuración del Sistema & Perfil">⚙️ Configuración del Sistema &amp; Perfil</option>
-              <option value="__custom__">✏️ Escribir otra página personalizada...</option>
-            </select>
-            <input type="text" id="stitchSinglePageCustom" placeholder="Escribe el nombre de la página personalizada..." oninput="updateStitchDesign()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
-          </div>
-          
-          <!-- Módulos / Secciones Activas -->
-          <div class="space-y-2 pt-2 border-t border-slate-100 text-xs">
-            <span class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Módulos &amp; Bloques Activos:</span>
-            <label class="flex items-center gap-2 text-slate-700 font-medium">
-              <input type="checkbox" id="comp-navbar" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
-              <span>Navbar con Branding "By Toni"</span>
-            </label>
-            <label class="flex items-center gap-2 text-slate-700 font-medium">
-              <input type="checkbox" id="comp-hero" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
-              <span>Hero Section de Alta Conversión con CTA</span>
-            </label>
-            <label class="flex items-center gap-2 text-slate-700 font-medium">
-              <input type="checkbox" id="comp-dashboard" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
-              <span>Bloque Principal (Dashboard / Features / Servicios)</span>
-            </label>
-            <label class="flex items-center gap-2 text-slate-700 font-medium">
-              <input type="checkbox" id="comp-crud" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
-              <span>Tabla de Datos / Grid de Gestión</span>
-            </label>
-            <label class="flex items-center gap-2 text-slate-700 font-medium">
-              <input type="checkbox" id="comp-ai" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
-              <span>Copilot IA Integrado (Streaming SSE)</span>
-            </label>
-            <label class="flex items-center gap-2 text-slate-700 font-medium">
-              <input type="checkbox" id="comp-legal" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
-              <span>Footer Legal (/privacidad con DNI 34799350M)</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Step 5: Motor de IA Integrado en el Diseño -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">5. Motor de IA en el Diseño</span>
-            <span class="text-[10px] text-purple-700 font-mono font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Sincronizado con Briefing</span>
-          </div>
-
-          <div class="p-3.5 bg-purple-50/60 border border-purple-200 rounded-xl space-y-2">
-            <div class="flex items-center justify-between">
-              <span id="stitch-ai-engine-name" class="text-xs font-bold text-purple-900 flex items-center gap-1.5">
-                <span>✨</span> Google Gemini 2.0 Flash
-              </span>
-              <span id="stitch-ai-arch-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-100 text-purple-800 border border-purple-200">
-                SSE Edge Function
-              </span>
-            </div>
-            <p id="stitch-ai-engine-desc" class="text-[11px] text-slate-600 leading-relaxed">
-              El asistente Copilot y las acciones inteligentes se diseñarán con streaming Server-Sent Events (SSE) en tiempo real y componentes de chat adaptados.
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Live Mockup Canvas & Generated Code -->
-      <div class="lg:col-span-7 space-y-5">
-        
-        <!-- Mockup Preview Card -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
-              <span>🖥️</span>
-              <span id="canvasProjectTitle">Vista Previa de Interfaz: Clinica-Dental</span>
-            </div>
-            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium">
-              <button onclick="setStitchViewTab('mockup')" id="stitchTab-mockup" class="px-3 py-1 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition">
-                Lienzo UI
-              </button>
-              <button onclick="setStitchViewTab('prompt')" id="stitchTab-prompt" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
-                Prompt Stitch MCP
-              </button>
-              <button onclick="setStitchViewTab('code')" id="stitchTab-code" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
-                Código React
-              </button>
-            </div>
-          </div>
-
-          <!-- Tab 1: Live Interactive Mockup Container -->
-          <div id="stitchMockupContainer" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[420px] space-y-4">
-            
-            <!-- Dynamic Canvas Mockup injected here -->
-            <div id="liveCanvasDynamicContent" class="space-y-4">
-              <!-- Injected by updateStitchDesign() -->
-            </div>
-
-          </div>
-
-          <!-- Tab 2: Compiled Stitch Prompt (Hidden by default) -->
-          <div id="stitchPromptContainer" class="hidden space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500 uppercase font-mono">Prompt Compilado para Stitch MCP:</span>
-              <button onclick="copyStitchPrompt()" class="text-xs text-purple-600 hover:text-purple-800 font-semibold flex items-center gap-1">
-                <span>📋 Copiar Prompt Stitch</span>
-              </button>
-            </div>
-            <pre id="stitchCompiledPromptText" class="bg-slate-900 text-purple-300 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-80 border border-slate-800 leading-relaxed"></pre>
-          </div>
-
-          <!-- Tab 3: Generated React Code (Hidden by default) -->
-          <div id="stitchCodeContainer" class="hidden space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500 uppercase font-mono">Código React 19 + Tailwind CSS:</span>
-              <button onclick="copyStitchReactCode()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
-                <span>📋 Copiar Código JSX</span>
-              </button>
-            </div>
-            <pre id="stitchGeneratedCodeText" class="bg-slate-900 text-sky-300 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-80 border border-slate-800 leading-relaxed"></pre>
-          </div>
-
-          <!-- Bottom Action Buttons for Stitch -->
-          <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
-            <button onclick="openStitchWeb()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-2">
-              <span>🧵</span> Abrir en Google Stitch
-            </button>
-
-            <button onclick="executeStitchMCP()" class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
-              <span>⚡</span> Generar con Stitch MCP (1-Clic)
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- MODAL: STITCH MCP CONTROL & EJECUCIÓN -->
-  <div id="stitchMCPModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 md:p-8 space-y-6 animate-in fade-in zoom-in-95 duration-200">
-      <div class="flex items-start justify-between pb-4 border-b border-slate-100">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-purple-600 flex items-center justify-center text-white text-lg font-bold shadow-md">
-            🧵
-          </div>
-          <div>
-            <h3 class="text-lg font-bold text-slate-900">Ejecución &amp; Protocolo Stitch MCP</h3>
-            <span class="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-              Servidor Conectado (/tools/stitch-mcp/index.js)
-            </span>
-          </div>
-        </div>
-        <button onclick="closeStitchMCPModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 text-sm">
-          ✕
-        </button>
-      </div>
-
-      <!-- MCP Quick Actions Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        <button onclick="openStitchWithPrompt()" class="p-4 bg-purple-50 hover:bg-purple-100/80 border border-purple-200 rounded-2xl text-left transition space-y-2 group">
-          <div class="flex items-center justify-between">
-            <span class="text-xl">🚀</span>
-            <span class="text-[10px] font-mono font-bold bg-purple-200 text-purple-800 px-2 py-0.5 rounded">1-CLIC</span>
-          </div>
-          <h4 class="text-xs font-bold text-purple-900 group-hover:text-purple-950">Abrir Stitch Web con Prompt</h4>
-          <p class="text-[11px] text-purple-700 leading-relaxed">Copia el prompt al portapapeles y abre stitch.withgoogle.com automáticamente para pegar.</p>
-        </button>
-
-        <button onclick="copyAntigravityMCPCommand()" class="p-4 bg-blue-50 hover:bg-blue-100/80 border border-blue-200 rounded-2xl text-left transition space-y-2 group">
-          <div class="flex items-center justify-between">
-            <span class="text-xl">🤖</span>
-            <span class="text-[10px] font-mono font-bold bg-blue-200 text-blue-800 px-2 py-0.5 rounded">CHAT AGENT</span>
-          </div>
-          <h4 class="text-xs font-bold text-blue-900 group-hover:text-blue-950">Instrucción para Antigravity</h4>
-          <p class="text-[11px] text-blue-700 leading-relaxed">Copia la orden con parámetros para que el agente ejecute Stitch MCP directamente.</p>
-        </button>
-      </div>
-
-      <!-- Preview of Compiled Prompt -->
-      <div class="space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-700 uppercase font-mono">Prompt Compilado Listo:</span>
-          <button onclick="copyStitchPrompt()" class="text-xs text-purple-600 hover:text-purple-800 font-semibold flex items-center gap-1">
-            <span>📋 Copiar Solo Prompt</span>
-          </button>
-        </div>
-        <pre id="mcpModalPromptSnippet" class="bg-slate-900 text-purple-300 p-3.5 rounded-xl text-xs font-mono overflow-x-auto max-h-40 border border-slate-800 leading-relaxed"></pre>
-      </div>
-
-      <div class="flex items-center justify-end gap-2 pt-2">
-        <button onclick="closeStitchMCPModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
-          Cerrar
-        </button>
-        <button onclick="openStitchWithPrompt()" class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
-          <span>🚀</span> Abrir Google Stitch →
-        </button>
-      </div>
-    </div>
-  </div>
-  <!-- ========================================================================= -->
-  <!-- TAB 4: REGLAS GLOBALES (RULES/) & CONFIGURACIÓN DEL AGENTE -->
-  <!-- ========================================================================= -->
-  <div id="rulesView" class="tab-content hidden space-y-6">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-      <div>
-        <div class="flex items-center gap-2">
-          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <h2 class="text-lg font-bold text-slate-900">Reglas Globales Activas de Antigravity</h2>
-        </div>
-        <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-          Residen en <code class="text-blue-700 font-mono bg-blue-50 px-1.5 py-0.5 rounded">~/.gemini/config/rules/</code> y se inyectan en todas las conversaciones.
-        </p>
-      </div>
-      <button onclick="openNewRuleModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>+</span> Crear Nueva Regla
-      </button>
-    </div>
-
-    <div id="rulesGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <!-- Injected dynamically -->
-    </div>
-
-    <!-- Agent Mode & Backup Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
-        <h3 class="text-xs font-bold text-blue-700 uppercase tracking-wider font-mono">Modo Operativo del Agente Antigravity</h3>
-
-        <div class="space-y-2.5">
-          <label class="flex items-start gap-3 p-3 bg-blue-50/50 border border-blue-200 rounded-xl cursor-pointer">
-            <input type="radio" name="agentMode" value="autonomous_architect" checked class="mt-1 text-blue-600 focus:ring-blue-500">
-            <div>
-              <div class="text-xs font-bold text-slate-900">Arquitecto Full-Stack Autónomo (Recomendado)</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Aplica las 5 directrices, valida TypeScript, resuelve dependencias y hace deploy sin interrupciones innecesarias.</div>
-            </div>
-          </label>
-
-          <label class="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition">
-            <input type="radio" name="agentMode" value="strict_audit" class="mt-1 text-blue-600 focus:ring-blue-500">
-            <div>
-              <div class="text-xs font-bold text-slate-900">Auditor Riguroso &amp; Seguridad Zero-Trust</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Prioriza validación de esquemas Zod, RLS estricto y prevención de fugas de datos antes de escribir código UI.</div>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
-        <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-wider font-mono">Copia de Seguridad &amp; Exportación JSON</h3>
-
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Exporta todas tus directrices, proyectos guardados, reglas y la tabla de Memoria Viva en un único archivo JSON unificado.
-        </p>
-
-        <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
-          <button onclick="exportConfigJSON()" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
-            <span>📥</span> Exportar Backup (JSON)
-          </button>
-
-          <label class="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
-            <span>📤</span> Importar Backup
-            <input type="file" accept=".json" onchange="importConfigJSON(event)" class="hidden">
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- TAB 6: SKILLS & MCP -->
-  <!-- ========================================================================= -->
-  <div id="skillsView" class="tab-content hidden space-y-6">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider">
-            <span>🧩</span> Catálogo Multiplataforma
-          </div>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900">Skills Especializadas &amp; Servidores MCP</h2>
-        <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-          Protocolos e instrucciones cargadas bajo demanda con soporte nativo para macOS y Windows.
-        </p>
-      </div>
-      <span class="px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 font-semibold">
-        8 Skills Instaladas &amp; Listas
-      </span>
-    </div>
-
-    <div id="skillsGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <!-- Injected dynamically -->
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- TAB 7: DIRECTIVAS SOP & MEMORIA VIVA -->
-  <!-- ========================================================================= -->
-  <div id="sopView" class="tab-content hidden space-y-6">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-xs font-semibold uppercase tracking-wider">
-            <span>📋</span> Procedimiento Operativo Estándar
-          </div>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900">Directiva de Tarea (SOP) &amp; Memoria Viva</h2>
-        <p class="text-xs text-slate-500 mt-1 max-w-3xl leading-relaxed">
-          Estructura para tareas complejas con tabla de auto-corrección para evitar regresiones de errores.
-        </p>
-      </div>
-      <button onclick="exportSOPTemplate()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>📥</span> Descargar Directiva-ejemplo.md
-      </button>
-    </div>
-
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-5">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-        <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
-          <span>🧠</span>
-          <span>Tabla de Aprendizajes &amp; Auto-Corrección (Memoria Viva)</span>
-        </div>
-        <button onclick="addLearningMemoryRow()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition border border-slate-200">
-          + Añadir Aprendizaje
-        </button>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead>
-            <tr class="bg-slate-50 text-slate-600 border-b border-slate-200">
-              <th class="py-2.5 px-3 font-bold">Fecha</th>
-              <th class="py-2.5 px-3 font-bold">Error Detectado</th>
-              <th class="py-2.5 px-3 font-bold">Causa Raíz</th>
-              <th class="py-2.5 px-3 font-bold">Solución / Parche Aplicado</th>
-              <th class="py-2.5 px-3 font-bold">Prevención Futura</th>
-              <th class="py-2.5 px-3 font-bold text-right">Acción</th>
-            </tr>
-          </thead>
-          <tbody id="learningMemoryTableBody" class="divide-y divide-slate-100">
-            <!-- Injected dynamically -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="pt-3 border-t border-slate-100 flex justify-end">
-        <button onclick="saveLearningMemory()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition shadow-sm">
-          💾 Guardar Memoria Viva
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- TAB 8: SYNC MAC ↔ WINDOWS -->
-  <!-- ========================================================================= -->
-  <div id="syncView" class="tab-content hidden space-y-6">
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-semibold uppercase tracking-wider">
-            <span>🔄</span> Sincronización Automática
-          </div>
-        </div>
-        <h2 class="text-lg font-bold text-slate-900">Estado de Sincronización del Workspace</h2>
-        <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-          Controla los 9 proyectos registrados en <code class="text-emerald-700 font-mono bg-emerald-50 px-1 py-0.5 rounded">projects.json</code> y genera comandos de sincronización instantáneos.
-        </p>
-      </div>
-      <button onclick="simulateWorkspaceSync()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>⚡</span> Comprobar Todos los Repos
-      </button>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
-        <div class="flex items-center justify-between">
-          <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
-            <span>🍎</span> macOS / Linux (Terminal)
-          </div>
-          <button onclick="copyCommand('macSyncCmd')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition">
-            Copiar
-          </button>
-        </div>
-        <pre id="macSyncCmd" class="bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono overflow-x-auto">cd ~/Proyectos/antigravity-config
-./sync.sh "Actualizadas directrices maestras"</pre>
-      </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
-        <div class="flex items-center justify-between">
-          <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
-            <span>💻</span> Windows (PowerShell)
-          </div>
-          <button onclick="copyCommand('winSyncCmd')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition">
-            Copiar
-          </button>
-        </div>
-        <pre id="winSyncCmd" class="bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono overflow-x-auto">cd C:\Proyectos\antigravity-config
-.\sync.ps1 "Actualizadas directrices maestras"</pre>
-      </div>
-    </div>
-
-    <div class="space-y-3">
-      <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Repositorios Registrados:</h3>
-      <div id="projectsListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Injected dynamically -->
-      </div>
-    </div>
-  </div>
-
-    </main>
-  </div>
-
-    <!-- FOOTER -->
-  <footer class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
-    <div class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-      <span>© 2026 Antonio Javier García García (DNI 34799350M, Madrid)</span>
-    </div>
-    <div class="flex items-center gap-3 font-medium">
-      <span class="text-blue-600 font-bold">Tonigravity Studio</span>
-      <span>•</span>
-      <span class="text-slate-700 font-semibold">Desarrollado con excelencia · By Toni</span>
+    <div class="font-mono">
+      <span>Ruta: /Users/toni/Proyectos/antigravity-config/</span>
     </div>
   </footer>
 
 </div>
 
-<!-- PROJECTS MANAGER MODAL -->
-<div id="projectsManagerModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-    
-    <!-- Modal Header -->
-    <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-      <div class="flex items-center gap-2.5">
-        <span class="text-xl">🗂️</span>
-        <div>
-          <h3 class="font-bold text-slate-900 text-sm md:text-base">Gestor de Proyectos &amp; Borradores Guardados</h3>
-          <p class="text-xs text-slate-500">Carga tus configuraciones, continúa editando, duplica o elimina proyectos guardados para luego.</p>
-        </div>
-      </div>
-      <button type="button" onclick="closeProjectsManagerModal()" class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100 flex items-center justify-center text-sm font-bold transition">
-        ✕
-      </button>
+<!-- SAVED PROJECTS MANAGER MODAL -->
+<div id="projectsManagerModal" class="modal-backdrop">
+  <div class="modal-window">
+    <div style="padding: 1.2rem 1.6rem; background: var(--bg-subtle); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+      <h3 class="type-lg">🗂️ Mis Proyectos &amp; Borradores Guardados</h3>
+      <button onclick="closeProjectsManagerModal()" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.6rem;">✕ Cerrar</button>
     </div>
-
-    <!-- Search & Quick Actions Bar -->
-    <div class="p-4 border-b border-slate-100 bg-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-      <div class="relative flex-1">
-        <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
-        <input type="text" id="projectSearchInput" oninput="renderProjectsManagerList()" placeholder="Buscar proyecto por nombre, nicho, tipo o base de datos..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-      <button type="button" onclick="createNewProjectDraft(); closeProjectsManagerModal();" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap">
-        <span>+</span> Nuevo en Blanco
-      </button>
+    <div style="padding: 1.2rem 1.6rem; border-bottom: 1px solid var(--border-light); display: flex; gap: 0.8rem;">
+      <input type="text" id="projectSearchInput" oninput="renderProjectsManagerList()" placeholder="Buscar proyecto..." class="form-input" style="flex: 1;">
+      <button onclick="createNewProjectDraft(); closeProjectsManagerModal();" class="btn-action btn-primary">+ Nuevo</button>
     </div>
-
-    <!-- Projects List Container -->
-    <div id="savedProjectsModalList" class="p-5 overflow-y-auto space-y-3 max-h-[50vh]">
-      <!-- Injected dynamically via JS -->
+    <div id="savedProjectsModalList" style="padding: 1.2rem 1.6rem; overflow-y: auto; max-height: 50vh; display: flex; flex-direction: column; gap: 0.8rem;">
+      <!-- Injected dynamically -->
     </div>
-
-    <!-- Modal Footer -->
-    <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
-      <span>Total guardados: <strong id="modalTotalProjectsCount" class="text-slate-800">0</strong> proyectos</span>
-      <button type="button" onclick="closeProjectsManagerModal()" class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold rounded-xl transition">
-        Cerrar
-      </button>
+    <div style="padding: 0.8rem 1.6rem; background: var(--bg-subtle); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; color: var(--text-muted);">
+      <span>Total: <strong id="modalTotalProjectsCount">0</strong></span>
+      <button onclick="closeProjectsManagerModal()" class="btn-action btn-secondary">Cerrar</button>
     </div>
-
   </div>
 </div>
 
 <!-- TOAST -->
-<div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl transition-all duration-300 transform translate-y-24 opacity-0 flex items-center gap-2.5 text-xs font-medium border border-slate-800">
-  <span id="toastIcon" class="text-blue-400">✓</span>
+<div id="toast" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 200; background: #0F172A; color: #FFFFFF; padding: 0.8rem 1.4rem; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.2s; transform: translateY(100px); opacity: 0; display: flex; align-items: center; gap: 0.6rem; font-size: 1.25rem; font-weight: 500; border: 1px solid #334155;" aria-live="polite">
+  <span id="toastIcon" style="color: #38BDF8;">✓</span>
   <span id="toastMessage">Operación realizada con éxito.</span>
 </div>
 
-<!-- SCRIPT LOGIC -->
+
 <script>
   // Nichos & Subnichos Mapping
   const NICHE_DATA = {
@@ -1717,7 +1240,15 @@
   }
 ];
 
-  const DEFAULT_RULES = [
+    const DEFAULT_RULES = [
+    {
+      id: 'rule_sop_clean_sdd',
+      filename: '00-sop-desarrollo-app-clean-sdd.md',
+      title: '🥇 SOP: Clean Architecture & SDD',
+      description: 'Regla #1 de máxima prioridad: 3 capas estrictas (domain, data, presentation), WCAG 2.1 AA, base 10px rem, cero alerts y RLS obligatorio.',
+      active: true,
+      scope: 'Global (Todo el Ecosistema)'
+    },
     {
       id: 'rule_master_directives',
       filename: '5-directrices-maestras.md',
@@ -1733,6 +1264,14 @@
       description: 'Comprobación de commits remotos antes de empezar, sincronización fast-forward y auto-commit al terminar hitos.',
       active: true,
       scope: 'Multi-Machine (Git & Skills)'
+    },
+    {
+      id: 'rule_directiva_ejemplo',
+      filename: 'directiva-ejemplo.md',
+      title: '📋 Plantilla Directiva SOP Modular',
+      description: 'Plantilla estandarizada para definir directivas específicas por módulo o aplicación subordinadas a la arquitectura general.',
+      active: true,
+      scope: 'Módulos & Componentes'
     }
   ];
 
@@ -1747,7 +1286,7 @@
     { id: 'supabase-mcp', title: 'Supabase MCP Management', icon: '🗄️', type: 'Base de Datos', desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.' }
   ];
 
-  const DEFAULT_PROJECTS = [
+    const DEFAULT_PROJECTS = [
     { name: 'Control61-Web', slug: 'com_control61', schema: 'com_control61', url: 'https://control61.vercel.app' },
     { name: 'EduStack-AI', slug: 'mia_edustack', schema: 'mia_academy', url: 'https://edustack-app-ten.vercel.app' },
     { name: 'Bicicletas-Puertanueva', slug: 'com_bicicletas', schema: 'com_bicicletas', url: 'https://bicicletas-puertanueva.vercel.app' },
@@ -1756,6 +1295,8 @@
     { name: 'Flowmind', slug: 'mia_flowmind', schema: 'mia_flowmind', url: 'https://flowmind.vercel.app' },
     { name: 'IA-Trading', slug: 'mia_iatrading', schema: 'mia_iatrading', url: 'https://algo-wizard-pro.vercel.app' },
     { name: 'Vita-Trading', slug: 'mia_vitatrading', schema: 'mia_vitatrading', url: 'https://vita-trading.vercel.app' },
+    { name: 'Vibe-Coding', slug: 'mia_vibestack', schema: 'mia_vibestack', url: 'https://vibestack-studio.vercel.app' },
+    { name: 'Orange-Territorio-Madrid', slug: 'com_orangemadrid', schema: 'com_orangemadrid', url: 'https://orange-territorio-madrid.vercel.app' },
     { name: 'antigravity-config', slug: 'antigravity-config', schema: 'config', url: 'https://tonigravity.vercel.app' }
   ];
 
