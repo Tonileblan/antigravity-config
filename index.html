@@ -560,6 +560,41 @@
       .directives-view-grid, .rules-view-grid, .briefing-view-grid { grid-template-columns: 1fr; }
     }
   
+    /* CUSTOM SELECT ROW & DELETE BUTTON */
+    .custom-select-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: 100%;
+    }
+    .custom-select-row select {
+      flex: 1;
+      min-width: 0;
+    }
+    .btn-delete-custom-opt {
+      height: 32px;
+      width: 32px;
+      min-width: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1px solid #FECACA;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .btn-delete-custom-opt:hover {
+      background: #FEE2E2;
+      border-color: #F87171;
+      color: #B91C1C;
+      transform: scale(1.05);
+    }
+
     /* INLINE CUSTOM DROPDOWN EDITOR */
     .custom-inline-editor {
       display: flex;
@@ -843,6 +878,7 @@
 
             <div class="form-group">
               <label class="form-label">3. Tipo de Proyecto</label>
+              <div class="custom-select-row">
               <select id="b-type" onchange="handleSelectWithCustom('b-type', 'Escribe el tipo de app personalizado...')" class="form-select">
                 <option value="Web App (SaaS / Dashboard Pro)">Web App (SaaS / Dashboard Pro)</option>
                 <option value="Membresía / Comunidad Privada & Cursos (LMS)">Membresía / Comunidad Privada &amp; Cursos (LMS)</option>
@@ -855,9 +891,11 @@
                 <option value="__custom__">✏️ + Escribir tipo personalizado...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">4. Nicho de Mercado</label>
+              <div class="custom-select-row">
               <select id="b-niche" onchange="handleSelectWithCustom('b-niche', 'Escribe el nicho personalizado...')" class="form-select">
                 <option value="Salud & Bienestar">Salud, Belleza &amp; Bienestar (Clínicas &amp; Estética)</option>
                 <option value="Educación & E-learning">Educación &amp; E-learning (EdTech / Cursos)</option>
@@ -872,9 +910,11 @@
                 <option value="__custom__">✏️ + Escribir nicho personalizado...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">5. Subnicho Específico</label>
+              <div class="custom-select-row">
               <select id="b-subniche" onchange="handleSelectWithCustom('b-subniche', 'Escribe el subnicho específico...')" class="form-select">
                 <option value="Clínicas Dentales & Odontología">Clínicas Dentales &amp; Odontología</option>
                 <option value="Fisioterapia & Osteopatía">Fisioterapia &amp; Osteopatía</option>
@@ -883,9 +923,11 @@
                 <option value="__custom__">✏️ + Escribir subnicho personalizado...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">6A. Monetización del Desarrollador (Toni / Dev)</label>
+              <div class="custom-select-row">
               <select id="b-monetization-dev" onchange="handleSelectWithCustom('b-monetization-dev', 'Escribe cómo monetizamos como dev...')" class="form-select">
                 <option value="SaaS Suscripción Recurrente (Stripe Billing mensual/anual)">SaaS Suscripción Recurrente (Stripe Billing mensual/anual)</option>
                 <option value="Setup Fee Inicial + Mantenimiento Mensual Recurrente">Setup Fee Inicial + Mantenimiento Mensual Recurrente</option>
@@ -897,9 +939,11 @@
                 <option value="__custom__">✏️ + Escribir monetización dev personalizada...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">6B. Monetización del Usuario Final (Negocio / Cliente)</label>
+              <div class="custom-select-row">
               <select id="b-monetization-user" onchange="handleSelectWithCustom('b-monetization-user', 'Escribe cómo genera ingresos el usuario final...')" class="form-select">
                 <option value="Cobro de Servicios / Consultas / Citas Online integradas">Cobro de Servicios / Consultas / Citas Online integradas</option>
                 <option value="Membresía VIP / Suscripción de Contenido para sus Alumnos">Membresía VIP / Suscripción para sus Alumnos o Clientes</option>
@@ -912,9 +956,11 @@
                 <option value="__custom__">✏️ + Escribir monetización usuario personalizada...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">7. Base de Datos / Persistencia</label>
+              <div class="custom-select-row">
               <select id="b-db" onchange="handleSelectWithCustom('b-db', 'Escribe la base de datos personalizada...')" class="form-select">
                 <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
                 <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
@@ -924,9 +970,11 @@
                 <option value="__custom__">✏️ + Escribir base de datos personalizada...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">8. Autenticación &amp; Roles</label>
+              <div class="custom-select-row">
               <select id="b-auth" onchange="handleSelectWithCustom('b-auth', 'Escribe el esquema de autenticación...')" class="form-select">
                 <option value="Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]">Supabase Auth Multi-Role (Admin + Staff + Cliente)</option>
                 <option value="Supabase Auth Estándar (Email + Password)">Supabase Auth Estándar (Email + Password)</option>
@@ -936,9 +984,11 @@
                 <option value="__custom__">✏️ + Escribir sistema de autenticación...</option>
               </select>
             </div>
+            </div>
 
             <div class="form-group">
               <label class="form-label">9. Motor de IA / API</label>
+              <div class="custom-select-row">
               <select id="b-ai" onchange="handleSelectWithCustom('b-ai', 'Escribe el motor o API de IA...')" class="form-select">
                 <option value="gemini">✨ Google Gemini AI (2.0 Flash / Pro) [SSE]</option>
                 <option value="claude">🧠 Anthropic Claude (3.7 Sonnet)</option>
@@ -949,6 +999,7 @@
                 <option value="none">🚫 Sin IA / Aplicación Clásica</option>
                 <option value="__custom__">✏️ + Escribir motor de IA personalizado...</option>
               </select>
+            </div>
             </div>
 
             <div class="form-group">
@@ -3074,7 +3125,7 @@ DOCUMENTACIÓN Y RECURSOS:
   }
 
 // =========================================================================
-  // SEAMLESS IN-DROPDOWN CUSTOM OPTIONS SYSTEM
+  // SEAMLESS IN-DROPDOWN CUSTOM OPTIONS SYSTEM (WITH DELETION & PERSISTENCE)
   // =========================================================================
   const previousSelectValues = {};
 
@@ -3091,6 +3142,7 @@ DOCUMENTACIÓN Y RECURSOS:
       } else if (selectId === 'b-ai') {
         handleAIChangeInternal();
       }
+      updateDeleteButtonVisibility(selectId);
       updateBriefingCompiledPrompt();
       updateStitchDesign();
     }
@@ -3100,6 +3152,7 @@ DOCUMENTACIÓN Y RECURSOS:
     const select = document.getElementById(selectId);
     if (!select) return;
 
+    const row = select.closest('.custom-select-row') || select.parentNode;
     let editor = document.getElementById(selectId + '-inline-editor');
     if (!editor) {
       const wrapper = document.createElement('div');
@@ -3110,12 +3163,11 @@ DOCUMENTACIÓN Y RECURSOS:
         <button type="button" class="btn-inline-save" onclick="saveInlineCustomOption('${selectId}')" title="Guardar opción en el desplegable">✓ Listo</button>
         <button type="button" class="btn-inline-cancel" onclick="cancelInlineCustomOption('${selectId}')" title="Cancelar y cerrar campo">✕</button>
       `;
-      select.parentNode.insertBefore(wrapper, select);
+      row.parentNode.insertBefore(wrapper, row);
       editor = wrapper;
     }
 
-    select.style.display = 'none';
-    select.classList.add('hidden');
+    if (row) row.style.display = 'none';
     editor.style.display = 'flex';
     editor.classList.remove('hidden');
 
@@ -3139,6 +3191,7 @@ DOCUMENTACIÓN Y RECURSOS:
     const select = document.getElementById(selectId);
     const input = document.getElementById(selectId + '-custom-input');
     const editor = document.getElementById(selectId + '-inline-editor');
+    const row = select ? (select.closest('.custom-select-row') || select.parentNode) : null;
     if (!select || !input) return;
 
     const customText = input.value.trim();
@@ -3146,10 +3199,12 @@ DOCUMENTACIÓN Y RECURSOS:
       let existingOpt = Array.from(select.options).find(o => o.value.toLowerCase() === customText.toLowerCase() || o.textContent.replace('✏️ ', '').trim().toLowerCase() === customText.toLowerCase());
       if (existingOpt) {
         existingOpt.selected = true;
+        existingOpt.setAttribute('data-custom', 'true');
       } else {
         const newOpt = document.createElement('option');
         newOpt.value = customText;
         newOpt.textContent = '✏️ ' + customText;
+        newOpt.setAttribute('data-custom', 'true');
         
         const customTrigger = select.querySelector('option[value="__custom__"]');
         if (customTrigger) {
@@ -3160,6 +3215,17 @@ DOCUMENTACIÓN Y RECURSOS:
         newOpt.selected = true;
       }
       previousSelectValues[selectId] = select.value;
+      
+      // Save to localStorage persistence
+      try {
+        const saved = JSON.parse(localStorage.getItem('tonigravity_custom_options') || '{}');
+        if (!saved[selectId]) saved[selectId] = [];
+        if (!saved[selectId].includes(customText)) {
+          saved[selectId].push(customText);
+          localStorage.setItem('tonigravity_custom_options', JSON.stringify(saved));
+        }
+      } catch(e) {}
+
       showToast(`✨ Opción "${customText}" agregada al desplegable.`);
     } else {
       select.value = previousSelectValues[selectId] || select.options[0]?.value || '';
@@ -3169,8 +3235,11 @@ DOCUMENTACIÓN Y RECURSOS:
       editor.style.display = 'none';
       editor.classList.add('hidden');
     }
+    if (row) row.style.display = 'flex';
     select.style.display = '';
     select.classList.remove('hidden');
+
+    updateDeleteButtonVisibility(selectId);
 
     if (selectId === 'b-niche') {
       handleNicheChangeInternal();
@@ -3185,6 +3254,7 @@ DOCUMENTACIÓN Y RECURSOS:
   function cancelInlineCustomOption(selectId) {
     const select = document.getElementById(selectId);
     const editor = document.getElementById(selectId + '-inline-editor');
+    const row = select ? (select.closest('.custom-select-row') || select.parentNode) : null;
     if (!select) return;
 
     const prev = previousSelectValues[selectId];
@@ -3198,8 +3268,72 @@ DOCUMENTACIÓN Y RECURSOS:
       editor.style.display = 'none';
       editor.classList.add('hidden');
     }
+    if (row) row.style.display = 'flex';
     select.style.display = '';
     select.classList.remove('hidden');
+
+    updateDeleteButtonVisibility(selectId);
+    updateBriefingCompiledPrompt();
+  }
+
+  function updateDeleteButtonVisibility(selectId) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    const row = select.closest('.custom-select-row') || select.parentNode;
+    let delBtn = document.getElementById(selectId + '-delete-btn');
+    const selectedOpt = select.options[select.selectedIndex];
+    const isCustom = selectedOpt && (selectedOpt.getAttribute('data-custom') === 'true' || (selectedOpt.textContent.startsWith('✏️ ') && selectedOpt.value !== '__custom__'));
+
+    if (isCustom) {
+      if (!delBtn) {
+        delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.id = selectId + '-delete-btn';
+        delBtn.className = 'btn-delete-custom-opt';
+        delBtn.title = 'Eliminar esta opción personalizada del desplegable';
+        delBtn.innerHTML = '🗑️';
+        delBtn.onclick = function() { deleteSelectedCustomOption(selectId); };
+        row.appendChild(delBtn);
+      }
+      delBtn.style.display = 'flex';
+      delBtn.classList.remove('hidden');
+    } else {
+      if (delBtn) {
+        delBtn.style.display = 'none';
+        delBtn.classList.add('hidden');
+      }
+    }
+  }
+
+  function deleteSelectedCustomOption(selectId) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    const selectedIndex = select.selectedIndex;
+    const optToDelete = select.options[selectedIndex];
+    if (!optToDelete) return;
+
+    const valToDelete = optToDelete.value;
+    const textToDelete = optToDelete.textContent.replace('✏️ ', '').trim();
+
+    // Remove option from select element
+    select.remove(selectedIndex);
+
+    // Remove from localStorage persistence
+    try {
+      const saved = JSON.parse(localStorage.getItem('tonigravity_custom_options') || '{}');
+      if (saved[selectId]) {
+        saved[selectId] = saved[selectId].filter(v => v.toLowerCase() !== valToDelete.toLowerCase());
+        localStorage.setItem('tonigravity_custom_options', JSON.stringify(saved));
+      }
+    } catch(e) {}
+
+    // Revert to first option
+    select.selectedIndex = 0;
+    previousSelectValues[selectId] = select.value;
+
+    updateDeleteButtonVisibility(selectId);
 
     if (selectId === 'b-niche') {
       handleNicheChangeInternal();
@@ -3209,6 +3343,33 @@ DOCUMENTACIÓN Y RECURSOS:
 
     updateBriefingCompiledPrompt();
     updateStitchDesign();
+
+    showToast(`🗑️ Opción "${textToDelete}" eliminada.`);
+  }
+
+  function loadSavedCustomOptionsFromStorage() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('tonigravity_custom_options') || '{}');
+      Object.keys(saved).forEach(selectId => {
+        const select = document.getElementById(selectId);
+        if (!select || !Array.isArray(saved[selectId])) return;
+        saved[selectId].forEach(customText => {
+          let existing = Array.from(select.options).find(o => o.value.toLowerCase() === customText.toLowerCase() || o.textContent.replace('✏️ ', '').trim().toLowerCase() === customText.toLowerCase());
+          if (!existing) {
+            const newOpt = document.createElement('option');
+            newOpt.value = customText;
+            newOpt.textContent = '✏️ ' + customText;
+            newOpt.setAttribute('data-custom', 'true');
+            const customTrigger = select.querySelector('option[value="__custom__"]');
+            if (customTrigger) {
+              select.insertBefore(newOpt, customTrigger);
+            } else {
+              select.appendChild(newOpt);
+            }
+          }
+        });
+      });
+    } catch(e) {}
   }
 
   function handleNicheChangeInternal() {
@@ -3220,6 +3381,10 @@ DOCUMENTACIÓN Y RECURSOS:
     const options = NICHE_DATA[niche] || ["General / Servicios", "Especialistas / Consultoría", "Gestión & Operaciones"];
     subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
       `<option value="__custom__">✏️ + Escribir subnicho personalizado...</option>`;
+
+    // Restore any custom subniches for this niche
+    loadSavedCustomOptionsFromStorage();
+    updateDeleteButtonVisibility('b-subniche');
   }
 
   function handleAIChangeInternal() {
@@ -3256,6 +3421,7 @@ DOCUMENTACIÓN Y RECURSOS:
       const newOpt = document.createElement('option');
       newOpt.value = target;
       newOpt.textContent = '✏️ ' + target;
+      newOpt.setAttribute('data-custom', 'true');
       const customTrigger = select.querySelector('option[value="__custom__"]');
       if (customTrigger) {
         select.insertBefore(newOpt, customTrigger);
@@ -3265,6 +3431,7 @@ DOCUMENTACIÓN Y RECURSOS:
       newOpt.selected = true;
     }
     previousSelectValues[selectId] = select.value;
+    updateDeleteButtonVisibility(selectId);
   }
 
   function getDropdownOrCustomValue(selectId, legacyCustomId) {
