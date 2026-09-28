@@ -267,31 +267,7 @@
 
     <!-- ÁREA PRINCIPAL DE CONTENIDO (Pestañas Dinámicas) -->
     <main id="appMainContent" class="lg:col-span-9 space-y-6 transition-all duration-300">
-      
-      <!-- Barra superior cuando el menú lateral está oculto -->
-      <div id="sidebarCollapsedBanner" class="hidden bg-white border border-slate-200 p-2.5 rounded-2xl card-shadow flex items-center justify-between gap-3 text-xs">
-        <div class="flex items-center gap-2.5">
-          <!-- Icono de mostrar menú a la izquierda del título -->
-          <button onclick="toggleSidebar()" class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition flex items-center justify-center shadow-sm text-sm shrink-0" title="Mostrar menú lateral">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="text-slate-600 text-[11px] font-medium flex items-center gap-1.5">
-            <span class="text-slate-400">🧭</span>
-            <span>Proyecto: <strong id="bannerProjectName" class="text-slate-900">Clinica-Dental</strong></span>
-          </div>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <button onclick="switchTab('briefingView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
-            📐 Briefing
-          </button>
-          <button onclick="switchTab('stitchView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
-            🎨 Stitch
-          </button>
-          <button onclick="switchTab('directricesView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
-            🏛️ Directrices
-          </button>
-        </div>
-      </div>
+
   <!-- ========================================================================= -->
   <!-- TAB 1: DIRECTRICES MAESTRAS (LECTURA COMPLETA & EDICIÓN INTEGRAL) -->
   <!-- ========================================================================= -->
@@ -301,7 +277,12 @@
       <!-- Left Column: Directives Selector -->
       <div class="lg:col-span-4 space-y-3">
         <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
-          <span>Seleccionar Directriz</span>
+          <div class="flex items-center gap-2">
+            <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <span>Seleccionar Directriz</span>
+          </div>
           <span class="font-mono text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded">6 Protocolos</span>
         </div>
 
@@ -421,8 +402,13 @@
       <!-- Top Title & Quick Actions Header -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b border-slate-100">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2">
-            <span>📐</span> Protocolo de Definición Ágil By Toni
+          <div class="flex items-center gap-2 mb-2">
+            <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider">
+              <span>📐</span> Protocolo de Definición Ágil By Toni
+            </div>
           </div>
           <h2 class="text-xl font-bold text-slate-900">Configurador Completo de Nuevo Proyecto</h2>
           <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
@@ -720,8 +706,13 @@
     <!-- Stitch Studio Header -->
     <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider mb-2">
-          <span>🧵</span> Google Stitch (Project Nemo) &amp; Gemini 2.0 Integration
+        <div class="flex items-center gap-2 mb-2">
+          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider">
+            <span>🧵</span> Google Stitch (Project Nemo) &amp; Gemini 2.0 Integration
+          </div>
         </div>
         <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
           Stitch UI Studio: Generador Visual de Interfaces
@@ -1279,7 +1270,12 @@
   <div id="rulesView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
-        <h2 class="text-lg font-bold text-slate-900">Reglas Globales Activas de Antigravity</h2>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h2 class="text-lg font-bold text-slate-900">Reglas Globales Activas de Antigravity</h2>
+        </div>
         <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
           Residen en <code class="text-blue-700 font-mono bg-blue-50 px-1.5 py-0.5 rounded">~/.gemini/config/rules/</code> y se inyectan en todas las conversaciones.
         </p>
@@ -1344,8 +1340,13 @@
   <div id="skillsView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider mb-2">
-          <span>🧩</span> Catálogo Multiplataforma
+        <div class="flex items-center gap-2 mb-2">
+          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider">
+            <span>🧩</span> Catálogo Multiplataforma
+          </div>
         </div>
         <h2 class="text-lg font-bold text-slate-900">Skills Especializadas &amp; Servidores MCP</h2>
         <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
@@ -1368,8 +1369,13 @@
   <div id="sopView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-xs font-semibold uppercase tracking-wider mb-2">
-          <span>📋</span> Procedimiento Operativo Estándar
+        <div class="flex items-center gap-2 mb-2">
+          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-xs font-semibold uppercase tracking-wider">
+            <span>📋</span> Procedimiento Operativo Estándar
+          </div>
         </div>
         <h2 class="text-lg font-bold text-slate-900">Directiva de Tarea (SOP) &amp; Memoria Viva</h2>
         <p class="text-xs text-slate-500 mt-1 max-w-3xl leading-relaxed">
@@ -1424,8 +1430,13 @@
   <div id="syncView" class="tab-content hidden space-y-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-semibold uppercase tracking-wider mb-2">
-          <span>🔄</span> Sincronización Automática
+        <div class="flex items-center gap-2 mb-2">
+          <button onclick="toggleSidebar()" class="sidebar-restore-btn hidden w-7 h-7 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition flex items-center justify-center shadow-xs text-xs shrink-0" title="Mostrar barra lateral">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-semibold uppercase tracking-wider">
+            <span>🔄</span> Sincronización Automática
+          </div>
         </div>
         <h2 class="text-lg font-bold text-slate-900">Estado de Sincronización del Workspace</h2>
         <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
@@ -3474,9 +3485,7 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
   function applySidebarState() {
     const sidebar = document.getElementById('appSidebar');
     const mainContent = document.getElementById('appMainContent');
-    const banner = document.getElementById('sidebarCollapsedBanner');
-    const toggleIcon = document.getElementById('sidebarToggleIcon');
-    const toggleLabel = document.getElementById('sidebarToggleLabel');
+    const restoreBtns = document.querySelectorAll('.sidebar-restore-btn');
 
     if (appState.sidebarCollapsed) {
       if (sidebar) sidebar.classList.add('hidden');
@@ -3484,23 +3493,15 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
         mainContent.classList.remove('lg:col-span-9');
         mainContent.classList.add('lg:col-span-12');
       }
-      if (banner) banner.classList.remove('hidden');
-      if (toggleIcon) toggleIcon.innerText = '☰';
-      if (toggleLabel) toggleLabel.innerText = 'Mostrar Menú';
+      restoreBtns.forEach(btn => btn.classList.remove('hidden'));
     } else {
       if (sidebar) sidebar.classList.remove('hidden');
       if (mainContent) {
         mainContent.classList.remove('lg:col-span-12');
         mainContent.classList.add('lg:col-span-9');
       }
-      if (banner) banner.classList.add('hidden');
-      if (toggleIcon) toggleIcon.innerText = '◧';
-      if (toggleLabel) toggleLabel.innerText = 'Ocultar Menú';
+      restoreBtns.forEach(btn => btn.classList.add('hidden'));
     }
-
-    const bannerProj = document.getElementById('bannerProjectName');
-    const activeProj = appState.savedProjects.find(p => p.id === appState.currentProjectId) || appState.savedProjects[0];
-    if (bannerProj && activeProj) bannerProj.innerText = activeProj.name;
   }
 
   // =========================================================================
