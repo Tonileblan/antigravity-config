@@ -1690,6 +1690,65 @@
   }
 ];
 
+  const DEFAULT_RULES = [
+    {
+      id: 'rule_master_directives',
+      filename: '5-directrices-maestras.md',
+      title: '🏛️ Las 5 Directrices Maestras de Toni',
+      description: 'Aplica obligatoriamente las normas de Supabase (mia_/com_), Auth JWT, IA Streaming SSE, RGPD Toni (DNI 34799350M) y Control Drive.',
+      active: true,
+      scope: 'Global (Todas las Apps & Tareas)'
+    },
+    {
+      id: 'rule_auto_sync',
+      filename: 'auto-sync.md',
+      title: '🔄 Auto-Sync Mac & Windows',
+      description: 'Comprobación de commits remotos antes de empezar, sincronización fast-forward y auto-commit al terminar hitos.',
+      active: true,
+      scope: 'Multi-Machine (Git & Skills)'
+    }
+  ];
+
+  const DEFAULT_SKILLS = [
+    { id: 'pencil-dev', title: 'Pencil Visual AI', icon: '🎨', type: 'Diseño & Canvas', desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.' },
+    { id: 'stitch', title: 'Google Stitch (Project Nemo)', icon: '🧵', type: 'Generación UI Gemini', desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.' },
+    { id: 'ui-ux-expert', title: 'UI/UX Desktop Expert', icon: '✨', type: 'Experiencia de Usuario', desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.' },
+    { id: 'mobile-ui-ux-expert', title: 'Mobile UI/UX Expert', icon: '📱', type: 'Mobile & PWA', desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.' },
+    { id: 'accidental-data-loss-prevention', title: 'Data Loss Prevention', icon: '🛡️', type: 'Seguridad', desc: 'Bloqueo de comandos destructivos que provoquen pérdida irreversible de datos.' },
+    { id: 'telegram', title: 'Telegram Bot MCP', icon: '✈️', type: 'Notificaciones', desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.' },
+    { id: 'whatsapp', title: 'WhatsApp Baileys MCP', icon: '💬', type: 'Mensajería', desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.' },
+    { id: 'supabase-mcp', title: 'Supabase MCP Management', icon: '🗄️', type: 'Base de Datos', desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.' }
+  ];
+
+  const DEFAULT_PROJECTS = [
+    { name: 'Control61-Web', slug: 'com_control61', schema: 'com_control61', url: 'https://control61.vercel.app' },
+    { name: 'EduStack-AI', slug: 'mia_edustack', schema: 'mia_academy', url: 'https://edustack-app-ten.vercel.app' },
+    { name: 'Bicicletas-Puertanueva', slug: 'com_bicicletas', schema: 'com_bicicletas', url: 'https://bicicletas-puertanueva.vercel.app' },
+    { name: 'ByToniProyect', slug: 'mia_bytoniproyect', schema: 'mia_bytoniproyect', url: 'https://bytoni-proyect.vercel.app' },
+    { name: 'Flow-Girl', slug: 'mia_flowgirl', schema: 'mia_flowgirl', url: 'https://flowgirl.vercel.app' },
+    { name: 'Flowmind', slug: 'mia_flowmind', schema: 'mia_flowmind', url: 'https://flowmind.vercel.app' },
+    { name: 'IA-Trading', slug: 'mia_iatrading', schema: 'mia_iatrading', url: 'https://algo-wizard-pro.vercel.app' },
+    { name: 'Vita-Trading', slug: 'mia_vitatrading', schema: 'mia_vitatrading', url: 'https://vita-trading.vercel.app' },
+    { name: 'antigravity-config', slug: 'antigravity-config', schema: 'config', url: 'https://tonigravity.vercel.app' }
+  ];
+
+  const DEFAULT_MEMORY = [
+    {
+      date: '28/09/2026',
+      error: 'Vite build type error en canvas-confetti types',
+      cause: 'Falta de declaración @types/canvas-confetti en TypeScript strict',
+      patch: 'Instalado @types/canvas-confetti y añadido type fallback',
+      prevention: 'Verificar siempre tipos antes de exportar componentes visuales'
+    },
+    {
+      date: '27/09/2026',
+      error: 'Supabase schema permissions en tablas de nuevo proyecto',
+      cause: 'No se ejecutó GRANT USAGE ON SCHEMA a los roles anon y authenticated',
+      patch: 'Añadido GRANT USAGE ON SCHEMA {schema} TO anon, authenticated, service_role en el init script',
+      prevention: 'Incluir siempre la directriz de permisos en la plantilla SQL'
+    }
+  ];
+
   const DEFAULT_SAVED_PROJECTS = [
     {
       id: 'proj_clinica_dental',
@@ -2215,7 +2274,7 @@
 
     if (select.value === '__custom__') {
       customInput.classList.remove('hidden');
-      customInput.focus();
+      if (typeof customInput.focus === 'function') customInput.focus();
     } else {
       customInput.classList.add('hidden');
     }
@@ -2235,7 +2294,7 @@
     if (nicheSelect.value === '__custom__') {
       if (nicheCustom) {
         nicheCustom.classList.remove('hidden');
-        nicheCustom.focus();
+        if (typeof nicheCustom.focus === 'function') nicheCustom.focus();
       }
       subSelect.innerHTML = `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
       subSelect.value = '__custom__';
@@ -2271,7 +2330,7 @@
     if (aiSelect.value === '__custom__') {
       if (aiCustom) {
         aiCustom.classList.remove('hidden');
-        aiCustom.focus();
+        if (typeof aiCustom.focus === 'function') aiCustom.focus();
       }
     } else {
       if (aiCustom) aiCustom.classList.add('hidden');
@@ -2317,9 +2376,11 @@
     if (!select) return;
 
     let found = false;
-    for (let i = 0; i < select.options.length; i++) {
-      if (select.options[i].value === value && value !== '__custom__') {
+    const opts = select.options || [];
+    for (let i = 0; i < opts.length; i++) {
+      if (opts[i] && opts[i].value === value && value !== '__custom__') {
         select.selectedIndex = i;
+        select.value = value;
         found = true;
         break;
       }
@@ -2826,7 +2887,7 @@ ${visualRef ? `- URL de Referencia Visual / Inspiración: ${visualRef}` : ''}
     if (select.value === '__custom__') {
       if (custom) {
         custom.classList.remove('hidden');
-        custom.focus();
+        if (typeof custom.focus === 'function') custom.focus();
       }
     } else {
       if (custom) custom.classList.add('hidden');
@@ -3525,10 +3586,6 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
       appState.stitchDesign.visualRefUrl = url;
     }
     updateBriefingCompiledPrompt();
-  }
-    if (appState.stitchDesign) {
-      appState.stitchDesign.visualRefUrl = url;
-    }
   }
 
   function extractColorsFromUrlAction() {
