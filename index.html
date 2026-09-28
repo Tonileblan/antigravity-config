@@ -553,24 +553,24 @@
         </h1>
       </div>
 
-      <!-- Non-Redundant Executive KPIs -->
+      <!-- Interactive Executive KPIs (Action Buttons) -->
       <div class="kpi-group" role="region" aria-label="Métricas Principales">
-        <div class="kpi-chip">
+        <button type="button" onclick="switchTab('directricesView')" class="kpi-chip" title="Ver las Directrices Maestras">
           <span class="kpi-value">6</span>
           <span class="kpi-label">Directrices Maestras</span>
-        </div>
-        <div class="kpi-chip">
+        </button>
+        <button type="button" onclick="openProjectsManagerModal()" class="kpi-chip" title="Ver y gestionar los 11 Repositorios Sincronizados">
           <span class="kpi-value" id="headerProjectsCount">11</span>
           <span class="kpi-label">Repos Sincronizados</span>
-        </div>
-        <div class="kpi-chip">
+        </button>
+        <button type="button" onclick="switchTab('skillsView')" class="kpi-chip" title="Ver los 8 Servidores MCP y Skills">
           <span class="kpi-value">8</span>
           <span class="kpi-label">MCP Skills</span>
-        </div>
-        <div class="kpi-chip" style="border-color: #A7F3D0; background: #ECFDF5;">
+        </button>
+        <button type="button" onclick="switchTab('syncView')" class="kpi-chip" style="border-color: #A7F3D0; background: #ECFDF5;" title="Ver monitor de paridad 100% Mac ↔ Windows">
           <span class="kpi-value" style="color: #059669;">✓ 100%</span>
           <span class="kpi-label" style="color: #047857;">Paridad Mac ↔ Win</span>
-        </div>
+        </button>
       </div>
     </div>
 
@@ -1031,11 +1031,12 @@
            TAB 5: SKILLS & MCP TOOLS
            ======================================================================= -->
       <div id="skillsView" class="tab-content hidden tab-scroll-pane">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light);">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light); margin-bottom: 1.2rem;">
           <div>
             <h2 class="type-lg">Servidores MCP &amp; Skills Registrados</h2>
-            <p class="type-sm" style="color: var(--text-muted);">Herramientas integradas para ejecución autónoma y control de contexto.</p>
+            <p class="type-sm" style="color: var(--text-muted);">Herramientas integradas para ejecución autónoma, control de contexto y automatizaciones.</p>
           </div>
+          <button onclick="copyAllSkillsPrompt()" class="btn-action btn-blue">⚡ Inyectar Todos los Skills</button>
         </div>
         <div id="skillsGridContainer" class="cards-grid">
           <!-- Injected dynamically -->
@@ -1119,7 +1120,7 @@
 </div>
 
 <!-- SAVED PROJECTS MANAGER MODAL -->
-<div id="projectsManagerModal" class="modal-backdrop">
+<div id="projectsManagerModal" class="modal-backdrop" onclick="if(event.target===this) closeProjectsManagerModal();">
   <div class="modal-window">
     <div style="padding: 1.2rem 1.6rem; background: var(--bg-subtle); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
       <h3 class="type-lg">🗂️ Mis Proyectos &amp; Borradores Guardados</h3>
@@ -1512,6 +1513,11 @@
           appState.rules = parsed.rules;
         } else {
           appState.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+        }
+        if (parsed.skills && Array.isArray(parsed.skills) && parsed.skills.length) {
+          appState.skills = parsed.skills;
+        } else {
+          appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
         }
         if (parsed.memory) appState.memory = parsed.memory;
         if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
@@ -1910,44 +1916,65 @@
 
   function renderSkillsGrid() {
     const container = document.getElementById('skillsGridContainer');
+    if (!container) return;
+    if (!appState.skills || !appState.skills.length) {
+      appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
+    }
     container.innerHTML = appState.skills.map(skill => `
-      <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow card-shadow-hover transition duration-200 flex flex-col justify-between space-y-3">
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-2xl">${skill.icon}</span>
-            <span class="text-xs text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-0.5 rounded-full font-medium">${skill.type}</span>
-          </div>
-          <h4 class="text-sm font-bold text-slate-900 mb-1">${skill.title}</h4>
-          <p class="text-slate-600 text-xs leading-relaxed">${skill.desc}</p>
+      <div class="skill-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem;">
+          <span style="font-size: 2.2rem;">${skill.icon}</span>
+          <span class="nav-badge" style="background: #F3E8FF; color: #7E22CE; border-color: #E9D5FF; font-size: 1.05rem;">${skill.type}</span>
         </div>
-        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-[10px] font-mono text-emerald-600 font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Listo
+        <h4 class="type-sm" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem;">${skill.title}</h4>
+        <p class="type-xs" style="color: var(--text-secondary); line-height: 1.5; flex: 1; margin-bottom: 1.0rem;">${skill.desc}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.8rem; border-top: 1px solid var(--border-light); margin-top: auto;">
+          <span class="font-mono type-xs" style="color: #059669; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10B981; display: inline-block;"></span> Activo
           </span>
-          <button onclick="testSkillPrompt('${skill.title}')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
-            Probar
+          <button onclick="testSkillPrompt('${skill.title}', '${skill.id}')" class="btn-action btn-secondary" style="min-height: 26px; padding: 0.2rem 0.8rem; font-size: 1.1rem;">
+            ⚡ Probar
           </button>
         </div>
       </div>
     `).join('');
   }
 
+  function testSkillPrompt(title, id) {
+    const promptText = `Por favor, activa y utiliza la herramienta / skill "${title}" (${id || ''}) para ejecutar la siguiente tarea...`;
+    navigator.clipboard.writeText(promptText).then(() => {
+      showToast(`⚡ Invocación de "${title}" copiada al portapapeles.`);
+    });
+  }
+
+  function copyAllSkillsPrompt() {
+    const skillsList = (appState.skills || DEFAULT_SKILLS).map(s => `- **${s.title}** (${s.id}): ${s.desc}`).join('\n');
+    const promptText = `================================================================================\nSERVIDORES MCP & SKILLS AUTORIZADOS\n================================================================================\n\n${skillsList}\n\nPor favor, utiliza estos MCP servers y skills según se requiera en el flujo de desarrollo.\n`;
+    navigator.clipboard.writeText(promptText).then(() => {
+      showToast('⚡ Catálogo de Skills & MCP copiado al portapapeles.');
+    });
+  }
+
   function renderProjectsGrid() {
     const container = document.getElementById('projectsListContainer');
+    if (!container) return;
+    if (!appState.projects || !appState.projects.length) {
+      appState.projects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+    }
     container.innerHTML = appState.projects.map(proj => `
-      <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow space-y-2">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <h4 class="text-xs font-bold text-slate-900">${proj.name}</h4>
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 6px; padding: 1.0rem; display: flex; flex-direction: column; gap: 0.6rem; transition: all 0.15s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+            <strong class="type-sm" style="color: var(--text-primary); font-size: 1.25rem;">${proj.name}</strong>
           </div>
-          <a href="${proj.url}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs font-semibold flex items-center gap-1">
+          <a href="${proj.url}" target="_blank" rel="noopener" class="btn-action btn-secondary" style="min-height: 24px; padding: 0.1rem 0.6rem; font-size: 1.05rem; text-decoration: none;">
             <span>Vercel ↗</span>
           </a>
         </div>
-        <div class="text-[11px] font-mono text-slate-500 flex items-center justify-between">
-          <span>Esquema: <strong class="text-slate-700">${proj.schema}</strong></span>
-          <span class="text-emerald-600 font-bold">100% Sync</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; color: var(--text-muted);" class="font-mono">
+          <span>Esquema: <strong style="color: var(--text-secondary);">${proj.schema}</strong></span>
+          <span style="color: #059669; font-weight: 700;">✓ 100% Sync</span>
         </div>
       </div>
     `).join('');
@@ -1955,15 +1982,19 @@
 
   function renderMemoryTable() {
     const tbody = document.getElementById('learningMemoryTableBody');
+    if (!tbody) return;
+    if (!appState.memory || !appState.memory.length) {
+      appState.memory = JSON.parse(JSON.stringify(DEFAULT_MEMORY));
+    }
     tbody.innerHTML = appState.memory.map((item, index) => `
-      <tr class="hover:bg-slate-50 transition">
-        <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap">${item.date}</td>
-        <td class="py-2.5 px-3 text-red-600 font-semibold">${item.error}</td>
-        <td class="py-2.5 px-3 text-slate-600">${item.cause}</td>
-        <td class="py-2.5 px-3 text-emerald-700">${item.patch}</td>
-        <td class="py-2.5 px-3 text-blue-700">${item.prevention}</td>
-        <td class="py-2.5 px-3 text-right">
-          <button onclick="deleteMemoryRow(${index})" class="text-slate-400 hover:text-red-500 text-xs">
+      <tr style="border-bottom: 1px solid var(--border-light);">
+        <td style="padding: 0.8rem 1.0rem; color: var(--text-muted); white-space: nowrap;">${item.date}</td>
+        <td style="padding: 0.8rem 1.0rem; color: var(--color-error); font-weight: 600;">${item.error}</td>
+        <td style="padding: 0.8rem 1.0rem; color: var(--text-secondary);">${item.cause}</td>
+        <td style="padding: 0.8rem 1.0rem; color: #047857; font-weight: 500;">${item.patch}</td>
+        <td style="padding: 0.8rem 1.0rem; color: #1E40AF;">${item.prevention}</td>
+        <td style="padding: 0.8rem 1.0rem; text-align: right;">
+          <button onclick="deleteMemoryRow(${index})" class="btn-action btn-secondary" style="min-height: 24px; padding: 0.1rem 0.5rem; font-size: 1.05rem; color: var(--color-error); border-color: #FECACA;">
             Eliminar
           </button>
         </td>
@@ -2039,14 +2070,10 @@
       const btn = document.getElementById(`tabBtn_${t.replace('View', '')}`);
       if (t === tabId) {
         if (content) content.classList.remove('hidden');
-        if (btn) {
-          btn.className = 'tab-btn active w-full flex items-center justify-between p-2.5 rounded-xl transition text-left bg-blue-50 text-blue-900 border border-blue-200 font-bold shadow-xs';
-        }
+        if (btn) btn.classList.add('active');
       } else {
         if (content) content.classList.add('hidden');
-        if (btn) {
-          btn.className = 'tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold';
-        }
+        if (btn) btn.classList.remove('active');
       }
     });
 
@@ -2057,6 +2084,15 @@
     if (tabId === 'rulesView') {
       renderRulesList();
       renderActiveRuleDetails();
+    }
+    if (tabId === 'skillsView') {
+      renderSkillsGrid();
+    }
+    if (tabId === 'sopView') {
+      renderMemoryTable();
+    }
+    if (tabId === 'syncView') {
+      renderProjectsGrid();
     }
     if (tabId === 'briefingView') updateBriefingCompiledPrompt();
     if (tabId === 'stitchView') updateStitchDesign();
@@ -2606,20 +2642,34 @@
   function openProjectsManagerModal() {
     const modal = document.getElementById('projectsManagerModal');
     if (modal) {
-      modal.classList.remove('hidden');
+      modal.classList.add('open');
       renderProjectsManagerList();
+      const countEl = document.getElementById('modalTotalProjectsCount');
+      if (countEl) countEl.innerText = (appState.savedProjects?.length || 0) + ' proyectos';
+      const search = document.getElementById('projectSearchInput');
+      if (search) setTimeout(() => search.focus(), 100);
     }
   }
 
   function closeProjectsManagerModal() {
     const modal = document.getElementById('projectsManagerModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) modal.classList.remove('open');
   }
 
   function renderProjectsManagerList() {
     const container = document.getElementById('savedProjectsModalList');
     const search = document.getElementById('projectSearchInput')?.value.toLowerCase().trim() || '';
+    const countEl = document.getElementById('modalTotalProjectsCount');
     if (!container) return;
+
+    if (!appState.savedProjects || !appState.savedProjects.length) {
+      appState.savedProjects = [
+        { id: 'proj_clinica', name: 'Clinica-Dental', slug: 'com_clinicadental', type: 'Web App (SaaS / Dashboard Pro)', niche: 'salud', subniche: 'clinica_dental', monetization: 'SaaS Suscripción', ai: 'claude_code', updatedAt: 'Hoy' },
+        { id: 'proj_edustack', name: 'EduStack-AI', slug: 'mia_edustack', type: 'Membresía / Comunidad Privada & Cursos (LMS)', niche: 'educacion', subniche: 'academia_online', monetization: 'Membresía Recurrente', ai: 'gemini_flash', updatedAt: 'Ayer' }
+      ];
+    }
+
+    if (countEl) countEl.innerText = `${appState.savedProjects.length} proyectos guardados`;
 
     const filtered = appState.savedProjects.filter(p => {
       if (!search) return true;
@@ -2632,8 +2682,8 @@
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div class="p-8 text-center bg-slate-50 rounded-xl border border-slate-200 text-slate-500 text-xs">
-          <span class="text-3xl block mb-2">🔍</span>
+        <div style="padding: 2.5rem; text-align: center; background: #F8FAFC; border: 1px dashed var(--border-color); border-radius: 8px; color: var(--text-muted); font-size: 1.25rem;">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.6rem;">🔍</span>
           No se encontraron proyectos que coincidan con la búsqueda.
         </div>
       `;
@@ -2644,33 +2694,30 @@
       const isActive = p.id === appState.currentProjectId;
       const hasAI = p.ai && p.ai !== 'none';
       return `
-        <div class="p-4 rounded-xl border transition ${isActive ? 'bg-blue-50/70 border-blue-300 ring-2 ring-blue-500/20' : 'bg-slate-50 border-slate-200 hover:bg-slate-100/80'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="space-y-1.5 flex-1">
-            <div class="flex items-center gap-2">
-              <span class="text-base">${isActive ? '⭐' : '📁'}</span>
-              <h4 class="text-xs font-bold text-slate-900">${p.name}</h4>
-              <span class="text-[10px] font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">${p.slug}</span>
-              ${isActive ? '<span class="px-2 py-0.5 bg-blue-600 text-white font-bold text-[9px] rounded-full uppercase">Activo</span>' : ''}
+        <div class="project-modal-card ${isActive ? 'active' : ''}">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 0.4rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <span style="font-size: 1.5rem;">${isActive ? '⭐' : '📁'}</span>
+              <strong class="type-sm" style="color: var(--text-primary); font-size: 1.3rem;">${p.name}</strong>
+              <span class="font-mono type-xs" style="background: var(--bg-surface); padding: 0.1rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-light); color: var(--text-secondary);">${p.slug}</span>
+              ${isActive ? '<span class="nav-badge" style="background: #EFF6FF; color: #1E40AF; border-color: #BFDBFE;">ACTIVO</span>' : ''}
             </div>
-            <div class="flex flex-wrap items-center gap-1.5 text-[10px]">
-              <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-700 font-medium">🏷️ ${p.niche || 'Nicho'}</span>
-              <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-700 font-medium">🎯 ${p.subniche || 'Subnicho'}</span>
-              <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-700 font-medium">💳 ${p.monetization || 'Monetización'}</span>
-              <span class="px-2 py-0.5 ${hasAI ? 'bg-purple-50 border-purple-200 text-purple-700' : 'bg-slate-100 border-slate-200 text-slate-600'} border rounded font-medium font-mono">${hasAI ? '🤖 ' + (p.aiCustom || p.ai) : '🚫 Sin IA'}</span>
-            </div>
-            <div class="text-[10px] text-slate-400">
-              Última modificación: <span class="font-mono text-slate-600">${p.updatedAt || 'Reciente'}</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 1.1rem;">
+              <span style="background: var(--bg-surface); border: 1px solid var(--border-light); padding: 0.1rem 0.5rem; border-radius: 4px; color: var(--text-secondary);">🏷️ ${p.niche || 'Nicho'}</span>
+              <span style="background: var(--bg-surface); border: 1px solid var(--border-light); padding: 0.1rem 0.5rem; border-radius: 4px; color: var(--text-secondary);">🎯 ${p.subniche || 'Subnicho'}</span>
+              <span style="background: var(--bg-surface); border: 1px solid var(--border-light); padding: 0.1rem 0.5rem; border-radius: 4px; color: var(--text-secondary);">💳 ${p.monetization || 'Monetización'}</span>
+              <span style="background: ${hasAI ? '#F3E8FF' : '#F1F5F9'}; color: ${hasAI ? '#7E22CE' : '#64748B'}; border: 1px solid ${hasAI ? '#E9D5FF' : '#E2E8F0'}; padding: 0.1rem 0.5rem; border-radius: 4px; font-family: monospace;">${hasAI ? '🤖 ' + (p.aiCustom || p.ai) : '🚫 Sin IA'}</span>
             </div>
           </div>
 
-          <div class="flex items-center gap-1.5 self-end sm:self-center">
-            <button onclick="loadSelectedProject('${p.id}'); closeProjectsManagerModal();" class="px-3 py-1.5 ${isActive ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-white hover:bg-slate-200 text-slate-800 border border-slate-200'} text-xs font-bold rounded-lg transition shadow-sm flex items-center gap-1">
-              <span>${isActive ? '✓ Editando' : '▶️ Continuar'}</span>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <button onclick="loadSelectedProject('${p.id}'); closeProjectsManagerModal();" class="btn-action ${isActive ? 'btn-blue' : 'btn-secondary'}" style="min-height: 28px; padding: 0.2rem 0.8rem; font-size: 1.15rem;">
+              <span>${isActive ? '✓ Editando' : '▶️ Cargar'}</span>
             </button>
-            <button onclick="duplicateProject('${p.id}')" title="Duplicar Proyecto" class="p-1.5 bg-white hover:bg-slate-200 text-slate-600 border border-slate-200 rounded-lg text-xs transition">
+            <button onclick="duplicateProject('${p.id}')" title="Duplicar Proyecto" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.6rem;">
               📋
             </button>
-            <button onclick="deleteProject('${p.id}')" title="Eliminar Proyecto" class="p-1.5 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs transition">
+            <button onclick="deleteProject('${p.id}')" title="Eliminar Proyecto" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.6rem; color: var(--color-error); border-color: #FECACA;">
               🗑️
             </button>
           </div>
@@ -3602,7 +3649,8 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
     applySidebarState();
     renderDirectivesList();
     renderActiveDirectiveDetails();
-    renderRulesGrid();
+    renderRulesList();
+    renderActiveRuleDetails();
     renderSkillsGrid();
     renderProjectsGrid();
     renderMemoryTable();
