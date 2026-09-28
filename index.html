@@ -257,6 +257,8 @@
   <div id="briefingView" class="tab-content hidden space-y-6">
     
     <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow space-y-6">
+      
+      <!-- Top Title & Quick Actions Header -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b border-slate-100">
         <div>
           <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -267,32 +269,67 @@
             Define la arquitectura técnica, modelo de negocio, nicho y tipología de la app. Los aspectos legales (RGPD DNI 34799350M) y de base de datos se heredan automáticamente.
           </p>
         </div>
-        <div class="flex gap-2">
-          <button onclick="passBriefingToStitch()" class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-            <span>🎨</span> Continuar a Diseño con Stitch →
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="saveCurrentProjectDraft()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>💾</span> Guardar para luego
+          </button>
+          <button type="button" onclick="openProjectsManagerModal()" class="px-4 py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>🗂️</span> Mis Proyectos (<span id="savedProjectsCountBadge">2</span>)
+          </button>
+          <button type="button" onclick="passBriefingToStitch()" class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>🎨</span> Continuar a Stitch →
           </button>
         </div>
       </div>
 
-      <!-- Extended Form Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        
-        <!-- Nombre -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">1. Nombre del Proyecto</label>
-          <input type="text" id="b-name" value="Clinica-Dental" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <!-- Active Project Selector & Draft Status Bar -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">📁</span>
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase font-mono block">Proyecto Activo:</span>
+              <span id="activeProjectBadge" class="text-xs font-bold text-slate-900">Clinica-Dental</span>
+            </div>
+          </div>
+          <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+          <!-- Quick Switcher Dropdown -->
+          <div class="flex-1 sm:w-64">
+            <select id="savedProjectsSelect" onchange="loadSelectedProject(this.value)" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <!-- Populated dynamically via JS -->
+            </select>
+          </div>
         </div>
 
-        <!-- Slug -->
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <button type="button" onclick="createNewProjectDraft()" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+            <span>+</span> Nuevo en Blanco
+          </button>
+          <button type="button" onclick="saveCurrentProjectDraft()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+            <span>💾</span> Guardar Borrador
+          </button>
+        </div>
+      </div>
+
+      <!-- Extended Form Grid with Custom Write-In Inputs -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        
+        <!-- 1. Nombre -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">1. Nombre del Proyecto</label>
+          <input type="text" id="b-name" value="Clinica-Dental" oninput="onProjectNameChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- 2. Slug -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">2. Slug / Identificador DB</label>
           <input type="text" id="b-slug" value="com_clinicadental" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- Tipo de Proyecto -->
+        <!-- 3. Tipo de Proyecto (con Opción Escrita) -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">3. Tipo de Proyecto</label>
-          <select id="b-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="b-type" onchange="handleCustomDropdownChange('b-type', 'b-type-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="Web App (SaaS / Dashboard Pro)">Web App (SaaS / Dashboard Pro)</option>
             <option value="Membresía / Comunidad Privada & Cursos (LMS)">Membresía / Comunidad Privada &amp; Cursos (LMS)</option>
             <option value="Mobile App (PWA / iOS & Android / Flutter)">Mobile App (PWA / iOS &amp; Android / Flutter)</option>
@@ -301,13 +338,15 @@
             <option value="Plataforma de Trading & Analítica Algorítmica">Plataforma de Trading &amp; Analítica Algorítmica</option>
             <option value="Agente Autónomo / Bot Multiplataforma (WhatsApp/TG)">Agente Autónomo / Bot Multiplataforma</option>
             <option value="Herramienta Interna / CLI & Backend">Herramienta Interna / CLI &amp; Backend</option>
+            <option value="__custom__">✏️ Escribir tipo personalizado...</option>
           </select>
+          <input type="text" id="b-type-custom" placeholder="Escribe el tipo de app personalizado..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- Nicho -->
+        <!-- 4. Nicho de Mercado (con Opción Escrita) -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">4. Nicho de Mercado</label>
-          <select id="b-niche" onchange="updateSubnicheOptions()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="b-niche" onchange="handleNicheDropdownChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="Salud & Bienestar">Salud, Belleza &amp; Bienestar (Clínicas &amp; Estética)</option>
             <option value="Educación & E-learning">Educación &amp; E-learning (EdTech / Cursos)</option>
             <option value="Finanzas & Trading">Finanzas, Inversión &amp; Trading (FinTech)</option>
@@ -318,24 +357,28 @@
             <option value="Movilidad & Talleres">Movilidad, Talleres &amp; Tiendas Físicas</option>
             <option value="Legal & Consultoría">Legal, Gestorías &amp; Consultoría Profesional</option>
             <option value="Creadores & Media">Creadores de Contenido &amp; Creator Economy</option>
+            <option value="__custom__">✏️ Escribir nicho personalizado...</option>
           </select>
+          <input type="text" id="b-niche-custom" placeholder="Escribe el nicho personalizado..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- Subnicho (Reactivo) -->
+        <!-- 5. Subnicho (Reactivo + con Opción Escrita) -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">5. Subnicho Específico</label>
-          <select id="b-subniche" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="b-subniche" onchange="handleCustomDropdownChange('b-subniche', 'b-subniche-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="Clínicas Dentales & Odontología">Clínicas Dentales &amp; Odontología</option>
             <option value="Fisioterapia & Osteopatía">Fisioterapia &amp; Osteopatía</option>
             <option value="Psicología & Terapia Online">Psicología &amp; Terapia Online</option>
             <option value="Medicina Estética & Spa">Medicina Estética &amp; Spa</option>
+            <option value="__custom__">✏️ Escribir subnicho personalizado...</option>
           </select>
+          <input type="text" id="b-subniche-custom" placeholder="Escribe el subnicho específico..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- Plan de Monetización -->
+        <!-- 6. Plan de Monetización (con Opción Escrita) -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">6. Plan de Monetización</label>
-          <select id="b-monetization" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="b-monetization" onchange="handleCustomDropdownChange('b-monetization', 'b-monetization-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="SaaS Suscripción Recurrente (Stripe Billing)">SaaS Suscripción Recurrente (Stripe Billing)</option>
             <option value="Membresía VIP / Acceso Continuo (Skool/Stripe)">Membresía VIP / Acceso Continuo</option>
             <option value="Pago Único de Licencia / Acceso Vitalicio (Lifetime)">Pago Único de Licencia (Lifetime Deal)</option>
@@ -344,30 +387,36 @@
             <option value="Comisión por Transacción (Marketplace Take-Rate)">Comisión por Transacción (Marketplace)</option>
             <option value="Freeware 100% Gratuito / Lead Magnet (I+D)">Freeware 100% Gratuito / Lead Magnet</option>
             <option value="Uso Interno de Toni (Sin Cobro)">Uso Interno de Toni (Sin Cobro)</option>
+            <option value="__custom__">✏️ Escribir plan de monetización...</option>
           </select>
+          <input type="text" id="b-monetization-custom" placeholder="Escribe el modelo de monetización..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- Base de Datos -->
+        <!-- 7. Base de Datos (con Opción Escrita) -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">7. Base de Datos / Persistencia</label>
-          <select id="b-db" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="b-db" onchange="handleCustomDropdownChange('b-db', 'b-db-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
             <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
             <option value="SQLite / DuckDB Local-First">SQLite / DuckDB Local-First</option>
+            <option value="__custom__">✏️ Escribir base de datos personalizada...</option>
           </select>
+          <input type="text" id="b-db-custom" placeholder="Escribe la base de datos o stack de datos..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- Autenticación & Roles -->
+        <!-- 8. Autenticación & Roles (con Opción Escrita) -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">8. Autenticación &amp; Roles</label>
-          <select id="b-auth" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <select id="b-auth" onchange="handleCustomDropdownChange('b-auth', 'b-auth-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]">Supabase Auth Multi-Role (Admin + Staff + Cliente)</option>
             <option value="Supabase Auth Estándar (Email + Password)">Supabase Auth Estándar (Email + Password)</option>
             <option value="No - Acceso Público / Sin Login">No - Acceso Público / Sin Login</option>
+            <option value="__custom__">✏️ Escribir sistema de autenticación...</option>
           </select>
+          <input type="text" id="b-auth-custom" placeholder="Escribe el esquema de autenticación..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- IA & Modelo -->
+        <!-- 9. IA & Modelo (con Opción Escrita) -->
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="block font-bold text-slate-700">9. Modelo &amp; API de IA</label>
@@ -375,7 +424,7 @@
               <span>⚙️ Panel APIs ↗</span>
             </button>
           </div>
-          <select id="b-ai" onchange="onBriefingAIChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+          <select id="b-ai" onchange="handleAIDropdownChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
             <option value="gemini">✨ Google Gemini 2.0 Flash (Streaming SSE / Nativo)</option>
             <option value="claude">🧠 Anthropic Claude 3.7 Sonnet (Razonamiento Profundo)</option>
             <option value="openai">🤖 OpenAI GPT-4o (Multimodal & Voice)</option>
@@ -383,14 +432,16 @@
             <option value="deepseek">⚡ DeepSeek V3 / Groq Llama 3.3 (Ultra Rápido)</option>
             <option value="custom">🖥️ Custom API Endpoint / Local Ollama</option>
             <option value="none">🚫 No Requiere Asistente de IA</option>
+            <option value="__custom__">✏️ Escribir modelo / endpoint personalizado...</option>
           </select>
+          <input type="text" id="b-ai-custom" placeholder="Ej: Mistral Large 2 / Llama 3.3 Fine-tuned..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
           <div id="briefing-ai-badge" class="mt-1.5 flex items-center gap-1.5 text-[11px] font-mono text-slate-500">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Motor Activo: <strong id="briefing-active-ai-label" class="text-purple-700 font-bold">Google Gemini 2.0</strong> · Arquitectura: <strong id="briefing-active-arch-label" class="text-slate-700">Supabase Edge (SSE)</strong></span>
           </div>
         </div>
 
-        <!-- Tagline / Propuesta de Valor -->
+        <!-- 10. Tagline / Propuesta de Valor -->
         <div class="md:col-span-3">
           <label class="block font-bold text-slate-700 mb-1">10. Propuesta de Valor / Tagline (1 Frase)</label>
           <input type="text" id="b-tagline" value="Plataforma todo en uno para automatizar citas, historiales y recordatorios automáticos por WhatsApp." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -409,14 +460,25 @@
         <pre id="b-compiled-prompt" class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-52 border border-slate-800 leading-relaxed"></pre>
       </div>
 
-      <!-- Action Footer -->
+      <!-- Action Footer with Save Button -->
       <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
-        <button onclick="copyBriefingPrompt()" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
-          <span>⚡</span> Copiar Prompt para Antigravity
-        </button>
-        <button onclick="passBriefingToStitch()" class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
-          <span>🎨</span> Pasar al Estudio de Diseño con Stitch IA →
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="saveCurrentProjectDraft()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>💾</span> Guardar Proyecto para luego
+          </button>
+          <button type="button" onclick="openProjectsManagerModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-2">
+            <span>🗂️</span> Mis Proyectos Guardados
+          </button>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="copyBriefingPrompt()" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>⚡</span> Copiar Prompt para Antigravity
+          </button>
+          <button onclick="passBriefingToStitch()" class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
+            <span>🎨</span> Pasar al Estudio de Diseño con Stitch IA →
+          </button>
+        </div>
       </div>
     </div>
 
@@ -441,9 +503,15 @@
         </p>
       </div>
       
-      <div class="flex gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="saveCurrentProjectDraft()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+          <span>💾</span> Guardar Proyecto &amp; UI
+        </button>
+        <button onclick="openProjectsManagerModal()" class="px-4 py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+          <span>🗂️</span> Mis Proyectos
+        </button>
         <button onclick="openStitchWeb()" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-          <span>↗️</span> Abrir stitch.withgoogle.com
+          <span>↗️</span> Abrir Stitch Web
         </button>
       </div>
     </div>
@@ -1324,6 +1392,51 @@
 
 </div>
 
+<!-- PROJECTS MANAGER MODAL -->
+<div id="projectsManagerModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+    
+    <!-- Modal Header -->
+    <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+      <div class="flex items-center gap-2.5">
+        <span class="text-xl">🗂️</span>
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm md:text-base">Gestor de Proyectos &amp; Borradores Guardados</h3>
+          <p class="text-xs text-slate-500">Carga tus configuraciones, continúa editando, duplica o elimina proyectos guardados para luego.</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeProjectsManagerModal()" class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100 flex items-center justify-center text-sm font-bold transition">
+        ✕
+      </button>
+    </div>
+
+    <!-- Search & Quick Actions Bar -->
+    <div class="p-4 border-b border-slate-100 bg-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div class="relative flex-1">
+        <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+        <input type="text" id="projectSearchInput" oninput="renderProjectsManagerList()" placeholder="Buscar proyecto por nombre, nicho, tipo o base de datos..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <button type="button" onclick="createNewProjectDraft(); closeProjectsManagerModal();" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap">
+        <span>+</span> Nuevo en Blanco
+      </button>
+    </div>
+
+    <!-- Projects List Container -->
+    <div id="savedProjectsModalList" class="p-5 overflow-y-auto space-y-3 max-h-[50vh]">
+      <!-- Injected dynamically via JS -->
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+      <span>Total guardados: <strong id="modalTotalProjectsCount" class="text-slate-800">0</strong> proyectos</span>
+      <button type="button" onclick="closeProjectsManagerModal()" class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold rounded-xl transition">
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl transition-all duration-300 transform translate-y-24 opacity-0 flex items-center gap-2.5 text-xs font-medium border border-slate-800">
   <span id="toastIcon" class="text-blue-400">✓</span>
@@ -1580,12 +1693,73 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     }
   ];
 
+  const DEFAULT_SAVED_PROJECTS = [
+    {
+      id: 'proj_clinica_dental',
+      name: 'Clinica-Dental',
+      slug: 'com_clinicadental',
+      type: 'Web App (SaaS / Dashboard Pro)',
+      typeCustom: '',
+      niche: 'Salud & Bienestar',
+      nicheCustom: '',
+      subniche: 'Clínicas Dentales & Odontología',
+      subnicheCustom: '',
+      monetization: 'SaaS Suscripción Recurrente (Stripe Billing)',
+      monetizationCustom: '',
+      db: 'Sí - Supabase PostgreSQL (Esquema Aislado)',
+      dbCustom: '',
+      auth: 'Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]',
+      authCustom: '',
+      ai: 'gemini',
+      aiCustom: '',
+      tagline: 'Plataforma todo en uno para automatizar citas, historiales y recordatorios automáticos por WhatsApp.',
+      stitchDesign: {
+        palette: 'blue_royal',
+        primaryColor: '#2563eb',
+        secondaryColor: '#1e40af',
+        uiStyle: 'vibe_clean',
+        uploadedFiles: []
+      },
+      updatedAt: '28/09/2026 10:15'
+    },
+    {
+      id: 'proj_bicicletas_puertanueva',
+      name: 'Bicicletas-Puertanueva',
+      slug: 'com_bicicletas',
+      type: 'Marketplace / Ecommerce B2B o B2C',
+      typeCustom: '',
+      niche: 'Movilidad & Talleres',
+      nicheCustom: '',
+      subniche: 'Taller de Bicicletas & Citas Online',
+      subnicheCustom: '',
+      monetization: 'Comisión por Transacción (Marketplace Take-Rate)',
+      monetizationCustom: '',
+      db: 'Sí - Supabase PostgreSQL (Esquema Aislado)',
+      dbCustom: '',
+      auth: 'Supabase Auth Estándar (Email + Password)',
+      authCustom: '',
+      ai: 'claude',
+      aiCustom: '',
+      tagline: 'Tienda online y software de gestión de taller para citas de revisión de bicicletas mecánicas y eléctricas.',
+      stitchDesign: {
+        palette: 'emerald_mint',
+        primaryColor: '#059669',
+        secondaryColor: '#10b981',
+        uiStyle: 'vibe_clean',
+        uploadedFiles: []
+      },
+      updatedAt: '27/09/2026 19:40'
+    }
+  ];
+
   // App State
   let appState = {
     directives: JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES)),
     rules: JSON.parse(JSON.stringify(DEFAULT_RULES)),
     skills: JSON.parse(JSON.stringify(DEFAULT_SKILLS)),
     projects: JSON.parse(JSON.stringify(DEFAULT_PROJECTS)),
+    savedProjects: JSON.parse(JSON.stringify(DEFAULT_SAVED_PROJECTS)),
+    currentProjectId: 'proj_clinica_dental',
     memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
     activeDirectiveId: 'dir_supabase',
     directiveViewMode: 'preview',
@@ -1623,6 +1797,8 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
         if (parsed.rules) appState.rules = parsed.rules;
         if (parsed.memory) appState.memory = parsed.memory;
         if (parsed.aiConfig) appState.aiConfig = parsed.aiConfig;
+        if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
+        if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
       }
     } catch (e) {
       console.error(e);
@@ -2045,24 +2221,465 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     showToast('⚡ Prompt Maestro de Inicialización copiado.');
   }
 
-  // Briefing Logic
-  function updateSubnicheOptions() {
-    const niche = document.getElementById('b-niche').value;
-    const subSelect = document.getElementById('b-subniche');
-    const options = NICHE_DATA[niche] || ["General / Personalizado"];
-    subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-    updateBriefingCompiledPrompt();
+  // Helper: Get value from Select or Custom Input
+  function getDropdownOrCustomValue(selectId, customInputId) {
+    const select = document.getElementById(selectId);
+    const customInput = document.getElementById(customInputId);
+    if (!select) return '';
+    if (select.value === '__custom__') {
+      return customInput ? customInput.value.trim() : '';
+    }
+    return select.value;
   }
 
+  // Handle Dropdown Change for custom write-in options
+  function handleCustomDropdownChange(selectId, customInputId) {
+    const select = document.getElementById(selectId);
+    const customInput = document.getElementById(customInputId);
+    if (!select || !customInput) return;
+
+    if (select.value === '__custom__') {
+      customInput.classList.remove('hidden');
+      customInput.focus();
+    } else {
+      customInput.classList.add('hidden');
+    }
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+  }
+
+  // Handle Niche Dropdown Change (cascades subniche options + custom inputs)
+  function handleNicheDropdownChange() {
+    const nicheSelect = document.getElementById('b-niche');
+    const nicheCustom = document.getElementById('b-niche-custom');
+    const subSelect = document.getElementById('b-subniche');
+    const subCustom = document.getElementById('b-subniche-custom');
+
+    if (!nicheSelect || !subSelect) return;
+
+    if (nicheSelect.value === '__custom__') {
+      if (nicheCustom) {
+        nicheCustom.classList.remove('hidden');
+        nicheCustom.focus();
+      }
+      subSelect.innerHTML = `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
+      subSelect.value = '__custom__';
+      if (subCustom) {
+        subCustom.classList.remove('hidden');
+      }
+    } else {
+      if (nicheCustom) {
+        nicheCustom.classList.add('hidden');
+      }
+      const niche = nicheSelect.value;
+      const options = NICHE_DATA[niche] || ["General / Servicios"];
+      subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
+        `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
+      if (subCustom) {
+        subCustom.classList.add('hidden');
+      }
+    }
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+  }
+
+  // Handle AI Dropdown Change (Syncs with Settings tab & custom input)
+  function handleAIDropdownChange() {
+    const aiSelect = document.getElementById('b-ai');
+    const aiCustom = document.getElementById('b-ai-custom');
+    if (!aiSelect) return;
+
+    if (aiSelect.value === '__custom__') {
+      if (aiCustom) {
+        aiCustom.classList.remove('hidden');
+        aiCustom.focus();
+      }
+    } else {
+      if (aiCustom) {
+        aiCustom.classList.add('hidden');
+      }
+      onBriefingAIChange();
+    }
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+  }
+
+  // Handle Project Name Change
+  function onProjectNameChange() {
+    const nameInput = document.getElementById('b-name');
+    const slugInput = document.getElementById('b-slug');
+    const badge = document.getElementById('activeProjectBadge');
+    if (!nameInput) return;
+    const name = nameInput.value.trim() || 'Proyecto-Sin-Nombre';
+    if (badge) badge.innerText = name;
+    if (slugInput) {
+      const clean = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const prefix = slugInput.value.startsWith('mia_') ? 'mia_' : 'com_';
+      slugInput.value = `${prefix}${clean}`;
+    }
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+  }
+
+  // Helper to set dropdown or custom input value
+  function setDropdownOrCustom(selectId, customInputId, value, customValue) {
+    const select = document.getElementById(selectId);
+    const customInput = document.getElementById(customInputId);
+    if (!select) return;
+
+    let found = false;
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === value && value !== '__custom__') {
+        select.selectedIndex = i;
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      if (customInput) {
+        customInput.classList.add('hidden');
+        customInput.value = customValue || '';
+      }
+    } else {
+      select.value = '__custom__';
+      if (customInput) {
+        customInput.classList.remove('hidden');
+        customInput.value = customValue || value || '';
+      }
+    }
+  }
+
+  // =========================================================================
+  // GESTIÓN DE PROYECTOS & BORRADORES GUARDADOS
+  // =========================================================================
+  function renderSavedProjectsDropdown() {
+    const select = document.getElementById('savedProjectsSelect');
+    const countBadge = document.getElementById('savedProjectsCountBadge');
+    const modalCount = document.getElementById('modalTotalProjectsCount');
+    const activeBadge = document.getElementById('activeProjectBadge');
+
+    if (countBadge) countBadge.innerText = appState.savedProjects.length;
+    if (modalCount) modalCount.innerText = appState.savedProjects.length;
+
+    if (!select) return;
+    select.innerHTML = appState.savedProjects.map(p => `
+      <option value="${p.id}" ${p.id === appState.currentProjectId ? 'selected' : ''}>
+        📂 ${p.name} (${p.niche || 'Borrador'})
+      </option>
+    `).join('');
+
+    const current = appState.savedProjects.find(p => p.id === appState.currentProjectId) || appState.savedProjects[0];
+    if (current && activeBadge) {
+      activeBadge.innerText = current.name;
+    }
+  }
+
+  function saveCurrentProjectDraft() {
+    const name = document.getElementById('b-name')?.value.trim() || 'Proyecto-Sin-Nombre';
+    const slug = document.getElementById('b-slug')?.value.trim() || 'com_proyecto';
+    const type = getDropdownOrCustomValue('b-type', 'b-type-custom');
+    const typeCustom = document.getElementById('b-type-custom')?.value.trim() || '';
+    const niche = getDropdownOrCustomValue('b-niche', 'b-niche-custom');
+    const nicheCustom = document.getElementById('b-niche-custom')?.value.trim() || '';
+    const subniche = getDropdownOrCustomValue('b-subniche', 'b-subniche-custom');
+    const subnicheCustom = document.getElementById('b-subniche-custom')?.value.trim() || '';
+    const monetization = getDropdownOrCustomValue('b-monetization', 'b-monetization-custom');
+    const monetizationCustom = document.getElementById('b-monetization-custom')?.value.trim() || '';
+    const db = getDropdownOrCustomValue('b-db', 'b-db-custom');
+    const dbCustom = document.getElementById('b-db-custom')?.value.trim() || '';
+    const auth = getDropdownOrCustomValue('b-auth', 'b-auth-custom');
+    const authCustom = document.getElementById('b-auth-custom')?.value.trim() || '';
+    const ai = getDropdownOrCustomValue('b-ai', 'b-ai-custom');
+    const aiCustom = document.getElementById('b-ai-custom')?.value.trim() || '';
+    const tagline = document.getElementById('b-tagline')?.value.trim() || '';
+
+    const now = new Date();
+    const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+    let project = appState.savedProjects.find(p => p.id === appState.currentProjectId);
+    if (project) {
+      project.name = name;
+      project.slug = slug;
+      project.type = type;
+      project.typeCustom = typeCustom;
+      project.niche = niche;
+      project.nicheCustom = nicheCustom;
+      project.subniche = subniche;
+      project.subnicheCustom = subnicheCustom;
+      project.monetization = monetization;
+      project.monetizationCustom = monetizationCustom;
+      project.db = db;
+      project.dbCustom = dbCustom;
+      project.auth = auth;
+      project.authCustom = authCustom;
+      project.ai = ai;
+      project.aiCustom = aiCustom;
+      project.tagline = tagline;
+      project.stitchDesign = JSON.parse(JSON.stringify(appState.stitchDesign));
+      project.updatedAt = dateStr;
+    } else {
+      const newId = 'proj_' + Date.now();
+      project = {
+        id: newId,
+        name,
+        slug,
+        type,
+        typeCustom,
+        niche,
+        nicheCustom,
+        subniche,
+        subnicheCustom,
+        monetization,
+        monetizationCustom,
+        db,
+        dbCustom,
+        auth,
+        authCustom,
+        ai,
+        aiCustom,
+        tagline,
+        stitchDesign: JSON.parse(JSON.stringify(appState.stitchDesign)),
+        updatedAt: dateStr
+      };
+      appState.savedProjects.unshift(project);
+      appState.currentProjectId = newId;
+    }
+
+    saveAllChanges();
+    renderSavedProjectsDropdown();
+    renderProjectsManagerList();
+    triggerConfetti();
+    showToast(`💾 Proyecto "${name}" guardado correctamente.`);
+  }
+
+  function loadSelectedProject(projectId) {
+    const project = appState.savedProjects.find(p => p.id === projectId);
+    if (!project) return;
+
+    appState.currentProjectId = project.id;
+
+    // Fill standard inputs
+    if (document.getElementById('b-name')) document.getElementById('b-name').value = project.name || '';
+    if (document.getElementById('b-slug')) document.getElementById('b-slug').value = project.slug || '';
+    if (document.getElementById('b-tagline')) document.getElementById('b-tagline').value = project.tagline || '';
+
+    // Set Niche & Subniche
+    const nicheSelect = document.getElementById('b-niche');
+    const nicheCustom = document.getElementById('b-niche-custom');
+    if (nicheSelect) {
+      setDropdownOrCustom('b-niche', 'b-niche-custom', project.niche, project.nicheCustom);
+      
+      const subSelect = document.getElementById('b-subniche');
+      const subCustom = document.getElementById('b-subniche-custom');
+      if (nicheSelect.value === '__custom__') {
+        subSelect.innerHTML = `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
+        subSelect.value = '__custom__';
+        if (subCustom) {
+          subCustom.classList.remove('hidden');
+          subCustom.value = project.subnicheCustom || project.subniche || '';
+        }
+      } else {
+        const options = NICHE_DATA[nicheSelect.value] || ["General / Servicios"];
+        subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
+          `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
+        setDropdownOrCustom('b-subniche', 'b-subniche-custom', project.subniche, project.subnicheCustom);
+      }
+    }
+
+    // Set other dropdowns
+    setDropdownOrCustom('b-type', 'b-type-custom', project.type, project.typeCustom);
+    setDropdownOrCustom('b-monetization', 'b-monetization-custom', project.monetization, project.monetizationCustom);
+    setDropdownOrCustom('b-db', 'b-db-custom', project.db, project.dbCustom);
+    setDropdownOrCustom('b-auth', 'b-auth-custom', project.auth, project.authCustom);
+    setDropdownOrCustom('b-ai', 'b-ai-custom', project.ai, project.aiCustom);
+
+    // Restore Stitch Design if present
+    if (project.stitchDesign) {
+      appState.stitchDesign = JSON.parse(JSON.stringify(project.stitchDesign));
+      if (project.stitchDesign.palette) {
+        selectPalette(project.stitchDesign.palette, project.stitchDesign.primaryColor, project.stitchDesign.secondaryColor);
+      }
+    }
+
+    // If AI is standard, sync with active provider
+    if (project.ai && project.ai !== '__custom__' && project.ai !== 'none' && AI_PROVIDERS_META[project.ai]) {
+      appState.aiConfig.activeProvider = project.ai;
+      renderAISettings();
+    }
+
+    renderSavedProjectsDropdown();
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+    showToast(`✓ Proyecto "${project.name}" cargado.`);
+  }
+
+  function createNewProjectDraft() {
+    const newId = 'proj_' + Date.now();
+    appState.currentProjectId = newId;
+
+    document.getElementById('b-name').value = 'Nuevo-Proyecto';
+    document.getElementById('b-slug').value = 'com_nuevo';
+    document.getElementById('b-tagline').value = '';
+
+    // Reset dropdowns to standard defaults and hide custom inputs
+    ['b-type', 'b-monetization', 'b-db', 'b-auth', 'b-ai'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.selectedIndex = 0;
+      const customEl = document.getElementById(`${id}-custom`);
+      if (customEl) {
+        customEl.value = '';
+        customEl.classList.add('hidden');
+      }
+    });
+
+    const nicheSelect = document.getElementById('b-niche');
+    if (nicheSelect) {
+      nicheSelect.selectedIndex = 0;
+      handleNicheDropdownChange();
+    }
+
+    const activeBadge = document.getElementById('activeProjectBadge');
+    if (activeBadge) activeBadge.innerText = 'Nuevo-Proyecto';
+
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
+    showToast('✨ Nuevo borrador en blanco preparado.');
+  }
+
+  function duplicateProject(projectId) {
+    const orig = appState.savedProjects.find(p => p.id === projectId);
+    if (!orig) return;
+
+    const copy = JSON.parse(JSON.stringify(orig));
+    copy.id = 'proj_' + Date.now();
+    copy.name = `${orig.name} (Copia)`;
+    copy.slug = `${orig.slug}_copia`;
+    copy.updatedAt = new Date().toLocaleDateString('es-ES') + ' ' + new Date().toLocaleTimeString('es-ES').slice(0, 5);
+
+    appState.savedProjects.unshift(copy);
+    appState.currentProjectId = copy.id;
+
+    saveAllChanges();
+    renderSavedProjectsDropdown();
+    renderProjectsManagerList();
+    loadSelectedProject(copy.id);
+    showToast(`✓ Proyecto duplicado: "${copy.name}".`);
+  }
+
+  function deleteProject(projectId) {
+    const proj = appState.savedProjects.find(p => p.id === projectId);
+    const name = proj ? proj.name : 'Proyecto';
+
+    if (appState.savedProjects.length <= 1) {
+      alert('Debes conservar al menos 1 proyecto o borrador.');
+      return;
+    }
+
+    if (!confirm(`¿Estás seguro de que deseas eliminar el proyecto "${name}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+
+    appState.savedProjects = appState.savedProjects.filter(p => p.id !== projectId);
+    
+    if (appState.currentProjectId === projectId) {
+      appState.currentProjectId = appState.savedProjects[0].id;
+      loadSelectedProject(appState.currentProjectId);
+    }
+
+    saveAllChanges();
+    renderSavedProjectsDropdown();
+    renderProjectsManagerList();
+    showToast(`🗑️ Proyecto "${name}" eliminado.`);
+  }
+
+  function openProjectsManagerModal() {
+    const modal = document.getElementById('projectsManagerModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      renderProjectsManagerList();
+    }
+  }
+
+  function closeProjectsManagerModal() {
+    const modal = document.getElementById('projectsManagerModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function renderProjectsManagerList() {
+    const container = document.getElementById('savedProjectsModalList');
+    const search = document.getElementById('projectSearchInput')?.value.toLowerCase().trim() || '';
+    if (!container) return;
+
+    const filtered = appState.savedProjects.filter(p => {
+      if (!search) return true;
+      return (p.name && p.name.toLowerCase().includes(search)) ||
+             (p.slug && p.slug.toLowerCase().includes(search)) ||
+             (p.niche && p.niche.toLowerCase().includes(search)) ||
+             (p.subniche && p.subniche.toLowerCase().includes(search)) ||
+             (p.type && p.type.toLowerCase().includes(search));
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="p-8 text-center bg-slate-50 rounded-xl border border-slate-200 text-slate-500 text-xs">
+          <span class="text-3xl block mb-2">🔍</span>
+          No se encontraron proyectos que coincidan con la búsqueda.
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(p => {
+      const isActive = p.id === appState.currentProjectId;
+      return `
+        <div class="p-4 rounded-xl border transition ${isActive ? 'bg-blue-50/70 border-blue-300 ring-2 ring-blue-500/20' : 'bg-slate-50 border-slate-200 hover:bg-slate-100/80'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-1.5 flex-1">
+            <div class="flex items-center gap-2">
+              <span class="text-base">${isActive ? '⭐' : '📁'}</span>
+              <h4 class="text-xs font-bold text-slate-900">${p.name}</h4>
+              <span class="text-[10px] font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">${p.slug}</span>
+              ${isActive ? '<span class="px-2 py-0.5 bg-blue-600 text-white font-bold text-[9px] rounded-full uppercase">Activo</span>' : ''}
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5 text-[10px]">
+              <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-700 font-medium">🏷️ ${p.niche || 'Nicho'}</span>
+              <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-700 font-medium">🎯 ${p.subniche || 'Subnicho'}</span>
+              <span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-700 font-medium">💳 ${p.monetization || 'Monetización'}</span>
+              <span class="px-2 py-0.5 bg-purple-50 border border-purple-200 rounded text-purple-700 font-medium font-mono">🤖 ${p.ai || 'IA'}</span>
+            </div>
+            <div class="text-[10px] text-slate-400">
+              Última modificación: <span class="font-mono text-slate-600">${p.updatedAt || 'Reciente'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 self-end sm:self-center">
+            <button onclick="loadSelectedProject('${p.id}'); closeProjectsManagerModal();" class="px-3 py-1.5 ${isActive ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-white hover:bg-slate-200 text-slate-800 border border-slate-200'} text-xs font-bold rounded-lg transition shadow-sm flex items-center gap-1">
+              <span>${isActive ? '✓ Editando' : '▶️ Continuar'}</span>
+            </button>
+            <button onclick="duplicateProject('${p.id}')" title="Duplicar Proyecto" class="p-1.5 bg-white hover:bg-slate-200 text-slate-600 border border-slate-200 rounded-lg text-xs transition">
+              📋
+            </button>
+            <button onclick="deleteProject('${p.id}')" title="Eliminar Proyecto" class="p-1.5 bg-white hover:bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs transition">
+              🗑️
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // =========================================================================
+  // BRIEFING COMPILED PROMPT LOGIC
+  // =========================================================================
   function updateBriefingCompiledPrompt() {
     const name = document.getElementById('b-name')?.value || 'Mi-Proyecto';
     const slug = document.getElementById('b-slug')?.value || 'mia_proyecto';
-    const type = document.getElementById('b-type')?.value || 'SaaS Web App';
-    const niche = document.getElementById('b-niche')?.value || 'Salud & Bienestar';
-    const subniche = document.getElementById('b-subniche')?.value || 'Clínicas & Servicios';
-    const monetization = document.getElementById('b-monetization')?.value || 'SaaS';
-    const db = document.getElementById('b-db')?.value || 'Sí - Supabase PostgreSQL';
-    const auth = document.getElementById('b-auth')?.value || 'Supabase Auth';
+    const type = getDropdownOrCustomValue('b-type', 'b-type-custom') || 'Web App (SaaS / Dashboard Pro)';
+    const niche = getDropdownOrCustomValue('b-niche', 'b-niche-custom') || 'Salud & Bienestar';
+    const subniche = getDropdownOrCustomValue('b-subniche', 'b-subniche-custom') || 'Clínicas & Servicios';
+    const monetization = getDropdownOrCustomValue('b-monetization', 'b-monetization-custom') || 'SaaS';
+    const db = getDropdownOrCustomValue('b-db', 'b-db-custom') || 'Sí - Supabase PostgreSQL';
+    const auth = getDropdownOrCustomValue('b-auth', 'b-auth-custom') || 'Supabase Auth';
     const tagline = document.getElementById('b-tagline')?.value || 'Solución integral';
     
     const activeProv = appState.aiConfig?.activeProvider || 'gemini';
@@ -2100,7 +2717,8 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     if (document.getElementById('b-compiled-prompt')) document.getElementById('b-compiled-prompt').innerText = prompt;
   }
 
-  ['b-name', 'b-slug', 'b-type', 'b-niche', 'b-subniche', 'b-monetization', 'b-db', 'b-auth', 'b-tagline'].forEach(id => {
+  // Attach event listeners to all input & custom inputs
+  ['b-name', 'b-slug', 'b-type', 'b-type-custom', 'b-niche', 'b-niche-custom', 'b-subniche', 'b-subniche-custom', 'b-monetization', 'b-monetization-custom', 'b-db', 'b-db-custom', 'b-auth', 'b-auth-custom', 'b-ai-custom', 'b-tagline'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', updateBriefingCompiledPrompt);
     document.getElementById(id)?.addEventListener('change', updateBriefingCompiledPrompt);
   });
@@ -2118,7 +2736,9 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     showToast('🎨 Datos del briefing transferidos a Stitch UI.');
   }
 
-  // Stitch Studio Logic
+  // =========================================================================
+  // STITCH STUDIO LOGIC
+  // =========================================================================
   function selectPalette(paletteKey, primary, secondary) {
     appState.stitchDesign.palette = paletteKey;
     appState.stitchDesign.primaryColor = primary;
@@ -2127,7 +2747,9 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     document.querySelectorAll('.palette-btn').forEach(btn => {
       btn.className = 'palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100';
     });
-    event.currentTarget.className = 'palette-btn p-2.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-left transition flex items-center gap-2';
+    if (event && event.currentTarget) {
+      event.currentTarget.className = 'palette-btn p-2.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-left transition flex items-center gap-2';
+    }
 
     updateStitchDesign();
   }
@@ -2152,12 +2774,12 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
   function updateStitchDesign() {
     const name = document.getElementById('b-name')?.value || 'Mi-Proyecto';
     const tagline = document.getElementById('b-tagline')?.value || 'Solución inteligente';
-    const subniche = document.getElementById('b-subniche')?.value || 'Clínicas & Servicios';
+    const subniche = getDropdownOrCustomValue('b-subniche', 'b-subniche-custom') || 'Clínicas & Servicios';
     
     const activeProv = appState.aiConfig?.activeProvider || 'gemini';
     const meta = AI_PROVIDERS_META[activeProv] || AI_PROVIDERS_META.gemini;
     const archMode = appState.aiConfig?.archMode || 'supabase_edge';
-    const primary = appState.stitchDesign.primaryColor;
+    const primary = appState.stitchDesign.primaryColor || '#2563eb';
 
     const activeModel = activeProv === 'gemini' ? (appState.aiConfig.geminiModel || 'gemini-2.0-flash') :
                         activeProv === 'claude' ? (appState.aiConfig.claudeModel || 'claude-3-7-sonnet-20250219') :
@@ -2354,7 +2976,9 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}Dashboard() {
     window.open('https://stitch.withgoogle.com', '_blank');
   }
 
-  // Memory & Save
+  // =========================================================================
+  // MEMORY & PERSISTENCE HELPERS
+  // =========================================================================
   function addLearningMemoryRow() {
     const today = new Date().toLocaleDateString('es-ES');
     appState.memory.unshift({
@@ -2383,7 +3007,6 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}Dashboard() {
   function saveAllChanges() {
     try {
       localStorage.setItem('tonigravity_state_v5', JSON.stringify(appState));
-      showToast('✓ Estado guardado en LocalStorage.');
     } catch (e) {
       console.error(e);
     }
@@ -2446,12 +3069,14 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}Dashboard() {
         if (imported.rules) appState.rules = imported.rules;
         if (imported.memory) appState.memory = imported.memory;
         if (imported.aiConfig) appState.aiConfig = imported.aiConfig;
+        if (imported.savedProjects) appState.savedProjects = imported.savedProjects;
         saveAllChanges();
         renderDirectivesList();
         renderActiveDirectiveDetails();
         renderRulesGrid();
         renderMemoryTable();
         renderAISettings();
+        renderSavedProjectsDropdown();
         showToast('✓ Configuración importada con éxito.');
       } catch (err) {
         alert('Error al leer el archivo JSON.');
@@ -2490,9 +3115,15 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}Dashboard() {
     renderProjectsGrid();
     renderMemoryTable();
     renderAISettings();
-    updateBriefingCompiledPrompt();
-    updateStitchDesign();
+    renderSavedProjectsDropdown();
+    if (appState.currentProjectId) {
+      loadSelectedProject(appState.currentProjectId);
+    } else {
+      updateBriefingCompiledPrompt();
+      updateStitchDesign();
+    }
   });
 </script>
 </body>
 </html>
+
