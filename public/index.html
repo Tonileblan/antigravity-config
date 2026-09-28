@@ -539,21 +539,41 @@
           <input type="text" id="b-subniche-custom" placeholder="Escribe el subnicho específico..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
-        <!-- 6. Plan de Monetización (con Opción Escrita) -->
+        <!-- 6A. Monetización del Desarrollador (¿Cómo monetizamos nosotros esta App?) -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">6. Plan de Monetización</label>
-          <select id="b-monetization" onchange="handleCustomDropdownChange('b-monetization', 'b-monetization-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="SaaS Suscripción Recurrente (Stripe Billing)">SaaS Suscripción Recurrente (Stripe Billing)</option>
-            <option value="Membresía VIP / Acceso Continuo (Skool/Stripe)">Membresía VIP / Acceso Continuo</option>
-            <option value="Pago Único de Licencia / Acceso Vitalicio (Lifetime)">Pago Único de Licencia (Lifetime Deal)</option>
-            <option value="Freemium (Plan Gratuito + Upgrade Pro)">Freemium (Plan Free + Upgrade Pro)</option>
-            <option value="Créditos / Pago por Uso (Tokens / Pay as you go)">Créditos / Pago por Uso (Tokens)</option>
-            <option value="Comisión por Transacción (Marketplace Take-Rate)">Comisión por Transacción (Marketplace)</option>
-            <option value="Freeware 100% Gratuito / Lead Magnet (I+D)">Freeware 100% Gratuito / Lead Magnet</option>
-            <option value="Uso Interno de Toni (Sin Cobro)">Uso Interno de Toni (Sin Cobro)</option>
-            <option value="__custom__">✏️ Escribir plan de monetización...</option>
+          <label class="block font-bold text-slate-700 mb-1">
+            <span class="text-blue-600 font-bold">6A.</span> Monetización del Desarrollador (Toni / Dev)
+          </label>
+          <select id="b-monetization-dev" onchange="handleCustomDropdownChange('b-monetization-dev', 'b-monetization-dev-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="SaaS Suscripción Recurrente (Stripe Billing mensual/anual)">SaaS Suscripción Recurrente (Stripe Billing mensual/anual)</option>
+            <option value="Setup Fee Inicial + Mantenimiento Mensual Recurrente">Setup Fee Inicial + Mantenimiento Mensual Recurrente</option>
+            <option value="Venta de Licencia de Software / Código (Lifetime / One-time)">Venta de Licencia de Software (Pago Único / One-Time)</option>
+            <option value="Comisión / Revenue Share por Transacción (Take-Rate %)">Comisión / Revenue Share por Transacción (Take-Rate %)</option>
+            <option value="Pago por Uso / Créditos de API con Margen (Tokens IA)">Pago por Uso / Créditos de API con Margen (Tokens IA)</option>
+            <option value="Freemium / Lead Magnet para Consultoría y Servicios Pro">Freemium / Lead Magnet para Consultoría y Servicios</option>
+            <option value="Uso Interno de Toni / I+D Propio (Sin Cobro Directo)">Uso Interno de Toni / I+D Propio (Sin Cobro Directo)</option>
+            <option value="__custom__">✏️ Escribir modelo de monetización dev...</option>
           </select>
-          <input type="text" id="b-monetization-custom" placeholder="Escribe el modelo de monetización..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
+          <input type="text" id="b-monetization-dev-custom" placeholder="Escribe cómo monetizamos como desarrolladores..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
+        </div>
+
+        <!-- 6B. Monetización del Usuario / Cliente Final (¿Cómo genera ingresos el negocio dentro de la App?) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">
+            <span class="text-purple-600 font-bold">6B.</span> Monetización del Usuario Final (Negocio / Cliente)
+          </label>
+          <select id="b-monetization-user" onchange="handleCustomDropdownChange('b-monetization-user', 'b-monetization-user-custom')" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <option value="Cobro de Servicios / Consultas / Citas Online integradas">Cobro de Servicios / Consultas / Citas Online integradas</option>
+            <option value="Membresía VIP / Suscripción de Contenido para sus Alumnos">Membresía VIP / Suscripción para sus Alumnos o Clientes</option>
+            <option value="Venta de Productos / E-commerce (Catálogo & Checkout)">Venta de Productos / E-commerce (Catálogo &amp; Checkout)</option>
+            <option value="Créditos / Pago por Consumo (Pay-as-you-go / Saldo)">Créditos / Pago por Consumo (Pay-as-you-go)</option>
+            <option value="Comisiones entre Compradores y Vendedores (Marketplace)">Comisiones entre Compradores y Vendedores (Marketplace)</option>
+            <option value="Cursos / Infoproductos / Descargas Digitales (LMS)">Cursos / Infoproductos / Descargas Digitales (LMS)</option>
+            <option value="Publicidad / Patrocinios / Afiliación y Sponsors">Publicidad / Patrocinios / Afiliación y Sponsors</option>
+            <option value="Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)">Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)</option>
+            <option value="__custom__">✏️ Escribir monetización del usuario...</option>
+          </select>
+          <input type="text" id="b-monetization-user-custom" placeholder="Escribe cómo genera ingresos el usuario final..." oninput="updateBriefingCompiledPrompt()" class="mt-1.5 w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-xs text-slate-900 hidden focus:ring-2 focus:ring-purple-500">
         </div>
 
         <!-- 7. Base de Datos (con Opción Escrita) -->
@@ -1760,8 +1780,10 @@
       nicheCustom: '',
       subniche: 'Clínicas Dentales & Odontología',
       subnicheCustom: '',
-      monetization: 'SaaS Suscripción Recurrente (Stripe Billing)',
-      monetizationCustom: '',
+      monetizationDev: 'SaaS Suscripción Recurrente (Stripe Billing mensual/anual)',
+      monetizationDevCustom: '',
+      monetizationUser: 'Cobro de Servicios / Consultas / Citas Online integradas',
+      monetizationUserCustom: '',
       db: 'Sí - Supabase PostgreSQL (Esquema Aislado)',
       dbCustom: '',
       auth: 'Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]',
@@ -1793,8 +1815,10 @@
       nicheCustom: '',
       subniche: 'Taller de Bicicletas & Citas Online',
       subnicheCustom: '',
-      monetization: 'Comisión por Transacción (Marketplace Take-Rate)',
-      monetizationCustom: '',
+      monetizationDev: 'Setup Fee Inicial + Mantenimiento Mensual Recurrente',
+      monetizationDevCustom: '',
+      monetizationUser: 'Venta de Productos / E-commerce (Catálogo & Checkout)',
+      monetizationUserCustom: '',
       db: 'Sí - Supabase PostgreSQL (Esquema Aislado)',
       dbCustom: '',
       auth: 'Supabase Auth Estándar (Email + Password)',
@@ -2438,8 +2462,10 @@
     const nicheCustom = document.getElementById('b-niche-custom')?.value.trim() || '';
     const subniche = getDropdownOrCustomValue('b-subniche', 'b-subniche-custom');
     const subnicheCustom = document.getElementById('b-subniche-custom')?.value.trim() || '';
-    const monetization = getDropdownOrCustomValue('b-monetization', 'b-monetization-custom');
-    const monetizationCustom = document.getElementById('b-monetization-custom')?.value.trim() || '';
+    const monetizationDev = getDropdownOrCustomValue('b-monetization-dev', 'b-monetization-dev-custom');
+    const monetizationDevCustom = document.getElementById('b-monetization-dev-custom')?.value.trim() || '';
+    const monetizationUser = getDropdownOrCustomValue('b-monetization-user', 'b-monetization-user-custom');
+    const monetizationUserCustom = document.getElementById('b-monetization-user-custom')?.value.trim() || '';
     const db = getDropdownOrCustomValue('b-db', 'b-db-custom');
     const dbCustom = document.getElementById('b-db-custom')?.value.trim() || '';
     const auth = getDropdownOrCustomValue('b-auth', 'b-auth-custom');
@@ -2497,8 +2523,12 @@
         nicheCustom,
         subniche,
         subnicheCustom,
-        monetization,
-        monetizationCustom,
+        monetizationDev,
+      monetizationDevCustom,
+      monetizationUser,
+      monetizationUserCustom,
+      monetization: monetizationDev,
+      monetizationCustom: monetizationDevCustom,
         db,
         dbCustom,
         auth,
@@ -2556,7 +2586,8 @@
 
     // Set other dropdowns
     setDropdownOrCustom('b-type', 'b-type-custom', project.type, project.typeCustom);
-    setDropdownOrCustom('b-monetization', 'b-monetization-custom', project.monetization, project.monetizationCustom);
+    setDropdownOrCustom('b-monetization-dev', 'b-monetization-dev-custom', project.monetizationDev || project.monetization, project.monetizationDevCustom || project.monetizationCustom);
+    setDropdownOrCustom('b-monetization-user', 'b-monetization-user-custom', project.monetizationUser || 'Cobro de Servicios / Consultas / Citas Online integradas', project.monetizationUserCustom || '');
     setDropdownOrCustom('b-db', 'b-db-custom', project.db, project.dbCustom);
     setDropdownOrCustom('b-auth', 'b-auth-custom', project.auth, project.authCustom);
     setDropdownOrCustom('b-ai', 'b-ai-custom', project.ai, project.aiCustom);
@@ -2601,7 +2632,7 @@
     document.getElementById('b-tagline').value = '';
 
     // Reset dropdowns to standard defaults and hide custom inputs
-    ['b-type', 'b-monetization', 'b-db', 'b-auth', 'b-ai'].forEach(id => {
+    ['b-type', 'b-monetization-dev', 'b-monetization-user', 'b-db', 'b-auth', 'b-ai'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.selectedIndex = 0;
       const customEl = document.getElementById(`${id}-custom`);
@@ -2762,7 +2793,8 @@
     const type = getDropdownOrCustomValue('b-type', 'b-type-custom') || 'Web App (SaaS / Dashboard Pro)';
     const niche = getDropdownOrCustomValue('b-niche', 'b-niche-custom') || 'Salud & Bienestar';
     const subniche = getDropdownOrCustomValue('b-subniche', 'b-subniche-custom') || 'Clínicas & Servicios';
-    const monetization = getDropdownOrCustomValue('b-monetization', 'b-monetization-custom') || 'SaaS';
+    const monetizationDev = getDropdownOrCustomValue('b-monetization-dev', 'b-monetization-dev-custom') || 'SaaS Suscripción Recurrente (Stripe Billing)';
+    const monetizationUser = getDropdownOrCustomValue('b-monetization-user', 'b-monetization-user-custom') || 'Cobro de Servicios / Citas Online';
     const db = getDropdownOrCustomValue('b-db', 'b-db-custom') || 'Sí - Supabase PostgreSQL';
     const auth = getDropdownOrCustomValue('b-auth', 'b-auth-custom') || 'Supabase Auth';
     const tagline = document.getElementById('b-tagline')?.value || 'Solución integral';
@@ -2793,7 +2825,8 @@
 - Slug / Esquema Supabase: ${slug}
 - Tipo de Aplicación: ${type}
 - Nicho de Mercado: ${niche} -> ${subniche}
-- Modelo de Monetización: ${monetization}
+- Monetización del Desarrollador (Toni / Dev): ${monetizationDev}
+- Monetización del Usuario Final (Negocio / Cliente): ${monetizationUser}
 - Propuesta de Valor: ${tagline}
 - Base de Datos: ${db}
 - Autenticación: ${auth}
@@ -2807,7 +2840,7 @@ ${visualRef ? `- URL de Referencia Visual / Inspiración: ${visualRef}` : ''}
   }
 
   // Attach event listeners to all input & custom inputs
-  ['b-name', 'b-slug', 'b-type', 'b-type-custom', 'b-niche', 'b-niche-custom', 'b-subniche', 'b-subniche-custom', 'b-monetization', 'b-monetization-custom', 'b-db', 'b-db-custom', 'b-auth', 'b-auth-custom', 'b-ai-custom', 'b-tagline'].forEach(id => {
+  ['b-name', 'b-slug', 'b-type', 'b-type-custom', 'b-niche', 'b-niche-custom', 'b-subniche', 'b-subniche-custom', 'b-monetization-dev', 'b-monetization-dev-custom', 'b-monetization-user', 'b-monetization-user-custom', 'b-db', 'b-db-custom', 'b-auth', 'b-auth-custom', 'b-ai-custom', 'b-tagline'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', updateBriefingCompiledPrompt);
     document.getElementById(id)?.addEventListener('change', updateBriefingCompiledPrompt);
   });
@@ -3131,6 +3164,8 @@ ${visualRef ? `- URL de Referencia Visual / Inspiración: ${visualRef}` : ''}
     const prompt = `Actúa como Diseñador de Interfaces Senior utilizando Google Stitch (Project Nemo) y Gemini 2.0.
 
 PROYECTO: ${name}
+MONETIZACIÓN DEV (TONI): ${getDropdownOrCustomValue('b-monetization-dev', 'b-monetization-dev-custom') || 'SaaS'}
+MONETIZACIÓN USUARIO FINAL: ${getDropdownOrCustomValue('b-monetization-user', 'b-monetization-user-custom') || 'Cobro Servicios'}
 PROPUESTA DE VALOR: ${tagline}
 NICHO: ${subniche}
 ALCANCE DEL DISEÑO: ${scope === 'single_page' ? `SOLO 1 PÁGINA ESPECÍFICA -> "${singlePage}"` : 'SUITE COMPLETA (Todas las páginas: Landing + Dashboard + Auth + CRUD + Configuración)'}
