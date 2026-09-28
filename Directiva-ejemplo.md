@@ -1,10 +1,10 @@
-# 📋 DIRECTIVA DE TAREA (SOP): [NOMBRE_CLAVE_DE_LA_TAREA]
+# 📋 PLANTILLA DE DIRECTIVA SOP: [NOMBRE_CLAVE_DE_LA_APP_O_MODULO]
 
-> **ID de Tarea:** `SOP-[ID_UNICO_O_FECHA]`  
-> **Script / Módulo Asociado:** `scripts/[nombre_del_script].py` (o `src/services/[servicio].ts`)  
-> **Última Actualización:** `[FECHA_ACTUAL]`  
-> **Estado:** `[BORRADOR / ACTIVO / DEPRECADO]`  
-> **Jerarquía:** Subordinada a las [5 Directrices Maestras de Toni](directrices/00_Directriz_Definicion_Proyecto.md)
+> **ID de Directiva:** `DIR-APP-[NOMBRE_MODULO]-V1`  
+> **Ámbito / Módulo:** `src/presentation/views/...` | `src/domain/usecases/...`  
+> **Última Actualización:** `[AAAA-MM-DD]`  
+> **Estado:** `[BORRADOR | ACTIVO | DEPRECADO]`  
+> **Jerarquía:** Subordinada a las [5 Directrices Maestras de Toni](directrices/00_Directriz_Definicion_Proyecto.md) y a la [Directiva de Desarrollo SOP](rules/sop-desarrollo-app-clean-sdd.md)
 
 ---
 
@@ -19,96 +19,81 @@ Cualquier tarea o módulo desarrollado bajo esta directiva **debe cumplir obliga
 ---
 
 ## 🎯 1. Objetivos y Alcance
-*Describe aquí QUÉ debe lograr esta tarea y POR QUÉ.*
-- **Objetivo Principal:** [Descripción concisa de la meta final, ej: "Extraer datos de la API y normalizarlos a formato compatible con Supabase"].
-- **Criterio de Éxito:** [Condición exacta para considerar la tarea completada, ej: "El script devuelve exitosamente los datos y se registra en base de datos sin errores"].
+*Describe qué debe lograr esta app/módulo y por qué.*
+- **Objetivo Principal:** [Descripción concisa del objetivo, ej: "Módulo de gestión de cobros y facturación recurrente con sincronización Supabase"].
+- **Criterio de Éxito:** [Condición exacta: "Compila sin errores TypeScript, pasa 100% de tests y feedback en DOM sin alerts"].
 
 ---
 
-## 📥 2. Especificaciones de Entrada/Salida (I/O)
-*Define estrictamente los tipos de datos para garantizar determinismo.*
+## 📥 2. Especificaciones de Entrada/Salida (I/O) y Estado
 
-### Entradas (Inputs)
-- **Argumentos Requeridos:**
-  - `[nombre_arg]`: `[Tipo de dato]` - `[Descripción]`.
-- **Variables de Entorno (.env):**
-  - `[NOMBRE_VAR]`: `[Descripción del secreto/token necesario]`.
-- **Archivos Fuente:**
-  - `[ruta/al/archivo]`: `[Descripción]`.
+### Entradas (Inputs & Eventos)
+- **Props / Parámetros de Ruta:** `[paramId: string]` - [Descripción].
+- **Eventos de Usuario:** [Clicks, formularios, gestos táctiles].
+- **Variables de Entorno (.env):** `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
 
 ### Salidas (Outputs)
-- **Artefactos Generados:**
-  - `[ruta/de/salida]`: `[Formato y descripción del contenido]`.
-- **Retorno de Consola / API:** `[Qué debe retornar: JSON, Path o Status Code de éxito]`.
+- **Renderizado UI:** Componentes en DOM accesibles y responsivos.
+- **Feedback al Usuario:** Notificación flotante (*Toast*) o Modal custom.
+- **Persistencia:** Mutaciones en esquema Supabase (`mia_*` / `com_*`).
 
 ---
 
-## 🔄 3. Flujo Lógico (Algoritmo Determinista)
-*Describe la lógica paso a paso para que cualquier script o agente pueda replicar el proceso.*
+## 🔄 3. Flujo Lógico y Clean Architecture
 
-1. **Inicialización:** [Ej: Validar dependencias, cargar variables de entorno y verificar carpetas de salida].
-2. **Adquisición / Conexión:** [Ej: Conectar al servicio / API con reintentos exponenciales].
-3. **Procesamiento & Validación:** [Ej: Normalizar datos con esquema Zod / tipado estricto].
-4. **Persistencia:** [Ej: Guardar en esquema dedicado de Supabase o generar archivo de salida].
-5. **Limpieza & Notificación:** [Ej: Cerrar conexiones y emitir log estructurado].
+1. **Capa de Dominio (`src/domain/`):** Entidades puras y casos de uso de negocio en TypeScript.
+2. **Capa de Datos (`src/data/`):** Repositorios Supabase, DTOs y persistencia local.
+3. **Capa de Presentación (`src/presentation/`):** Componentes UI, hooks y gestión de estado reactivo.
 
 ---
 
-## 🛠️ 4. Herramientas y Librerías Permitidas
-*Lista blanca de dependencias y servicios.*
-- **Librerías / SDKs:** `[nombres de paquetes aprobados]`.
-- **APIs / Servicios Externos:** `[Nombre y versión del endpoint]`.
+## 🛠️ 4. Herramientas y Librerías Permitidas (Lista Blanca)
+- **Frontend:** React, TypeScript, CSS3 Nativo, Lucide React, Vite.
+- **BaaS:** Supabase JS SDK (PostgreSQL, Auth, Storage).
+- **Testing:** Vitest / Jest, React Testing Library.
 
 ---
 
-## ⚠️ 5. Restricciones y Casos Borde (Edge Cases)
-*Condiciones conocidas que podrían romper el flujo estándar y cómo manejarlas.*
-
-### Limitaciones Conocidas
-- **Límites de Cuota / Rate Limits:** [Ej: Máximo X llamadas por minuto -> aplicar delay].
-- **Manejo de Nulos / Formatos Inesperados:** [Ej: Sanitizar strings y proveer valores fallback].
-- **Concurrencia:** [Ej: No ejecutar en paralelo si muta el mismo recurso].
-
-### Validaciones Requeridas
-- [ ] Validación de inputs antes de ejecutar.
-- [ ] Comprobación de conectividad y variables de entorno.
-- [ ] Verificación de integridad de los datos de salida.
+## ⚠️ 5. Restricciones, Casos Borde y Accesibilidad
+- **Cero Diálogos Nativos:** Prohibido `alert()`, `confirm()` o `prompt()`. Usar siempre Toasts en el DOM.
+- **Accesibilidad:** `aria-label` en controles interactivos, contraste ≥ 4.5:1, targets táctiles ≥ 48x48px.
+- **Aislamiento:** La UI nunca hace llamadas directas a BD; invoca casos de uso.
 
 ---
 
-## 🧠 6. Protocolo de Aprendizajes y Memoria Viva (Self-Correction)
-*CRÍTICO: Esta sección se actualiza automáticamente tras resolver cualquier fallo o caso borde inesperado para evitar regresiones futuras.*
+## 🧠 6. Protocolo de Errores y Aprendizajes (Memoria Viva)
 
-| Fecha | Error Detectado | Causa Raíz | Solución / Parche Aplicado | Prevención Futura |
-| :--- | :--- | :--- | :--- | :--- |
-| `[DD/MM/AAAA]` | `[Tipo de Error / Excepción]` | `[Por qué ocurrió]` | `[Cómo se resolvió el bug]` | `[Regla técnica a seguir]` |
+| Fecha | Error Detectado | Causa Raíz | Solución / Parche Definitivo |
+| :--- | :--- | :--- | :--- |
+| [DD/MM] | [Tipo de Error] | [Por qué ocurrió] | [Solución aplicada] |
 
-> **Nota de Implementación:** Si encuentras un nuevo error, **primero** arréglalo en el código, y **luego** documenta la solución en esta tabla.
+> **Nota de Implementación:** Arregla el fallo primero en el código y luego añade la regla aquí para evitar regresiones.
 
 ---
 
-## 💻 7. Ejemplos de Invocación y Uso
-*Comandos reproducibles para ejecutar el script o módulo.*
+## 🚀 7. Comandos de Ejecución y Test
 
 ```bash
-# Ejecución estándar en desarrollo
-npm run task:ejecutar -- --param="valor"
-# o en Python:
-python scripts/[nombre_del_script].py --input "valor"
+# Desarrollo local
+npm run dev
+
+# Tests
+npm run test
+
+# Build de producción
+npm run build
 ```
 
 ---
 
-## ✅ 8. Checklist de Pre-Ejecución y Post-Ejecución
+## 📋 8. Checklists
 
 ### Pre-Ejecución
-- [ ] Variables de entorno configuradas en `.env.local`
-- [ ] Dependencias instaladas
-- [ ] Archivos de entrada disponibles y validados
-- [ ] Esquema de Supabase y políticas RLS verificadas
+- [ ] Variables de entorno configuradas (`.env`).
+- [ ] Entidades de dominio y casos de uso definidos.
 
 ### Post-Ejecución
-- [ ] Salidas y artefactos generados correctamente
-- [ ] Logs revisados sin errores ni warnings críticos
-- [ ] Resultados validados contra el criterio de éxito
-- [ ] Tabla de Memoria Viva actualizada (si se descubrió un nuevo caso borde)
+- [ ] Compilación exitosa (`npm run build`).
+- [ ] Tests pasando al 100%.
+- [ ] Feedback visual en DOM verificado.
+- [ ] Directiva actualizada con nuevos aprendizajes.
