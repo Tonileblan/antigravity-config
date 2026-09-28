@@ -21,7 +21,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif],
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
@@ -150,14 +150,14 @@
       <!-- Card del Menú Lateral -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 card-shadow space-y-5">
         
-        <!-- Header del Sidebar con botón de colapsar (solo icono) -->
+        <!-- Header del Sidebar con botón de colapsar (mismo icono de menú en la esquina superior derecha) -->
         <div class="flex items-center justify-between pb-2 border-b border-slate-100">
           <div class="flex items-center gap-1.5 text-xs font-extrabold text-slate-800">
             <span>🧭</span>
             <span>Navegación</span>
           </div>
-          <button onclick="toggleSidebar()" class="w-7 h-7 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition flex items-center justify-center text-sm font-bold border border-transparent hover:border-slate-200" title="Ocultar menú lateral">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+          <button onclick="toggleSidebar()" class="w-7 h-7 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition flex items-center justify-center text-sm font-bold border border-transparent hover:border-slate-200" title="Ocultar menú lateral">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
           </button>
         </div>
 
@@ -270,25 +270,28 @@
       
       <!-- Barra superior cuando el menú lateral está oculto -->
       <div id="sidebarCollapsedBanner" class="hidden bg-white border border-slate-200 p-2.5 rounded-2xl card-shadow flex items-center justify-between gap-3 text-xs">
-        <div class="flex items-center gap-2.5">
-          <button onclick="toggleSidebar()" class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition flex items-center justify-center shadow-sm text-sm" title="Mostrar menú lateral">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="text-slate-600 text-[11px] hidden sm:block">
-            Proyecto Activo: <strong id="bannerProjectName" class="text-slate-900">Clinica-Dental</strong>
+        <div class="flex items-center gap-3">
+          <div class="text-slate-600 text-[11px] font-medium flex items-center gap-1.5">
+            <span class="text-slate-400">🧭</span>
+            <span>Proyecto: <strong id="bannerProjectName" class="text-slate-900">Clinica-Dental</strong></span>
+          </div>
+          <div class="hidden sm:flex items-center gap-1.5">
+            <button onclick="switchTab('briefingView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+              📐 Briefing
+            </button>
+            <button onclick="switchTab('stitchView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+              🎨 Stitch
+            </button>
+            <button onclick="switchTab('directricesView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+              🏛️ Directrices
+            </button>
           </div>
         </div>
-        <div class="flex items-center gap-1.5">
-          <button onclick="switchTab('briefingView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
-            📐 Briefing
-          </button>
-          <button onclick="switchTab('stitchView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
-            🎨 Stitch
-          </button>
-          <button onclick="switchTab('directricesView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
-            🏛️ Directrices
-          </button>
-        </div>
+        
+        <!-- Botón de Mostrar Menú en la esquina superior derecha de la barra -->
+        <button onclick="toggleSidebar()" class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition flex items-center justify-center shadow-sm text-sm shrink-0" title="Mostrar menú lateral">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
       </div>
   <!-- ========================================================================= -->
   <!-- TAB 1: DIRECTRICES MAESTRAS (LECTURA COMPLETA & EDICIÓN INTEGRAL) -->
