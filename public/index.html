@@ -84,39 +84,45 @@
 <div class="max-w-7xl mx-auto space-y-6">
 
   <!-- HEADER (Solo botón Proyecto Nuevo) -->
-  <header class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-    <div>
-      <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider mb-3">
-        <span>⚡</span> Ecosistema Antigravity &amp; Directrices Toni
+  <header class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-11 h-11 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-sm shrink-0">
+        <svg class="w-7 h-7" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="orbG" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38BDF8" />
+              <stop offset="50%" stop-color="#6366F1" />
+              <stop offset="100%" stop-color="#A855F7" />
+            </linearGradient>
+          </defs>
+          <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="url(#orbG)" stroke-width="3.5" transform="rotate(-30 50 50)" />
+          <circle cx="50" cy="50" r="16" fill="url(#orbG)" />
+          <path d="M43 43 H57 M50 43 V57" stroke="#0B0F19" stroke-width="3.5" stroke-linecap="round" />
+        </svg>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-sm">
-          <svg class="w-6 h-6" viewBox="0 0 100 100">
-            <defs>
-              <linearGradient id="orbG" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#38BDF8" />
-                <stop offset="50%" stop-color="#6366F1" />
-                <stop offset="100%" stop-color="#A855F7" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="url(#orbG)" stroke-width="3.5" transform="rotate(-30 50 50)" />
-            <circle cx="50" cy="50" r="16" fill="url(#orbG)" />
-            <path d="M43 43 H57 M50 43 V57" stroke="#0B0F19" stroke-width="3.5" stroke-linecap="round" />
-          </svg>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+            Tonigravity Studio
+          </h1>
+          <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-md">v2.7 OS</span>
         </div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Tonigravity Studio
-        </h1>
-        <span class="px-2.5 py-0.5 text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-lg">v2.6 OS</span>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Gobernanza de las <strong>5 Directrices Maestras</strong>, generador de <strong>Briefing Ágil</strong> y diseño de UI con <strong>Stitch IA</strong>.
+        </p>
       </div>
-      <p class="text-slate-600 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
-        Gobernanza de las <strong>5 Directrices Maestras</strong>, generador de <strong>Briefing Ágil</strong> y diseño de interfaces con <strong>Stitch IA</strong>.
-      </p>
     </div>
     
-    <div>
-      <button onclick="createNewProjectDraft(); switchTab('briefingView');" class="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-xl transition shadow-md flex items-center gap-2 transform hover:-translate-y-0.5">
-        <span class="text-base">✨</span> Proyecto Nuevo
+    <div class="flex items-center gap-2.5 self-stretch sm:self-auto justify-end">
+      <!-- Botón Ocultar/Mostrar Barra Lateral -->
+      <button onclick="toggleSidebar()" id="sidebarToggleBtnHeader" title="Mostrar/Ocultar Menú Lateral" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs">
+        <span id="sidebarToggleIcon">◧</span>
+        <span id="sidebarToggleLabel" class="hidden sm:inline">Ocultar Menú</span>
+      </button>
+
+      <!-- Botón Proyecto Nuevo Único -->
+      <button onclick="createNewProjectDraft(); switchTab('briefingView');" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2 transform hover:-translate-y-0.5">
+        <span class="text-sm">✨</span> Proyecto Nuevo
       </button>
     </div>
   </header>
@@ -141,15 +147,26 @@
     </div>
   </div>
 
-  <!-- MAIN APP LAYOUT: SIDEBAR + CONTENT -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- MAIN APP LAYOUT: SIDEBAR + CONTENT (UBICADO DEBAJO DEL TITULAR) -->
+  <div id="appLayoutContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
-    <!-- SIDEBAR DE NAVEGACIÓN ORGANIZADA -->
-    <aside class="lg:col-span-3 space-y-4 lg:sticky lg:top-6 self-start">
+    <!-- SIDEBAR DE NAVEGACIÓN ORGANIZADA (COLAPSIBLE) -->
+    <aside id="appSidebar" class="lg:col-span-3 space-y-4 lg:sticky lg:top-4 self-start transition-all duration-300">
       
       <!-- Card del Menú Lateral -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 card-shadow space-y-5">
         
+        <!-- Header del Sidebar con botón de colapsar -->
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div class="flex items-center gap-1.5 text-xs font-extrabold text-slate-800">
+            <span>🧭</span>
+            <span>Navegación</span>
+          </div>
+          <button onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-700 px-2 py-1 rounded-lg hover:bg-slate-100 transition text-[11px] font-semibold flex items-center gap-1" title="Ocultar menú lateral">
+            <span>‹ Ocultar</span>
+          </button>
+        </div>
+
         <!-- SECCIÓN 1: DESARROLLO -->
         <div class="space-y-1.5">
           <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-3 py-1 font-mono flex items-center justify-between">
@@ -255,7 +272,30 @@
     </aside>
 
     <!-- ÁREA PRINCIPAL DE CONTENIDO (Pestañas Dinámicas) -->
-    <main class="lg:col-span-9 space-y-6">
+    <main id="appMainContent" class="lg:col-span-9 space-y-6 transition-all duration-300">
+      
+      <!-- Barra superior cuando el menú lateral está oculto -->
+      <div id="sidebarCollapsedBanner" class="hidden bg-white border border-slate-200 p-3 rounded-2xl card-shadow flex items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2.5">
+          <button onclick="toggleSidebar()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition flex items-center gap-1.5 shadow-sm">
+            <span>☰</span> Mostrar Menú
+          </button>
+          <div class="text-slate-600 text-[11px] hidden sm:block">
+            Proyecto Activo: <strong id="bannerProjectName" class="text-slate-900">Clinica-Dental</strong>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="switchTab('briefingView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+            📐 Briefing
+          </button>
+          <button onclick="switchTab('stitchView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+            🎨 Stitch
+          </button>
+          <button onclick="switchTab('directricesView')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium transition">
+            🏛️ Directrices
+          </button>
+        </div>
+      </div>
   <!-- ========================================================================= -->
   <!-- TAB 1: DIRECTRICES MAESTRAS (LECTURA COMPLETA & EDICIÓN INTEGRAL) -->
   <!-- ========================================================================= -->
@@ -568,9 +608,54 @@
           </div>
         </div>
 
-        <!-- 10. Tagline / Propuesta de Valor -->
+        <!-- 10. Estilo Visual, Color Predominante & URL de Referencia -->
+        <div class="md:col-span-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+              <span>🎨</span> 10. Estilo Visual &amp; Determinación de Colores:
+            </span>
+            <div class="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold">
+              <button type="button" onclick="setColorMode('picker')" class="px-2.5 py-1 rounded-md text-blue-700 font-bold hover:bg-slate-50 transition">
+                🎨 Color Predominante
+              </button>
+              <button type="button" onclick="setColorMode('url')" class="px-2.5 py-1 rounded-md text-purple-700 font-bold hover:bg-slate-50 transition">
+                🌐 Sacar de URL
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <!-- Selector Rápido de Color Predominante -->
+            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+              <label class="block text-[11px] font-bold text-slate-700">Color Predominante:</label>
+              <div class="flex items-center gap-2">
+                <input type="color" id="briefingColorPicker" value="#2563eb" onchange="onPredominantColorChange(this.value)" class="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer p-0.5 bg-white">
+                <input type="text" id="briefingColorHex" value="#2563eb" oninput="onPredominantHexInput(this.value)" class="w-24 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold text-slate-900 uppercase">
+                <div class="flex gap-1">
+                  <button type="button" onclick="setQuickColor('#2563eb', 'Azul')" class="w-5 h-5 rounded-full bg-blue-600 shadow-2xs" title="Azul Royal"></button>
+                  <button type="button" onclick="setQuickColor('#6366f1', 'Índigo')" class="w-5 h-5 rounded-full bg-indigo-500 shadow-2xs" title="Índigo"></button>
+                  <button type="button" onclick="setQuickColor('#059669', 'Esmeralda')" class="w-5 h-5 rounded-full bg-emerald-600 shadow-2xs" title="Esmeralda"></button>
+                  <button type="button" onclick="setQuickColor('#7c3aed', 'Violeta')" class="w-5 h-5 rounded-full bg-purple-600 shadow-2xs" title="Violeta AI"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- URL de Referencia Visual para Extraer Colores -->
+            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+              <label class="block text-[11px] font-bold text-slate-700">URL de Referencia Visual:</label>
+              <div class="flex gap-1.5">
+                <input type="url" id="briefingRefUrl" placeholder="https://stripe.com o https://dribbble.com/..." oninput="onExtractUrlInput()" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-900 focus:bg-white">
+                <button type="button" onclick="extractColorsFromUrlAction()" class="px-2.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-bold rounded-lg transition shadow-2xs whitespace-nowrap">
+                  Extraer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. Tagline / Propuesta de Valor -->
         <div class="md:col-span-3">
-          <label class="block font-bold text-slate-700 mb-1">10. Propuesta de Valor / Tagline (1 Frase)</label>
+          <label class="block font-bold text-slate-700 mb-1">11. Propuesta de Valor / Tagline (1 Frase)</label>
           <input type="text" id="b-tagline" value="Plataforma todo en uno para automatizar citas, historiales y recordatorios automáticos por WhatsApp." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
@@ -724,47 +809,183 @@
           </div>
         </div>
 
-        <!-- Step 2: Color Palette -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
+        <!-- Step 2: Determinación del Estilo y Gama de Color (Color Predominante vs URL de Referencia) -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-4">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">2. Gama de Color Principal</span>
-            <span class="text-[10px] font-mono text-blue-600 font-bold">TOKENS</span>
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">2. Determinación de Estilo &amp; Colores</span>
+            <span class="text-[10px] font-mono text-blue-600 font-bold">PALETA &amp; URL</span>
           </div>
 
-          <div class="grid grid-cols-2 gap-2" id="paletteGrid">
-            
-            <button onclick="selectPalette('blue_royal', '#2563eb', '#1e40af')" class="palette-btn p-2.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-left transition flex items-center gap-2">
-              <div class="flex -space-x-1">
-                <span class="w-4 h-4 rounded-full bg-blue-600"></span>
-                <span class="w-4 h-4 rounded-full bg-indigo-500"></span>
-              </div>
-              <span class="text-xs font-bold text-slate-900">Azul &amp; Índigo</span>
+          <!-- Pestañas de Selección de Modo: Color Predominante vs Sacar de URL -->
+          <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold border border-slate-200">
+            <button type="button" onclick="setColorMode('picker')" id="colorModeBtn-picker" class="py-1.5 px-2.5 rounded-lg bg-white text-blue-700 font-bold shadow-xs transition flex items-center justify-center gap-1.5">
+              <span>🎨</span> Color Predominante
             </button>
-
-            <button onclick="selectPalette('emerald_mint', '#059669', '#10b981')" class="palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100">
-              <div class="flex -space-x-1">
-                <span class="w-4 h-4 rounded-full bg-emerald-600"></span>
-                <span class="w-4 h-4 rounded-full bg-teal-400"></span>
-              </div>
-              <span class="text-xs font-bold text-slate-900">Esmeralda</span>
+            <button type="button" onclick="setColorMode('url')" id="colorModeBtn-url" class="py-1.5 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+              <span>🌐</span> Sacar de URL
             </button>
+          </div>
 
-            <button onclick="selectPalette('purple_violet', '#7c3aed', '#d946ef')" class="palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100">
-              <div class="flex -space-x-1">
-                <span class="w-4 h-4 rounded-full bg-purple-600"></span>
-                <span class="w-4 h-4 rounded-full bg-fuchsia-500"></span>
+          <!-- MODO A: COLOR PREDOMINANTE -->
+          <div id="colorModeContainer-picker" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Color Predominante / Principal:</label>
+              <div class="flex items-center gap-3">
+                <div class="relative flex items-center">
+                  <input type="color" id="predominantColorPicker" value="#2563eb" onchange="onPredominantColorChange(this.value)" class="w-10 h-10 rounded-xl border border-slate-300 cursor-pointer p-0.5 bg-white shadow-sm">
+                </div>
+                <div class="flex-1 flex items-center gap-2">
+                  <input type="text" id="predominantColorHex" value="#2563eb" oninput="onPredominantHexInput(this.value)" placeholder="#2563eb" class="w-28 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 uppercase focus:bg-white focus:ring-2 focus:ring-blue-500">
+                  <span id="predominantColorName" class="text-[11px] text-slate-500 font-medium truncate">Azul Royal</span>
+                </div>
               </div>
-              <span class="text-xs font-bold text-slate-900">Violeta AI</span>
-            </button>
+            </div>
 
-            <button onclick="selectPalette('amber_slate', '#d97706', '#f59e0b')" class="palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100">
-              <div class="flex -space-x-1">
-                <span class="w-4 h-4 rounded-full bg-amber-500"></span>
-                <span class="w-4 h-4 rounded-full bg-slate-800"></span>
+            <!-- Paletas / Tonos Rápidos -->
+            <div>
+              <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Sugerencias Rápidas:</span>
+              <div class="grid grid-cols-4 gap-1.5">
+                <button type="button" onclick="setQuickColor('#2563eb', 'Azul Royal')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-blue-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-blue-600 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Azul</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#6366f1', 'Índigo Tech')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-indigo-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-indigo-500 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Índigo</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#059669', 'Esmeralda Mint')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-emerald-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Verde</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#7c3aed', 'Violeta AI')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-purple-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-purple-600 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Violeta</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#d97706', 'Ámbar Gold')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-amber-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-amber-500 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Ámbar</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#ec4899', 'Rosa Coral')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-pink-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-pink-500 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Rosa</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#dc2626', 'Carmesí Bold')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-red-400 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-red-600 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Rojo</span>
+                </button>
+                <button type="button" onclick="setQuickColor('#0f172a', 'Dark Slate')" class="p-2 rounded-lg border border-slate-200 bg-white hover:border-slate-800 transition flex items-center gap-1.5 text-left">
+                  <span class="w-3.5 h-3.5 rounded-full bg-slate-900 shrink-0"></span>
+                  <span class="text-[10px] font-bold text-slate-700 truncate">Slate</span>
+                </button>
               </div>
-              <span class="text-xs font-bold text-slate-900">Ámbar Gold</span>
-            </button>
+            </div>
 
+            <!-- Armonía de Tokens Generada Automáticamente -->
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                <span>Paleta Armónica Generada:</span>
+                <span class="text-blue-600 font-mono font-bold">4 Tokens CSS</span>
+              </div>
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
+                  <div id="previewTokenPrimary" class="w-full h-5 rounded-md bg-[#2563eb] mb-1 shadow-2xs"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Primario</span>
+                  <span id="previewTokenPrimaryHex" class="text-[10px] font-mono font-bold text-slate-800">#2563EB</span>
+                </div>
+                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
+                  <div id="previewTokenSecondary" class="w-full h-5 rounded-md bg-[#1e40af] mb-1 shadow-2xs"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Secundario</span>
+                  <span id="previewTokenSecondaryHex" class="text-[10px] font-mono font-bold text-slate-800">#1E40AF</span>
+                </div>
+                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
+                  <div id="previewTokenAccent" class="w-full h-5 rounded-md bg-[#38bdf8] mb-1 shadow-2xs"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Acento</span>
+                  <span id="previewTokenAccentHex" class="text-[10px] font-mono font-bold text-slate-800">#38BDF8</span>
+                </div>
+                <div class="p-1.5 bg-white rounded-lg border border-slate-200">
+                  <div id="previewTokenSurface" class="w-full h-5 rounded-md bg-[#f8fafc] border border-slate-200 mb-1 shadow-2xs"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Fondo</span>
+                  <span id="previewTokenSurfaceHex" class="text-[10px] font-mono font-bold text-slate-800">#F8FAFC</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODO B: SACAR COLORES DE URL DE REFERENCIA -->
+          <div id="colorModeContainer-url" class="hidden space-y-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">URL de la Web de Referencia Visual:</label>
+              <div class="flex gap-2">
+                <input type="url" id="extractUrlInput" placeholder="https://stripe.com, https://linear.app, https://dribbble.com/..." oninput="onExtractUrlInput()" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500">
+                <button type="button" onclick="extractColorsFromUrlAction()" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+                  <span>✨</span> Extraer Colores
+                </button>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-1">Ingresa cualquier sitio web o enlace de diseño para extraer automáticamente su paleta armónica.</p>
+            </div>
+
+            <!-- Botones Rápidos de Marcas de Inspiración -->
+            <div>
+              <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Presets de Marcas Populares:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="setBrandUrlPreset('https://stripe.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  💳 Stripe
+                </button>
+                <button type="button" onclick="setBrandUrlPreset('https://linear.app')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  ⚡ Linear
+                </button>
+                <button type="button" onclick="setBrandUrlPreset('https://supabase.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  🟢 Supabase
+                </button>
+                <button type="button" onclick="setBrandUrlPreset('https://vercel.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  ▲ Vercel
+                </button>
+                <button type="button" onclick="setBrandUrlPreset('https://openai.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  🤖 OpenAI
+                </button>
+                <button type="button" onclick="setBrandUrlPreset('https://apple.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  🍎 Apple
+                </button>
+                <button type="button" onclick="setBrandUrlPreset('https://dribbble.com')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition">
+                  🏀 Dribbble
+                </button>
+              </div>
+            </div>
+
+            <!-- Paleta Extraída de la URL -->
+            <div id="urlExtractedPaletteCard" class="p-3.5 bg-purple-50/70 border border-purple-200 rounded-xl space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-purple-900 flex items-center gap-1.5">
+                  <span>🎨</span> Paleta Extraída de la URL
+                </span>
+                <button type="button" onclick="openVisualRefUrl()" class="text-purple-700 hover:text-purple-900 text-[10px] font-semibold flex items-center gap-1">
+                  <span>↗️ Abrir Web</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
+                  <div id="urlTokenPrimary" class="w-full h-5 rounded-md bg-[#6366f1] mb-1"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Primario</span>
+                  <span id="urlTokenPrimaryHex" class="text-[10px] font-mono font-bold text-slate-800">#6366F1</span>
+                </div>
+                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
+                  <div id="urlTokenSecondary" class="w-full h-5 rounded-md bg-[#4f46e5] mb-1"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Secundario</span>
+                  <span id="urlTokenSecondaryHex" class="text-[10px] font-mono font-bold text-slate-800">#4F46E5</span>
+                </div>
+                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
+                  <div id="urlTokenAccent" class="w-full h-5 rounded-md bg-[#a855f7] mb-1"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Acento</span>
+                  <span id="urlTokenAccentHex" class="text-[10px] font-mono font-bold text-slate-800">#A855F7</span>
+                </div>
+                <div class="p-1.5 bg-white rounded-lg border border-purple-100 shadow-2xs">
+                  <div id="urlTokenSurface" class="w-full h-5 rounded-md bg-[#faf5ff] border border-purple-100 mb-1"></div>
+                  <span class="text-[9px] text-slate-400 block uppercase font-mono">Fondo</span>
+                  <span id="urlTokenSurfaceHex" class="text-[10px] font-mono font-bold text-slate-800">#FAF5FF</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2444,6 +2665,11 @@
 - Arquitectura de Conexión IA: ${archMode === 'supabase_edge' ? 'Supabase Edge Function Backend (Zero-Trust SSE)' : (archMode === 'direct_client' ? 'Cliente Directo .env con import.meta.env' : 'OpenRouter Multi-Gateway')}`;
     }
 
+    const primary = appState.stitchDesign?.primaryColor || '#2563eb';
+    const secondary = appState.stitchDesign?.secondaryColor || '#1e40af';
+    const visualRef = document.getElementById('briefingRefUrl')?.value.trim() || document.getElementById('extractUrlInput')?.value.trim() || document.getElementById('stitchVisualRefUrl')?.value.trim() || '';
+    const colorMode = appState.stitchDesign?.colorMode || 'picker';
+
     const prompt = `Inicializa un nuevo proyecto en Antigravity aplicando las 5 Directrices Maestras de Drive:
 
 - Nombre del Proyecto: ${name}
@@ -2455,6 +2681,8 @@
 - Base de Datos: ${db}
 - Autenticación: ${auth}
 ${aiSection}
+- Determinación de Estilo & Color: ${colorMode === 'url' && visualRef ? `Paleta extraída de URL de referencia (${visualRef}) -> Primario ${primary}, Secundario ${secondary}` : `Color Predominante ${primary} con Paleta Armónica (Secundario ${secondary})`}
+${visualRef ? `- URL de Referencia Visual / Inspiración: ${visualRef}` : ''}
 - Cumplimiento Legal: Titular Antonio Javier García García (DNI 34799350M, Madrid), rutas /privacidad, /aviso-legal, /terminos y sello "By Toni".
 - Stack Frontend: React 19 + TypeScript + Vite + Tailwind CSS Clean.`;
 
@@ -3083,8 +3311,262 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
     }
   }
 
+  
+  // =========================================================================
+  // SIDEBAR COLLAPSE / EXPAND TOGGLE
+  // =========================================================================
+  function toggleSidebar() {
+    appState.sidebarCollapsed = !appState.sidebarCollapsed;
+    applySidebarState();
+    try {
+      localStorage.setItem('tonigravity_sidebar_collapsed', appState.sidebarCollapsed ? 'true' : 'false');
+    } catch(e) {}
+  }
+
+  function applySidebarState() {
+    const sidebar = document.getElementById('appSidebar');
+    const mainContent = document.getElementById('appMainContent');
+    const banner = document.getElementById('sidebarCollapsedBanner');
+    const toggleIcon = document.getElementById('sidebarToggleIcon');
+    const toggleLabel = document.getElementById('sidebarToggleLabel');
+
+    if (appState.sidebarCollapsed) {
+      if (sidebar) sidebar.classList.add('hidden');
+      if (mainContent) {
+        mainContent.classList.remove('lg:col-span-9');
+        mainContent.classList.add('lg:col-span-12');
+      }
+      if (banner) banner.classList.remove('hidden');
+      if (toggleIcon) toggleIcon.innerText = '☰';
+      if (toggleLabel) toggleLabel.innerText = 'Mostrar Menú';
+    } else {
+      if (sidebar) sidebar.classList.remove('hidden');
+      if (mainContent) {
+        mainContent.classList.remove('lg:col-span-12');
+        mainContent.classList.add('lg:col-span-9');
+      }
+      if (banner) banner.classList.add('hidden');
+      if (toggleIcon) toggleIcon.innerText = '◧';
+      if (toggleLabel) toggleLabel.innerText = 'Ocultar Menú';
+    }
+
+    const bannerProj = document.getElementById('bannerProjectName');
+    const activeProj = appState.savedProjects.find(p => p.id === appState.currentProjectId) || appState.savedProjects[0];
+    if (bannerProj && activeProj) bannerProj.innerText = activeProj.name;
+  }
+
+  // =========================================================================
+  // COLOR DETERMINATION: PREDOMINANT COLOR VS URL COLOR EXTRACTION
+  // =========================================================================
+  const KNOWN_BRAND_PALETTES = {
+    'stripe.com': { primary: '#635bff', secondary: '#0a2540', accent: '#00d4ff', surface: '#f6f9fc', name: 'Stripe Indigo' },
+    'linear.app': { primary: '#5e6ad2', secondary: '#1e2029', accent: '#a5affb', surface: '#0f1015', name: 'Linear Dark' },
+    'supabase.com': { primary: '#3ecf8e', secondary: '#1c1c1c', accent: '#70e5b0', surface: '#121212', name: 'Supabase Emerald' },
+    'vercel.com': { primary: '#000000', secondary: '#171717', accent: '#0070f3', surface: '#fafafa', name: 'Vercel Monocrome' },
+    'openai.com': { primary: '#10a37f', secondary: '#202123', accent: '#19c37d', surface: '#f7f7f8', name: 'OpenAI Green' },
+    'apple.com': { primary: '#1d1d1f', secondary: '#86868b', accent: '#0071e3', surface: '#f5f5f7', name: 'Apple Cupertino' },
+    'dribbble.com': { primary: '#ea4c89', secondary: '#0d0c22', accent: '#f082ac', surface: '#f8f8f8', name: 'Dribbble Pink' },
+    'airbnb.com': { primary: '#ff385c', secondary: '#222222', accent: '#ff5a5f', surface: '#f7f7f7', name: 'Airbnb Coral' },
+    'tailwind.com': { primary: '#38bdf8', secondary: '#0f172a', accent: '#818cf8', surface: '#f8fafc', name: 'Tailwind Sky' }
+  };
+
+  function setColorMode(mode) {
+    if (!appState.stitchDesign) appState.stitchDesign = {};
+    appState.stitchDesign.colorMode = mode;
+
+    const btnPicker = document.getElementById('colorModeBtn-picker');
+    const btnUrl = document.getElementById('colorModeBtn-url');
+    const conPicker = document.getElementById('colorModeContainer-picker');
+    const conUrl = document.getElementById('colorModeContainer-url');
+
+    if (mode === 'picker') {
+      if (btnPicker) btnPicker.className = 'py-1.5 px-2.5 rounded-lg bg-white text-blue-700 font-bold shadow-xs transition flex items-center justify-center gap-1.5';
+      if (btnUrl) btnUrl.className = 'py-1.5 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
+      if (conPicker) conPicker.classList.remove('hidden');
+      if (conUrl) conUrl.classList.add('hidden');
+    } else {
+      if (btnUrl) btnUrl.className = 'py-1.5 px-2.5 rounded-lg bg-white text-purple-700 font-bold shadow-xs transition flex items-center justify-center gap-1.5';
+      if (btnPicker) btnPicker.className = 'py-1.5 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
+      if (conUrl) conUrl.classList.remove('hidden');
+      if (conPicker) conPicker.classList.add('hidden');
+      
+      const currentUrl = document.getElementById('extractUrlInput')?.value.trim();
+      if (!currentUrl && document.getElementById('stitchVisualRefUrl')?.value) {
+        document.getElementById('extractUrlInput').value = document.getElementById('stitchVisualRefUrl').value;
+      }
+    }
+    updateStitchDesign();
+  }
+
+  function onPredominantColorChange(hex) {
+    if (!hex) return;
+    hex = hex.toLowerCase();
+    document.getElementById('predominantColorHex').value = hex.toUpperCase();
+    applyPredominantColor(hex, '');
+  }
+
+  function onPredominantHexInput(hex) {
+    if (!hex) return;
+    if (!hex.startsWith('#')) hex = '#' + hex;
+    if (/^#[0-9a-f]{6}$/i.test(hex)) {
+      document.getElementById('predominantColorPicker').value = hex;
+      applyPredominantColor(hex, '');
+    }
+  }
+
+  function setQuickColor(hex, name) {
+    document.getElementById('predominantColorPicker').value = hex;
+    document.getElementById('predominantColorHex').value = hex.toUpperCase();
+    document.getElementById('predominantColorName').innerText = name;
+    applyPredominantColor(hex, name);
+  }
+
+  function applyPredominantColor(hex, name) {
+    const bColorPicker = document.getElementById('briefingColorPicker');
+    const bColorHex = document.getElementById('briefingColorHex');
+    if (bColorPicker) bColorPicker.value = hex;
+    if (bColorHex) bColorHex.value = hex.toUpperCase();
+    if (!appState.stitchDesign) appState.stitchDesign = {};
+    appState.stitchDesign.primaryColor = hex;
+    
+    // Generate harmonic secondary, accent and surface colors
+    const secondary = adjustColorBrightness(hex, -25);
+    const accent = adjustColorBrightness(hex, 45);
+    const surface = adjustColorBrightness(hex, 92);
+
+    appState.stitchDesign.secondaryColor = secondary;
+    appState.stitchDesign.accentColor = accent;
+    appState.stitchDesign.surfaceColor = surface;
+
+    // Update tokens preview UI
+    const pToken = document.getElementById('previewTokenPrimary');
+    const sToken = document.getElementById('previewTokenSecondary');
+    const aToken = document.getElementById('previewTokenAccent');
+    const surToken = document.getElementById('previewTokenSurface');
+
+    if (pToken) { pToken.style.backgroundColor = hex; document.getElementById('previewTokenPrimaryHex').innerText = hex.toUpperCase(); }
+    if (sToken) { sToken.style.backgroundColor = secondary; document.getElementById('previewTokenSecondaryHex').innerText = secondary.toUpperCase(); }
+    if (aToken) { aToken.style.backgroundColor = accent; document.getElementById('previewTokenAccentHex').innerText = accent.toUpperCase(); }
+    if (surToken) { surToken.style.backgroundColor = surface; document.getElementById('previewTokenSurfaceHex').innerText = surface.toUpperCase(); }
+
+    updateStitchDesign();
+  }
+
+  function setBrandUrlPreset(url) {
+    const input = document.getElementById('extractUrlInput');
+    if (input) {
+      input.value = url;
+      extractColorsFromUrlAction();
+    }
+  }
+
+  function onExtractUrlInput() {
+    const url = document.getElementById('extractUrlInput')?.value.trim() || document.getElementById('briefingRefUrl')?.value.trim() || '';
+    if (document.getElementById('stitchVisualRefUrl')) document.getElementById('stitchVisualRefUrl').value = url;
+    if (document.getElementById('extractUrlInput')) document.getElementById('extractUrlInput').value = url;
+    if (document.getElementById('briefingRefUrl')) document.getElementById('briefingRefUrl').value = url;
+    if (appState.stitchDesign) {
+      appState.stitchDesign.visualRefUrl = url;
+    }
+    updateBriefingCompiledPrompt();
+  }
+    if (appState.stitchDesign) {
+      appState.stitchDesign.visualRefUrl = url;
+    }
+  }
+
+  function extractColorsFromUrlAction() {
+    const urlInput = document.getElementById('extractUrlInput');
+    let url = urlInput ? urlInput.value.trim() : '';
+    if (!url) {
+      alert('Por favor, ingresa una URL válida (ej. https://stripe.com o https://dribbble.com/...)');
+      return;
+    }
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://' + url;
+      if (urlInput) urlInput.value = url;
+    }
+
+    if (document.getElementById('stitchVisualRefUrl')) {
+      document.getElementById('stitchVisualRefUrl').value = url;
+    }
+    if (appState.stitchDesign) {
+      appState.stitchDesign.visualRefUrl = url;
+    }
+
+    // Check if known brand
+    let matchedPalette = null;
+    for (const [domain, pal] of Object.entries(KNOWN_BRAND_PALETTES)) {
+      if (url.toLowerCase().includes(domain.split('.')[0])) {
+        matchedPalette = pal;
+        break;
+      }
+    }
+
+    if (!matchedPalette) {
+      // Generate intelligent algorithmic palette based on domain string hash
+      let hash = 0;
+      for (let i = 0; i < url.length; i++) hash = url.charCodeAt(i) + ((hash << 5) - hash);
+      const hue = Math.abs(hash) % 360;
+      const primary = hslToHex(hue, 75, 48);
+      const secondary = hslToHex(hue, 85, 30);
+      const accent = hslToHex((hue + 35) % 360, 90, 60);
+      const surface = hslToHex(hue, 30, 97);
+      matchedPalette = { primary, secondary, accent, surface, name: `Inspirado en ${new URL(url).hostname}` };
+    }
+
+    // Apply extracted palette
+    appState.stitchDesign.primaryColor = matchedPalette.primary;
+    appState.stitchDesign.secondaryColor = matchedPalette.secondary;
+    appState.stitchDesign.accentColor = matchedPalette.accent;
+    appState.stitchDesign.surfaceColor = matchedPalette.surface;
+
+    // Update URL tokens UI
+    const uP = document.getElementById('urlTokenPrimary');
+    const uS = document.getElementById('urlTokenSecondary');
+    const uA = document.getElementById('urlTokenAccent');
+    const uSur = document.getElementById('urlTokenSurface');
+
+    if (uP) { uP.style.backgroundColor = matchedPalette.primary; document.getElementById('urlTokenPrimaryHex').innerText = matchedPalette.primary.toUpperCase(); }
+    if (uS) { uS.style.backgroundColor = matchedPalette.secondary; document.getElementById('urlTokenSecondaryHex').innerText = matchedPalette.secondary.toUpperCase(); }
+    if (uA) { uA.style.backgroundColor = matchedPalette.accent; document.getElementById('urlTokenAccentHex').innerText = matchedPalette.accent.toUpperCase(); }
+    if (uSur) { uSur.style.backgroundColor = matchedPalette.surface; document.getElementById('urlTokenSurfaceHex').innerText = matchedPalette.surface.toUpperCase(); }
+
+    triggerConfetti();
+    showToast(`✓ Paleta extraída con éxito de ${new URL(url).hostname}`);
+    updateStitchDesign();
+  }
+
+  // Color utilities
+  function adjustColorBrightness(col, percent) {
+    let num = parseInt(col.replace('#',''), 16);
+    let amt = Math.round(2.55 * percent);
+    let R = (num >> 16) + amt;
+    let G = (num >> 8 & 0x00FF) + amt;
+    let B = (num & 0x0000FF) + amt;
+    return '#' + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+  }
+
+  function hslToHex(h, s, l) {
+    l /= 100;
+    const a = s * Math.min(l, 1 - l) / 100;
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     loadSavedState();
+    try {
+      const savedSidebar = localStorage.getItem('tonigravity_sidebar_collapsed');
+      if (savedSidebar === 'true') {
+        appState.sidebarCollapsed = true;
+      }
+    } catch(e) {}
+    applySidebarState();
     renderDirectivesList();
     renderActiveDirectiveDetails();
     renderRulesGrid();
