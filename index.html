@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tonigravity • Hub de Directrices, Skills &amp; Ecosistema IA</title>
+  <title>Tonigravity Studio • Hub de Directrices, Briefing Ágil &amp; Diseño Stitch IA</title>
   
   <!-- Favicon & Icons -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -83,7 +83,7 @@
 
 <div class="max-w-6xl mx-auto space-y-6">
 
-  <!-- HEADER (Exact Vibe Coding Style) -->
+  <!-- HEADER -->
   <header class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
     <div>
       <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider mb-3">
@@ -110,36 +110,36 @@
         <span class="px-2.5 py-0.5 text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-lg">v2.6 OS</span>
       </div>
       <p class="text-slate-600 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
-        Centro de mando para gobernar las <strong>5 Directrices Maestras</strong>, reglas globales, catálogo de skills MCP y sincronización bidireccional entre <strong>macOS</strong> y <strong>Windows</strong>.
+        Gobernanza de las <strong>5 Directrices Maestras</strong>, generador de <strong>Briefing Ágil</strong>, diseño de interfaces con <strong>Stitch IA</strong> y sincronización <strong>macOS ↔ Windows</strong>.
       </p>
     </div>
     
     <div class="flex flex-wrap gap-2 w-full md:w-auto">
-      <button onclick="openPromptBuilderModal()" class="px-4 py-2.5 bg-blue-600 text-white hover:bg-blue-700 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>✨</span> Nuevo Proyecto (Briefing)
+      <button onclick="switchTab('briefingView')" class="px-4 py-2.5 bg-blue-600 text-white hover:bg-blue-700 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
+        <span>✨</span> Briefing Ágil
+      </button>
+      <button onclick="switchTab('stitchView')" class="px-4 py-2.5 bg-purple-600 text-white hover:bg-purple-700 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
+        <span>🎨</span> Diseñar con Stitch IA
       </button>
       <button onclick="copyMasterInitPrompt()" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>⚡</span> Copiar Prompt Maestro
-      </button>
-      <button onclick="saveAllChanges()" class="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-xl transition flex items-center gap-2">
-        <span>💾</span> Guardar
+        <span>⚡</span> Prompt Maestro
       </button>
     </div>
   </header>
 
-  <!-- STATS COUNTER CARDS (Exact Vibe Coding 4-Column Metric Grid) -->
+  <!-- STATS COUNTER CARDS -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
     <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
       <div class="text-2xl md:text-3xl font-bold text-blue-600">6</div>
       <div class="text-xs text-slate-500 font-medium mt-0.5">Directrices &amp; Protocolos</div>
     </div>
     <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-emerald-600">9</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Repos Sincronizados</div>
+      <div class="text-2xl md:text-3xl font-bold text-purple-600">Stitch AI</div>
+      <div class="text-xs text-slate-500 font-medium mt-0.5">Generador de UI &amp; Mockups</div>
     </div>
     <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
-      <div class="text-2xl md:text-3xl font-bold text-purple-600">8</div>
-      <div class="text-xs text-slate-500 font-medium mt-0.5">Skills &amp; Servidores MCP</div>
+      <div class="text-2xl md:text-3xl font-bold text-emerald-600">9</div>
+      <div class="text-xs text-slate-500 font-medium mt-0.5">Repos Sincronizados</div>
     </div>
     <div class="bg-white border border-slate-200 rounded-xl p-4 card-shadow text-center">
       <div class="text-2xl md:text-3xl font-bold text-amber-600">100%</div>
@@ -147,41 +147,45 @@
     </div>
   </div>
 
-  <!-- NAVIGATION TABS BAR (Exact Vibe Coding Pill System) -->
+  <!-- NAVIGATION TABS BAR -->
   <div class="bg-slate-200/80 p-1 rounded-xl flex gap-1 overflow-x-auto text-xs md:text-sm font-medium">
-    <button id="tabBtn_directrices" onclick="switchTab('directricesView')" class="tab-btn active flex-1 py-2.5 px-4 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition whitespace-nowrap text-center">
-      🏛️ 5 Directrices Maestras (6)
+    <button id="tabBtn_directrices" onclick="switchTab('directricesView')" class="tab-btn active flex-1 py-2.5 px-3 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition whitespace-nowrap text-center">
+      🏛️ 5 Directrices Maestras
     </button>
-    <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+    <button id="tabBtn_briefing" onclick="switchTab('briefingView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+      📐 Briefing &amp; Nuevo Proyecto
+    </button>
+    <button id="tabBtn_stitch" onclick="switchTab('stitchView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+      🎨 Stitch UI Studio (Gemini)
+    </button>
+    <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
       🛡️ Reglas Globales
     </button>
-    <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+    <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
       🧩 Skills &amp; MCP (8)
     </button>
-    <button id="tabBtn_sop" onclick="switchTab('sopView')" class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      📋 Directiva SOP &amp; Memoria Viva
+    <button id="tabBtn_sop" onclick="switchTab('sopView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+      📋 Directiva SOP
     </button>
-    <button id="tabBtn_sync" onclick="switchTab('syncView')" class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      🔄 Sync Mac ↔ Windows
+    <button id="tabBtn_sync" onclick="switchTab('syncView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+      🔄 Sync Mac ↔ Win
     </button>
-    <button id="tabBtn_settings" onclick="switchTab('settingsView')" class="tab-btn flex-1 py-2.5 px-4 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      ⚙️ Persona &amp; Ajustes
+    <button id="tabBtn_settings" onclick="switchTab('settingsView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
+      ⚙️ Ajustes
     </button>
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 1: DIRECTRICES MAESTRAS (EDITOR & PREVIEW) -->
+  <!-- TAB 1: DIRECTRICES MAESTRAS -->
   <!-- ========================================================================= -->
   <div id="directricesView" class="tab-content space-y-6">
-    
-    <!-- Workspace Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
       <!-- Left Column: Directives List -->
       <div class="lg:col-span-4 space-y-3">
         <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
           <span>Seleccionar Directriz</span>
-          <span class="font-mono text-slate-400">6 Elementos</span>
+          <span class="font-mono text-slate-400">6 Archivos</span>
         </div>
 
         <div id="directivesListContainer" class="space-y-2.5">
@@ -192,7 +196,6 @@
       <!-- Right Column: Interactive Content Viewer & Editor -->
       <div class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-5">
         
-        <!-- Header & Action Switchers -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-3">
           <div>
             <div class="flex items-center gap-2">
@@ -202,7 +205,6 @@
             <p id="activeDirSummary" class="text-xs text-slate-500 mt-1">Esquema aislado, RLS obligatorio y foreign key user_id.</p>
           </div>
 
-          <!-- View Switcher -->
           <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium border border-slate-200">
             <button onclick="setDirectiveViewMode('preview')" id="viewMode-preview" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition">
               📖 Vista Formateada
@@ -213,7 +215,6 @@
           </div>
         </div>
 
-        <!-- Rules Pills -->
         <div>
           <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Reglas Clave de Cumplimiento:</span>
           <div id="activeDirRulesList" class="flex flex-wrap gap-1.5 mt-2">
@@ -221,24 +222,21 @@
           </div>
         </div>
 
-        <!-- Preview Container -->
-        <div id="directivePreviewContainer" class="prose-light max-h-[500px] overflow-y-auto p-5 bg-slate-50 border border-slate-200 rounded-xl leading-relaxed">
+        <div id="directivePreviewContainer" class="prose-light max-h-[460px] overflow-y-auto p-5 bg-slate-50 border border-slate-200 rounded-xl leading-relaxed">
           <!-- Injected rendered Markdown -->
         </div>
 
-        <!-- Editor Container -->
         <div id="directiveEditorContainer" class="hidden space-y-3">
           <textarea id="directiveMarkdownTextarea" rows="16" class="w-full font-mono text-xs bg-slate-900 text-slate-100 border border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 leading-relaxed resize-y"></textarea>
           
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-400 font-mono">Los cambios se guardan localmente en memoria y LocalStorage.</span>
             <button onclick="saveActiveDirectiveEdit()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
-              <span>✓</span> Aplicar Cambios a esta Directriz
+              <span>✓</span> Aplicar Cambios
             </button>
           </div>
         </div>
 
-        <!-- Bottom Actions -->
         <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
           <button onclick="copyActiveDirectiveMarkdown()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition flex items-center gap-2">
             <span>📋</span> Copiar Texto Completo
@@ -254,15 +252,491 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 2: REGLAS GLOBALES (RULES/) -->
+  <!-- TAB 2: BRIEFING & NUEVO PROYECTO (EXTENDIDO) -->
+  <!-- ========================================================================= -->
+  <div id="briefingView" class="tab-content hidden space-y-6">
+    
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b border-slate-100">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2">
+            <span>📐</span> Protocolo de Definición Ágil By Toni
+          </div>
+          <h2 class="text-xl font-bold text-slate-900">Configurador Completo de Nuevo Proyecto</h2>
+          <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+            Define la arquitectura técnica, modelo de negocio, nicho y tipología de la app. Los aspectos legales (RGPD DNI 34799350M) y de base de datos se heredan automáticamente.
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="passBriefingToStitch()" class="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+            <span>🎨</span> Continuar a Diseño con Stitch →
+          </button>
+        </div>
+      </div>
+
+      <!-- Extended Form Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        
+        <!-- Nombre -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">1. Nombre del Proyecto</label>
+          <input type="text" id="b-name" value="Clinica-Dental" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Slug -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">2. Slug / Identificador DB</label>
+          <input type="text" id="b-slug" value="com_clinicadental" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Tipo de Proyecto -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">3. Tipo de Proyecto</label>
+          <select id="b-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Web App (SaaS / Dashboard Pro)">Web App (SaaS / Dashboard Pro)</option>
+            <option value="Membresía / Comunidad Privada & Cursos (LMS)">Membresía / Comunidad Privada &amp; Cursos (LMS)</option>
+            <option value="Mobile App (PWA / iOS & Android / Flutter)">Mobile App (PWA / iOS &amp; Android / Flutter)</option>
+            <option value="Landing Page & Embudo de Conversión">Landing Page &amp; Embudo de Conversión</option>
+            <option value="Marketplace / Ecommerce B2B o B2C">Marketplace / E-commerce B2B o B2C</option>
+            <option value="Plataforma de Trading & Analítica Algorítmica">Plataforma de Trading &amp; Analítica Algorítmica</option>
+            <option value="Agente Autónomo / Bot Multiplataforma (WhatsApp/TG)">Agente Autónomo / Bot Multiplataforma</option>
+            <option value="Herramienta Interna / CLI & Backend">Herramienta Interna / CLI &amp; Backend</option>
+          </select>
+        </div>
+
+        <!-- Nicho -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">4. Nicho de Mercado</label>
+          <select id="b-niche" onchange="updateSubnicheOptions()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Salud & Bienestar">Salud, Belleza &amp; Bienestar (Clínicas &amp; Estética)</option>
+            <option value="Educación & E-learning">Educación &amp; E-learning (EdTech / Cursos)</option>
+            <option value="Finanzas & Trading">Finanzas, Inversión &amp; Trading (FinTech)</option>
+            <option value="Hostelería & Restaurantes">Hostelería, Restaurantes &amp; Eventos (FoodTech)</option>
+            <option value="Fitness & Deportes">Fitness, Gimnasios &amp; Nutrición</option>
+            <option value="Inmobiliaria & PropTech">Inmobiliaria, Alquileres &amp; PropTech</option>
+            <option value="Productividad & Agentes IA">Productividad, IA &amp; Automatización No-Code</option>
+            <option value="Movilidad & Talleres">Movilidad, Talleres &amp; Tiendas Físicas</option>
+            <option value="Legal & Consultoría">Legal, Gestorías &amp; Consultoría Profesional</option>
+            <option value="Creadores & Media">Creadores de Contenido &amp; Creator Economy</option>
+          </select>
+        </div>
+
+        <!-- Subnicho (Reactivo) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">5. Subnicho Específico</label>
+          <select id="b-subniche" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Clínicas Dentales & Odontología">Clínicas Dentales &amp; Odontología</option>
+            <option value="Fisioterapia & Osteopatía">Fisioterapia &amp; Osteopatía</option>
+            <option value="Psicología & Terapia Online">Psicología &amp; Terapia Online</option>
+            <option value="Medicina Estética & Spa">Medicina Estética &amp; Spa</option>
+          </select>
+        </div>
+
+        <!-- Plan de Monetización -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">6. Plan de Monetización</label>
+          <select id="b-monetization" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="SaaS Suscripción Recurrente (Stripe Billing)">SaaS Suscripción Recurrente (Stripe Billing)</option>
+            <option value="Membresía VIP / Acceso Continuo (Skool/Stripe)">Membresía VIP / Acceso Continuo</option>
+            <option value="Pago Único de Licencia / Acceso Vitalicio (Lifetime)">Pago Único de Licencia (Lifetime Deal)</option>
+            <option value="Freemium (Plan Gratuito + Upgrade Pro)">Freemium (Plan Free + Upgrade Pro)</option>
+            <option value="Créditos / Pago por Uso (Tokens / Pay as you go)">Créditos / Pago por Uso (Tokens)</option>
+            <option value="Comisión por Transacción (Marketplace Take-Rate)">Comisión por Transacción (Marketplace)</option>
+            <option value="Freeware 100% Gratuito / Lead Magnet (I+D)">Freeware 100% Gratuito / Lead Magnet</option>
+            <option value="Uso Interno de Toni (Sin Cobro)">Uso Interno de Toni (Sin Cobro)</option>
+          </select>
+        </div>
+
+        <!-- Base de Datos -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">7. Base de Datos / Persistencia</label>
+          <select id="b-db" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
+            <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
+            <option value="SQLite / DuckDB Local-First">SQLite / DuckDB Local-First</option>
+          </select>
+        </div>
+
+        <!-- Autenticación & Roles -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">8. Autenticación &amp; Roles</label>
+          <select id="b-auth" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]">Supabase Auth Multi-Role (Admin + Staff + Cliente)</option>
+            <option value="Supabase Auth Estándar (Email + Password)">Supabase Auth Estándar (Email + Password)</option>
+            <option value="No - Acceso Público / Sin Login">No - Acceso Público / Sin Login</option>
+          </select>
+        </div>
+
+        <!-- IA & Modelo -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">9. Inteligencia Artificial</label>
+          <select id="b-ai" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Google Gemini 2.0 Flash (Streaming SSE & Ultra Baja Latencia)">Google Gemini 2.0 Flash (Streaming SSE)</option>
+            <option value="Anthropic Claude 3.5 Sonnet (Razonamiento Complejo)">Anthropic Claude 3.5 Sonnet</option>
+            <option value="OpenAI GPT-4o (Multimodal & Voice)">OpenAI GPT-4o</option>
+            <option value="DeepSeek V3 / Groq Llama 3 (Alta Velocidad)">DeepSeek V3 / Groq Llama 3</option>
+            <option value="No Requiere IA">No Requiere IA</option>
+          </select>
+        </div>
+
+        <!-- Tagline / Propuesta de Valor -->
+        <div class="md:col-span-3">
+          <label class="block font-bold text-slate-700 mb-1">10. Propuesta de Valor / Tagline (1 Frase)</label>
+          <input type="text" id="b-tagline" value="Plataforma todo en uno para automatizar citas, historiales y recordatorios automáticos por WhatsApp." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+      </div>
+
+      <!-- Compiled Master Prompt Box -->
+      <div class="space-y-2 pt-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-600 uppercase font-mono">Prompt Maestro de Inicialización Compilado:</span>
+          <button onclick="copyBriefingPrompt()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+            <span>📋 Copiar Prompt</span>
+          </button>
+        </div>
+        <pre id="b-compiled-prompt" class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-52 border border-slate-800 leading-relaxed"></pre>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
+        <button onclick="copyBriefingPrompt()" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2">
+          <span>⚡</span> Copiar Prompt para Antigravity
+        </button>
+        <button onclick="passBriefingToStitch()" class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
+          <span>🎨</span> Pasar al Estudio de Diseño con Stitch IA →
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TAB 3: STITCH UI STUDIO (DISEÑO & GENERADOR DE INTERFACES IA) -->
+  <!-- ========================================================================= -->
+  <div id="stitchView" class="tab-content hidden space-y-6">
+    
+    <!-- Stitch Studio Header -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider mb-2">
+          <span>🧵</span> Google Stitch (Project Nemo) &amp; Gemini 2.0 Integration
+        </div>
+        <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+          Stitch UI Studio: Generador Visual de Interfaces
+        </h2>
+        <p class="text-slate-600 text-xs md:text-sm mt-1 max-w-2xl leading-relaxed">
+          Diseña interfaces completas para tu proyecto seleccionando tipo de interfaz, paletas de color, pantallas clave y archivos de referencia (<code class="font-mono bg-purple-50 text-purple-700 px-1 py-0.5 rounded">.pen</code>, mockups o imágenes).
+        </p>
+      </div>
+      
+      <div class="flex gap-2">
+        <button onclick="openStitchWeb()" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
+          <span>↗️</span> Abrir stitch.withgoogle.com
+        </button>
+      </div>
+    </div>
+
+    <!-- Step-by-Step UI Design Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Config Column: Styles, Colors & Components -->
+      <div class="lg:col-span-5 space-y-5">
+        
+        <!-- Step 1: Interface Style -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">1. Tipo de Interfaz / Estilo Visual</span>
+            <span class="text-[10px] font-mono text-purple-600 font-bold">ESTILO</span>
+          </div>
+
+          <div class="space-y-2" id="styleOptionsContainer">
+            <label class="flex items-center justify-between p-3 rounded-xl border border-blue-200 bg-blue-50/50 cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="uiStyle" value="vibe_clean" checked onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
+                <div>
+                  <div class="text-xs font-bold text-slate-900">Vibe Coding Clean Light</div>
+                  <div class="text-[10px] text-slate-500">Blanco nítido, slate-900, azul royal y tarjetas suaves.</div>
+                </div>
+              </div>
+              <span class="text-xs">✨</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="uiStyle" value="glass_dark" onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
+                <div>
+                  <div class="text-xs font-bold text-slate-900">Glassmorphism Cyber Dark</div>
+                  <div class="text-[10px] text-slate-500">Fondo oscuro, neon cian/violeta y paneles blur traslúcidos.</div>
+                </div>
+              </div>
+              <span class="text-xs">🌌</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="uiStyle" value="fintech_stripe" onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
+                <div>
+                  <div class="text-xs font-bold text-slate-900">FinTech Stripe Minimal</div>
+                  <div class="text-[10px] text-slate-500">Tipografía refinada, ultra legible con micro-bordes elegantes.</div>
+                </div>
+              </div>
+              <span class="text-xs">💳</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="uiStyle" value="mobile_ios" onchange="updateStitchDesign()" class="text-blue-600 focus:ring-blue-500">
+                <div>
+                  <div class="text-xs font-bold text-slate-900">Mobile Ergonomic iOS PWA</div>
+                  <div class="text-[10px] text-slate-500">Navegación inferior táctil, tarjetas swipeables y safe-areas.</div>
+                </div>
+              </div>
+              <span class="text-xs">📱</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 2: Color Palette -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">2. Gama de Color Principal</span>
+            <span class="text-[10px] font-mono text-blue-600 font-bold">TOKENS</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2" id="paletteGrid">
+            
+            <button onclick="selectPalette('blue_royal', '#2563eb', '#1e40af')" class="palette-btn p-2.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-left transition flex items-center gap-2">
+              <div class="flex -space-x-1">
+                <span class="w-4 h-4 rounded-full bg-blue-600"></span>
+                <span class="w-4 h-4 rounded-full bg-indigo-500"></span>
+              </div>
+              <span class="text-xs font-bold text-slate-900">Azul &amp; Índigo</span>
+            </button>
+
+            <button onclick="selectPalette('emerald_mint', '#059669', '#10b981')" class="palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100">
+              <div class="flex -space-x-1">
+                <span class="w-4 h-4 rounded-full bg-emerald-600"></span>
+                <span class="w-4 h-4 rounded-full bg-teal-400"></span>
+              </div>
+              <span class="text-xs font-bold text-slate-900">Esmeralda</span>
+            </button>
+
+            <button onclick="selectPalette('purple_violet', '#7c3aed', '#d946ef')" class="palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100">
+              <div class="flex -space-x-1">
+                <span class="w-4 h-4 rounded-full bg-purple-600"></span>
+                <span class="w-4 h-4 rounded-full bg-fuchsia-500"></span>
+              </div>
+              <span class="text-xs font-bold text-slate-900">Violeta AI</span>
+            </button>
+
+            <button onclick="selectPalette('amber_slate', '#d97706', '#f59e0b')" class="palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100">
+              <div class="flex -space-x-1">
+                <span class="w-4 h-4 rounded-full bg-amber-500"></span>
+                <span class="w-4 h-4 rounded-full bg-slate-800"></span>
+              </div>
+              <span class="text-xs font-bold text-slate-900">Ámbar Gold</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Step 3: Reference Files & Pencil Dropzone -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">3. Archivos de Referencia (.pen / Logos)</span>
+            <span class="text-[10px] font-mono text-emerald-600 font-bold">PENCIL</span>
+          </div>
+
+          <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center hover:border-purple-400 transition cursor-pointer bg-slate-50/50" onclick="document.getElementById('stitchFileInput').click()">
+            <input type="file" id="stitchFileInput" multiple accept=".pen,.png,.jpg,.jpeg,.svg,.json" class="hidden" onchange="handleStitchFiles(event)">
+            <span class="text-2xl">📁</span>
+            <div class="text-xs font-bold text-slate-700 mt-1">Arrastra archivos .pen, logos o mockups</div>
+            <div class="text-[11px] text-slate-500">Compatible con Pencil dev y Stitch MCP</div>
+          </div>
+          <div id="stitchFilesList" class="text-xs space-y-1">
+            <!-- Uploaded reference files injected here -->
+          </div>
+        </div>
+
+        <!-- Step 4: Component Checkboxes -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
+          <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">4. Pantallas &amp; Módulos a Generar</span>
+          
+          <div class="space-y-2 text-xs">
+            <label class="flex items-center gap-2 text-slate-700 font-medium">
+              <input type="checkbox" id="comp-navbar" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
+              <span>Navbar con Branding "By Toni"</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-700 font-medium">
+              <input type="checkbox" id="comp-hero" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
+              <span>Hero Section de Alta Conversión con CTA</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-700 font-medium">
+              <input type="checkbox" id="comp-dashboard" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
+              <span>Dashboard de Control con KPIs y Gráficos</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-700 font-medium">
+              <input type="checkbox" id="comp-crud" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
+              <span>Tabla de Gestión de Datos con Filtros</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-700 font-medium">
+              <input type="checkbox" id="comp-ai" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
+              <span>Ventana de Chat Copilot IA (Streaming SSE)</span>
+            </label>
+            <label class="flex items-center gap-2 text-slate-700 font-medium">
+              <input type="checkbox" id="comp-legal" checked onchange="updateStitchDesign()" class="rounded text-purple-600 focus:ring-purple-500">
+              <span>Footer Legal (/privacidad con DNI 34799350M)</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Live Mockup Canvas & Generated Code -->
+      <div class="lg:col-span-7 space-y-5">
+        
+        <!-- Mockup Preview Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
+              <span>🖥️</span>
+              <span id="canvasProjectTitle">Vista Previa de Interfaz: Clinica-Dental</span>
+            </div>
+            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium">
+              <button onclick="setStitchViewTab('mockup')" id="stitchTab-mockup" class="px-3 py-1 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition">
+                Lienzo UI
+              </button>
+              <button onclick="setStitchViewTab('prompt')" id="stitchTab-prompt" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                Prompt Stitch MCP
+              </button>
+              <button onclick="setStitchViewTab('code')" id="stitchTab-code" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                Código React
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab 1: Live Interactive Mockup Container -->
+          <div id="stitchMockupContainer" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[420px] space-y-4">
+            
+            <!-- Mockup Header -->
+            <div id="mockupNavbar" class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div id="mockupLogoDot" class="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center text-white text-xs font-bold">🦷</div>
+                <span id="mockupBrandText" class="font-bold text-slate-900 text-xs">Clinica-Dental</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-600 font-medium">
+                <span>Citas</span>
+                <span>Pacientes</span>
+                <button id="mockupPrimaryBtn" class="px-3 py-1 bg-blue-600 text-white rounded-lg font-semibold text-xs shadow-sm">
+                  + Nueva Cita
+                </button>
+              </div>
+            </div>
+
+            <!-- Mockup Hero / Stats -->
+            <div id="mockupHero" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span id="mockupBadge" class="px-2.5 py-0.5 text-[10px] font-semibold bg-blue-50 text-blue-700 rounded-full border border-blue-200">
+                    SISTEMA ACTIVO
+                  </span>
+                  <h3 id="mockupHeroTitle" class="text-base font-extrabold text-slate-900 mt-1">Gestión Odontológica Inteligente</h3>
+                  <p id="mockupHeroDesc" class="text-xs text-slate-500 mt-0.5">Control de historiales clínicos, agenda y recordatorios automáticos.</p>
+                </div>
+                <div class="text-right">
+                  <div class="text-xl font-extrabold text-blue-600" id="mockupMetricText">142</div>
+                  <div class="text-[10px] text-slate-400 font-medium">Pacientes este mes</div>
+                </div>
+              </div>
+
+              <!-- Mini Table in Mockup -->
+              <div class="pt-2 border-t border-slate-100">
+                <table class="w-full text-left text-[11px]">
+                  <thead>
+                    <tr class="text-slate-400 border-b border-slate-100 font-medium">
+                      <th class="py-1">Paciente</th>
+                      <th class="py-1">Tratamiento</th>
+                      <th class="py-1">Hora</th>
+                      <th class="py-1 text-right">Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-50 text-slate-700">
+                    <tr>
+                      <td class="py-1.5 font-semibold">Laura Sánchez</td>
+                      <td class="py-1.5">Limpieza &amp; Revisión</td>
+                      <td class="py-1.5 font-mono">10:30</td>
+                      <td class="py-1.5 text-right text-emerald-600 font-bold">Confirmada</td>
+                    </tr>
+                    <tr>
+                      <td class="py-1.5 font-semibold">Carlos Méndez</td>
+                      <td class="py-1.5">Ortodoncia Invisible</td>
+                      <td class="py-1.5 font-mono">11:15</td>
+                      <td class="py-1.5 text-right text-blue-600 font-bold">En Sala</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Mockup Footer -->
+            <div id="mockupFooter" class="p-2.5 bg-white border border-slate-200 rounded-xl text-center text-[10px] text-slate-400 flex items-center justify-between">
+              <span>© 2026 Antonio Javier García García (DNI 34799350M)</span>
+              <span class="font-bold text-blue-600">Desarrollado · By Toni</span>
+            </div>
+
+          </div>
+
+          <!-- Tab 2: Compiled Stitch Prompt (Hidden by default) -->
+          <div id="stitchPromptContainer" class="hidden space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase font-mono">Prompt Compilado para Stitch MCP:</span>
+              <button onclick="copyStitchPrompt()" class="text-xs text-purple-600 hover:text-purple-800 font-semibold flex items-center gap-1">
+                <span>📋 Copiar Prompt Stitch</span>
+              </button>
+            </div>
+            <pre id="stitchCompiledPromptText" class="bg-slate-900 text-purple-300 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-80 border border-slate-800 leading-relaxed"></pre>
+          </div>
+
+          <!-- Tab 3: Generated React Code (Hidden by default) -->
+          <div id="stitchCodeContainer" class="hidden space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase font-mono">Código React 19 + Tailwind CSS:</span>
+              <button onclick="copyStitchReactCode()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                <span>📋 Copiar Código JSX</span>
+              </button>
+            </div>
+            <pre id="stitchGeneratedCodeText" class="bg-slate-900 text-sky-300 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-80 border border-slate-800 leading-relaxed"></pre>
+          </div>
+
+          <!-- Bottom Action Buttons for Stitch -->
+          <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
+            <button onclick="openStitchWeb()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-2">
+              <span>🧵</span> Abrir en Google Stitch
+            </button>
+
+            <button onclick="copyStitchPrompt()" class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md flex items-center gap-2">
+              <span>⚡</span> Generar con Stitch MCP (1-Clic)
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TAB 4: REGLAS GLOBALES (RULES/) -->
   <!-- ========================================================================= -->
   <div id="rulesView" class="tab-content hidden space-y-6">
-    
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
         <h2 class="text-lg font-bold text-slate-900">Reglas Globales Activas de Antigravity</h2>
         <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
-          Estas reglas residen en <code class="text-blue-700 font-mono bg-blue-50 px-1.5 py-0.5 rounded">~/.gemini/config/rules/</code> y se inyectan en todas las conversaciones de los agentes.
+          Residen en <code class="text-blue-700 font-mono bg-blue-50 px-1.5 py-0.5 rounded">~/.gemini/config/rules/</code> y se inyectan en todas las conversaciones.
         </p>
       </div>
       <button onclick="openNewRuleModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
@@ -276,10 +750,9 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 3: SKILLS & SERVIDORES MCP -->
+  <!-- TAB 5: SKILLS & MCP -->
   <!-- ========================================================================= -->
   <div id="skillsView" class="tab-content hidden space-y-6">
-    
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 border border-purple-200 rounded-full text-purple-700 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -301,10 +774,9 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 4: DIRECTIVAS SOP & MEMORIA VIVA -->
+  <!-- TAB 6: DIRECTIVAS SOP & MEMORIA VIVA -->
   <!-- ========================================================================= -->
   <div id="sopView" class="tab-content hidden space-y-6">
-    
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -312,7 +784,7 @@
         </div>
         <h2 class="text-lg font-bold text-slate-900">Directiva de Tarea (SOP) &amp; Memoria Viva</h2>
         <p class="text-xs text-slate-500 mt-1 max-w-3xl leading-relaxed">
-          Estructura para tareas complejas subordinada a las 5 directrices maestras, con tabla de auto-corrección para evitar regresiones de errores.
+          Estructura para tareas complejas con tabla de auto-corrección para evitar regresiones de errores.
         </p>
       </div>
       <button onclick="exportSOPTemplate()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-xl transition shadow-sm flex items-center gap-2">
@@ -320,7 +792,6 @@
       </button>
     </div>
 
-    <!-- Self-Correction Table Card -->
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
@@ -359,10 +830,9 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 5: SYNC MULTIPLATAFORMA (MAC ↔ WINDOWS) -->
+  <!-- TAB 7: SYNC MAC ↔ WINDOWS -->
   <!-- ========================================================================= -->
   <div id="syncView" class="tab-content hidden space-y-6">
-    
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -378,10 +848,7 @@
       </button>
     </div>
 
-    <!-- Commands Quick Copy Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      
-      <!-- macOS Box -->
       <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
         <div class="flex items-center justify-between">
           <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -395,7 +862,6 @@
 ./sync.sh "Actualizadas directrices maestras"</pre>
       </div>
 
-      <!-- Windows Box -->
       <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow space-y-3">
         <div class="flex items-center justify-between">
           <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -408,12 +874,10 @@
         <pre id="winSyncCmd" class="bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono overflow-x-auto">cd C:\Proyectos\antigravity-config
 .\sync.ps1 "Actualizadas directrices maestras"</pre>
       </div>
-
     </div>
 
-    <!-- Projects Grid -->
     <div class="space-y-3">
-      <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Repositorios Registrados en projects.json:</h3>
+      <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Repositorios Registrados:</h3>
       <div id="projectsListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Injected dynamically -->
       </div>
@@ -421,10 +885,9 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- TAB 6: PERSONA & AJUSTES GLOBALES -->
+  <!-- TAB 8: AJUSTES & BACKUP -->
   <!-- ========================================================================= -->
   <div id="settingsView" class="tab-content hidden space-y-6">
-    
     <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow">
       <h2 class="text-lg font-bold text-slate-900">Configuración de Comportamiento &amp; Agente</h2>
       <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
@@ -433,8 +896,6 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      
-      <!-- Persona Mode Card -->
       <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
         <h3 class="text-xs font-bold text-blue-700 uppercase tracking-wider font-mono">Modo Operativo del Agente</h3>
 
@@ -454,18 +915,9 @@
               <div class="text-[11px] text-slate-500 mt-0.5">Prioriza validación de esquemas Zod, RLS estricto y prevención de fugas de datos antes de escribir código UI.</div>
             </div>
           </label>
-
-          <label class="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition">
-            <input type="radio" name="agentMode" value="vibe_creator" class="mt-1 text-blue-600 focus:ring-blue-500">
-            <div>
-              <div class="text-xs font-bold text-slate-900">Vibe Coding &amp; Prototipado Rápido</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Enfoque en velocidad de entrega visual, diseño WOW e interactividad instantánea.</div>
-            </div>
-          </label>
         </div>
       </div>
 
-      <!-- Global Backup Card -->
       <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-4">
         <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-wider font-mono">Copia de Seguridad &amp; Exportación JSON</h3>
 
@@ -484,7 +936,6 @@
           </label>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -495,7 +946,7 @@
       <span>© 2026 Antonio Javier García García (DNI 34799350M, Madrid)</span>
     </div>
     <div class="flex items-center gap-3 font-medium">
-      <span class="text-blue-600 font-bold">Tonigravity Suite</span>
+      <span class="text-blue-600 font-bold">Tonigravity Studio</span>
       <span>•</span>
       <span class="text-slate-700 font-semibold">Desarrollado con excelencia · By Toni</span>
     </div>
@@ -503,97 +954,7 @@
 
 </div>
 
-<!-- ========================================================================= -->
-<!-- MODAL: PROMPT BUILDER / BRIEFING ÁGIL -->
-<!-- ========================================================================= -->
-<div id="promptBuilderModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-  <div class="bg-white border border-slate-200 max-w-2xl w-full rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
-    
-    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center font-bold text-sm">
-          ⚡
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-slate-900">Generador de Briefing Ágil (Prompt Maestro)</h3>
-          <p class="text-xs text-slate-500">Completa los campos y obtén el prompt maestro con las 5 directrices incorporadas.</p>
-        </div>
-      </div>
-      <button onclick="closePromptBuilderModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg p-1">✕</button>
-    </div>
-
-    <!-- Grid Inputs -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
-      <div>
-        <label class="block font-bold text-slate-700 mb-1">Nombre del Proyecto</label>
-        <input type="text" id="pb-name" value="Clinica-Dental" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-
-      <div>
-        <label class="block font-bold text-slate-700 mb-1">Slug / Identificador</label>
-        <input type="text" id="pb-slug" value="com_clinicadental" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-
-      <div>
-        <label class="block font-bold text-slate-700 mb-1">Categoría</label>
-        <select id="pb-category" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="Comercial / Clientes">Comercial / Clientes (com_*)</option>
-          <option value="Suite Toni (Propio / I+D)">Suite Toni Propio / I+D (mia_*)</option>
-          <option value="Prototipo Rápido / Demo">Prototipo Rápido / Demo</option>
-          <option value="Herramienta Interna / CLI">Herramienta Interna / CLI</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block font-bold text-slate-700 mb-1">Base de Datos</label>
-        <select id="pb-db" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
-          <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
-          <option value="SQLite / DuckDB Local">SQLite / DuckDB Local</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block font-bold text-slate-700 mb-1">Autenticación</label>
-        <select id="pb-auth" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="Sí - Supabase Auth (Email + Magic Link)">Sí - Supabase Auth (Email + Magic Link)</option>
-          <option value="Sí - OAuth (Google / GitHub)">Sí - OAuth (Google / GitHub)</option>
-          <option value="No - Acceso Público / Libre">No - Acceso Público / Libre</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block font-bold text-slate-700 mb-1">Integración IA</label>
-        <select id="pb-ai" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="Asistente Conversacional / Chatbot (SSE)">Asistente Conversacional / Chatbot (SSE)</option>
-          <option value="Agente Autónomo / Tool Calling">Agente Autónomo / Tool Calling</option>
-          <option value="Análisis & Procesamiento de Datos">Análisis & Procesamiento de Datos</option>
-          <option value="No Requiere IA">No Requiere IA</option>
-        </select>
-      </div>
-
-      <div class="sm:col-span-2">
-        <label class="block font-bold text-slate-700 mb-1">Propuesta de Valor (1 Frase)</label>
-        <input type="text" id="pb-tagline" value="Gestión odontológica inteligente con recordatorios automáticos por WhatsApp." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-    </div>
-
-    <!-- Compiled Preview -->
-    <div class="space-y-1.5">
-      <label class="block font-mono text-xs font-bold text-slate-600 uppercase">Prompt Compilado:</label>
-      <pre id="pb-compiled-prompt" class="bg-slate-900 text-emerald-400 p-3.5 rounded-xl text-xs font-mono overflow-x-auto max-h-40 border border-slate-800"></pre>
-    </div>
-
-    <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-      <button onclick="closePromptBuilderModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cerrar</button>
-      <button onclick="copyCompiledBriefingPrompt()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1.5">
-        <span>📋</span> Copiar Prompt al Portapapeles
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST NOTIFICATION -->
+<!-- TOAST -->
 <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl transition-all duration-300 transform translate-y-24 opacity-0 flex items-center gap-2.5 text-xs font-medium border border-slate-800">
   <span id="toastIcon" class="text-blue-400">✓</span>
   <span id="toastMessage">Operación realizada con éxito.</span>
@@ -601,7 +962,70 @@
 
 <!-- SCRIPT LOGIC -->
 <script>
-  // Initial Datasets
+  // Nichos & Subnichos Mapping
+  const NICHE_DATA = {
+    "Salud & Bienestar": [
+      "Clínicas Dentales & Odontología",
+      "Fisioterapia & Osteopatía",
+      "Psicología & Terapia Online",
+      "Medicina Estética & Spa"
+    ],
+    "Educación & E-learning": [
+      "Academia de Cursos Online (LMS)",
+      "Bootcamp de Programación & IA",
+      "Preparación de Oposiciones",
+      "Idiomas & Clases Particulares"
+    ],
+    "Finanzas & Trading": [
+      "Trading Algorítmico & Forex/Cripto",
+      "Gestor de Finanzas Personales & Ahorro",
+      "Facturación & Presupuestos para Autónomos",
+      "Asesoría Fiscal & Contabilidad"
+    ],
+    "Hostelería & Restaurantes": [
+      "Restaurante con KDS & Comandas en Vivo",
+      "Cafetería & Pedidos QR",
+      "Dark Kitchen & Delivery Propio",
+      "Gestión de Reservas & Mesas"
+    ],
+    "Fitness & Deportes": [
+      "Gimnasio & Reservas de Clases",
+      "Entrenador Personal & Rutinas App",
+      "Nutrición Deportiva & Planes de Dieta",
+      "Club de Padel / Ciclismo"
+    ],
+    "Inmobiliaria & PropTech": [
+      "Portal Inmobiliario & Alquiler Vacacional",
+      "Gestión de Propiedades & Inquilinos",
+      "Tours Virtuales & Valoración con IA",
+      "Inversión en Crowdfunding Inmobiliario"
+    ],
+    "Productividad & Agentes IA": [
+      "Suite de Automatización con n8n & IA",
+      "Generador de Contenidos & Reels",
+      "Gestor de Tareas & SOPs para Equipos",
+      "Chatbots de Atención 24/7"
+    ],
+    "Movilidad & Talleres": [
+      "Taller de Bicicletas & Citas Online",
+      "Taller Mecánico & Mantenimiento ITV",
+      "Alquiler de Vehículos / Patinetes",
+      "Ecommerce de Recambios & Accesorios"
+    ],
+    "Legal & Consultoría": [
+      "Despacho de Abogados & Contratos",
+      "Gestoría & Asesoría Laboral",
+      "Consultoría Estratégica B2B",
+      "Auditoría de Cumplimiento RGPD"
+    ],
+    "Creadores & Media": [
+      "Membresía de Contenido Exclusivo",
+      "Plataforma de Podcasts & Vídeo",
+      "Agencia de Marketing & Influencers",
+      "Newsletter Premium & Sponsors"
+    ]
+  };
+
   const DEFAULT_DIRECTIVES = [
     {
       id: 'dir_definicion',
@@ -747,70 +1171,14 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
   ];
 
   const DEFAULT_SKILLS = [
-    {
-      id: 'pencil-dev',
-      title: 'Pencil Visual AI',
-      icon: '🎨',
-      type: 'Diseño & Canvas',
-      desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.',
-      active: true
-    },
-    {
-      id: 'stitch',
-      title: 'Google Stitch (Project Nemo)',
-      icon: '🧵',
-      type: 'Generación UI Gemini',
-      desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.',
-      active: true
-    },
-    {
-      id: 'ui-ux-expert',
-      title: 'UI/UX Desktop Expert',
-      icon: '✨',
-      type: 'Experiencia de Usuario',
-      desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.',
-      active: true
-    },
-    {
-      id: 'mobile-ui-ux-expert',
-      title: 'Mobile UI/UX Expert',
-      icon: '📱',
-      type: 'Mobile & PWA',
-      desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.',
-      active: true
-    },
-    {
-      id: 'accidental-data-loss-prevention',
-      title: 'Data Loss Prevention',
-      icon: '🛡️',
-      type: 'Seguridad',
-      desc: 'Bloqueo automático de comandos destructivos que provoquen pérdida irreversible de datos.',
-      active: true
-    },
-    {
-      id: 'telegram',
-      title: 'Telegram Bot MCP',
-      icon: '✈️',
-      type: 'Notificaciones',
-      desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.',
-      active: true
-    },
-    {
-      id: 'whatsapp',
-      title: 'WhatsApp Baileys MCP',
-      icon: '💬',
-      type: 'Mensajería',
-      desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.',
-      active: true
-    },
-    {
-      id: 'supabase-mcp',
-      title: 'Supabase MCP Management',
-      icon: '🗄️',
-      type: 'Base de Datos',
-      desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.',
-      active: true
-    }
+    { id: 'pencil-dev', title: 'Pencil Visual AI', icon: '🎨', type: 'Diseño & Canvas', desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.' },
+    { id: 'stitch', title: 'Google Stitch (Project Nemo)', icon: '🧵', type: 'Generación UI Gemini', desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.' },
+    { id: 'ui-ux-expert', title: 'UI/UX Desktop Expert', icon: '✨', type: 'Experiencia de Usuario', desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.' },
+    { id: 'mobile-ui-ux-expert', title: 'Mobile UI/UX Expert', icon: '📱', type: 'Mobile & PWA', desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.' },
+    { id: 'accidental-data-loss-prevention', title: 'Data Loss Prevention', icon: '🛡️', type: 'Seguridad', desc: 'Bloqueo de comandos destructivos que provoquen pérdida irreversible de datos.' },
+    { id: 'telegram', title: 'Telegram Bot MCP', icon: '✈️', type: 'Notificaciones', desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.' },
+    { id: 'whatsapp', title: 'WhatsApp Baileys MCP', icon: '💬', type: 'Mensajería', desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.' },
+    { id: 'supabase-mcp', title: 'Supabase MCP Management', icon: '🗄️', type: 'Base de Datos', desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.' }
   ];
 
   const DEFAULT_PROJECTS = [
@@ -842,7 +1210,7 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     }
   ];
 
-  // State Container
+  // App State
   let appState = {
     directives: JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES)),
     rules: JSON.parse(JSON.stringify(DEFAULT_RULES)),
@@ -850,13 +1218,19 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     projects: JSON.parse(JSON.stringify(DEFAULT_PROJECTS)),
     memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
     activeDirectiveId: 'dir_supabase',
-    directiveViewMode: 'preview'
+    directiveViewMode: 'preview',
+    stitchDesign: {
+      palette: 'blue_royal',
+      primaryColor: '#2563eb',
+      secondaryColor: '#1e40af',
+      uiStyle: 'vibe_clean',
+      uploadedFiles: []
+    }
   };
 
-  // State Persistence
   function loadSavedState() {
     try {
-      const saved = localStorage.getItem('tonigravity_state_v3');
+      const saved = localStorage.getItem('tonigravity_state_v4');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.directives) appState.directives = parsed.directives;
@@ -868,7 +1242,7 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     }
   }
 
-  // Render Functions
+  // Render Directives List
   function renderDirectivesList() {
     const container = document.getElementById('directivesListContainer');
     container.innerHTML = appState.directives.map(dir => {
@@ -892,7 +1266,6 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
 
   function renderActiveDirectiveDetails() {
     const dir = appState.directives.find(d => d.id === appState.activeDirectiveId) || appState.directives[0];
-    
     document.getElementById('activeDirIcon').innerText = dir.icon;
     document.getElementById('activeDirTitle').innerText = dir.title;
     document.getElementById('activeDirSummary').innerText = dir.summary;
@@ -908,7 +1281,6 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     const previewContainer = document.getElementById('directivePreviewContainer');
     const sanitizedHTML = DOMPurify.sanitize(marked.parse(dir.markdownContent));
     previewContainer.innerHTML = sanitizedHTML;
-
     document.getElementById('directiveMarkdownTextarea').value = dir.markdownContent;
   }
 
@@ -1003,18 +1375,21 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
 
   // Tab Switcher
   function switchTab(tabId) {
-    const tabs = ['directricesView', 'rulesView', 'skillsView', 'sopView', 'syncView', 'settingsView'];
+    const tabs = ['directricesView', 'briefingView', 'stitchView', 'rulesView', 'skillsView', 'sopView', 'syncView', 'settingsView'];
     tabs.forEach(t => {
       const content = document.getElementById(t);
       const btn = document.getElementById(`tabBtn_${t.replace('View', '')}`);
       if (t === tabId) {
         content.classList.remove('hidden');
-        btn.className = 'tab-btn active flex-1 py-2.5 px-4 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition whitespace-nowrap text-center';
+        if (btn) btn.className = 'tab-btn active flex-1 py-2.5 px-3 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition whitespace-nowrap text-center';
       } else {
         content.classList.add('hidden');
-        btn.className = 'tab-btn flex-1 py-2.5 px-4 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center';
+        if (btn) btn.className = 'tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center';
       }
     });
+
+    if (tabId === 'briefingView') updateBriefingCompiledPrompt();
+    if (tabId === 'stitchView') updateStitchDesign();
   }
 
   function selectDirective(id) {
@@ -1079,7 +1454,7 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     const prompt = `Aplica la ${dir.title}: Asegura el estricto cumplimiento de sus reglas en este desarrollo.`;
     navigator.clipboard.writeText(prompt);
     triggerConfetti();
-    showToast('✓ Prompt de aplicación rápida copiado.');
+    showToast('✓ Prompt copiado.');
   }
 
   function copyMasterInitPrompt() {
@@ -1094,13 +1469,191 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     showToast('⚡ Prompt Maestro de Inicialización copiado.');
   }
 
-  function copyCommand(elementId) {
-    const text = document.getElementById(elementId).innerText;
-    navigator.clipboard.writeText(text);
-    triggerConfetti();
-    showToast('✓ Comando copiado.');
+  // Briefing Logic
+  function updateSubnicheOptions() {
+    const niche = document.getElementById('b-niche').value;
+    const subSelect = document.getElementById('b-subniche');
+    const options = NICHE_DATA[niche] || ["General / Personalizado"];
+    subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+    updateBriefingCompiledPrompt();
   }
 
+  function updateBriefingCompiledPrompt() {
+    const name = document.getElementById('b-name').value;
+    const slug = document.getElementById('b-slug').value;
+    const type = document.getElementById('b-type').value;
+    const niche = document.getElementById('b-niche').value;
+    const subniche = document.getElementById('b-subniche').value;
+    const monetization = document.getElementById('b-monetization').value;
+    const db = document.getElementById('b-db').value;
+    const auth = document.getElementById('b-auth').value;
+    const ai = document.getElementById('b-ai').value;
+    const tagline = document.getElementById('b-tagline').value;
+
+    const prompt = `Inicializa un nuevo proyecto en Antigravity aplicando las 5 Directrices Maestras de Drive:
+
+- Nombre del Proyecto: ${name}
+- Slug / Esquema Supabase: ${slug}
+- Tipo de Aplicación: ${type}
+- Nicho de Mercado: ${niche} -> ${subniche}
+- Modelo de Monetización: ${monetization}
+- Propuesta de Valor: ${tagline}
+- Base de Datos: ${db}
+- Autenticación: ${auth}
+- Inteligencia Artificial: ${ai}
+- Cumplimiento Legal: Titular Antonio Javier García García (DNI 34799350M, Madrid), rutas /privacidad, /aviso-legal, /terminos y sello "By Toni".
+- Stack Frontend: React 19 + TypeScript + Vite + Tailwind CSS Clean.`;
+
+    document.getElementById('b-compiled-prompt').innerText = prompt;
+  }
+
+  ['b-name', 'b-slug', 'b-type', 'b-niche', 'b-subniche', 'b-monetization', 'b-db', 'b-auth', 'b-ai', 'b-tagline'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', updateBriefingCompiledPrompt);
+    document.getElementById(id)?.addEventListener('change', updateBriefingCompiledPrompt);
+  });
+
+  function copyBriefingPrompt() {
+    const text = document.getElementById('b-compiled-prompt').innerText;
+    navigator.clipboard.writeText(text);
+    triggerConfetti();
+    showToast('🚀 Briefing copiado al portapapeles.');
+  }
+
+  function passBriefingToStitch() {
+    switchTab('stitchView');
+    updateStitchDesign();
+    showToast('🎨 Datos del briefing transferidos a Stitch UI.');
+  }
+
+  // Stitch Studio Logic
+  function selectPalette(paletteKey, primary, secondary) {
+    appState.stitchDesign.palette = paletteKey;
+    appState.stitchDesign.primaryColor = primary;
+    appState.stitchDesign.secondaryColor = secondary;
+
+    document.querySelectorAll('.palette-btn').forEach(btn => {
+      btn.className = 'palette-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-left transition flex items-center gap-2 hover:bg-slate-100';
+    });
+    event.currentTarget.className = 'palette-btn p-2.5 rounded-xl border-2 border-blue-500 bg-blue-50 text-left transition flex items-center gap-2';
+
+    updateStitchDesign();
+  }
+
+  function handleStitchFiles(event) {
+    const files = Array.from(event.target.files);
+    if (!files.length) return;
+
+    appState.stitchDesign.uploadedFiles = files.map(f => f.name);
+    const container = document.getElementById('stitchFilesList');
+    container.innerHTML = files.map(f => `
+      <div class="flex items-center justify-between p-2 bg-purple-50 text-purple-900 rounded-lg font-mono text-[11px] border border-purple-200">
+        <span>📄 ${f.name}</span>
+        <span class="text-[10px] text-purple-600 font-bold">${(f.size / 1024).toFixed(1)} KB</span>
+      </div>
+    `).join('');
+    
+    updateStitchDesign();
+    showToast(`✓ ${files.length} archivo(s) de diseño vinculado(s).`);
+  }
+
+  function updateStitchDesign() {
+    const name = document.getElementById('b-name').value || 'Mi-Proyecto';
+    const tagline = document.getElementById('b-tagline').value || 'Solución inteligente';
+    const subniche = document.getElementById('b-subniche').value || 'Clínicas & Servicios';
+    const primary = appState.stitchDesign.primaryColor;
+    
+    // Update Mockup UI
+    document.getElementById('canvasProjectTitle').innerText = `Vista Previa de Interfaz: ${name}`;
+    document.getElementById('mockupBrandText').innerText = name;
+    document.getElementById('mockupHeroTitle').innerText = subniche;
+    document.getElementById('mockupHeroDesc').innerText = tagline;
+    document.getElementById('mockupPrimaryBtn').style.backgroundColor = primary;
+    document.getElementById('mockupLogoDot').style.backgroundColor = primary;
+    document.getElementById('mockupMetricText').style.color = primary;
+
+    // Compile Stitch Prompt
+    const prompt = `Actúa como Diseñador de Interfaces Senior utilizando Google Stitch (Project Nemo) y Gemini 2.0.
+
+PROYECTO: ${name}
+PROPUESTA DE VALOR: ${tagline}
+NICHO: ${subniche}
+PALETA DE COLOR: Primario ${primary}, Secundario ${appState.stitchDesign.secondaryColor}
+ESTILO VISUAL: ${document.querySelector('input[name="uiStyle"]:checked')?.value || 'vibe_clean'}
+ARCHIVOS REFERENCIA: ${appState.stitchDesign.uploadedFiles.length ? appState.stitchDesign.uploadedFiles.join(', ') : 'Ninguno (generar desde cero)'}
+
+COMPONENTES REQUERIDOS:
+1. Navbar con logo y sello 'By Toni'
+2. Hero Section con CTA
+3. Dashboard con tarjetas de métricas KPIs y gráficos
+4. Tabla de datos interactiva con filtros
+5. Asistente IA flotante (SSE streaming)
+6. Footer legal con titular Antonio Javier García García (DNI 34799350M)
+
+Genera el código JSX / React 19 + Tailwind CSS modular listo para producción.`;
+
+    document.getElementById('stitchCompiledPromptText').innerText = prompt;
+
+    // React Code Mockup
+    const code = `import React, { useState } from 'react';
+
+export default function ${name.replace(/-/g, '')}Dashboard() {
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 p-6">
+      {/* Header */}
+      <header className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+        <h1 className="text-xl font-bold">${name}</h1>
+        <button className="px-4 py-2 bg-[${primary}] text-white rounded-xl text-xs font-bold shadow-sm">
+          + Nuevo Registro
+        </button>
+      </header>
+
+      {/* Main Stats */}
+      <main className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500 font-semibold">${subniche}</div>
+          <div className="text-2xl font-bold text-[${primary}] mt-1">142 Activos</div>
+        </div>
+      </main>
+
+      {/* Footer Legal By Toni */}
+      <footer className="mt-8 text-center text-xs text-slate-500">
+        © 2026 Antonio Javier García García (DNI 34799350M) · By Toni
+      </footer>
+    </div>
+  );
+}`;
+    document.getElementById('stitchGeneratedCodeText').innerText = code;
+  }
+
+  function setStitchViewTab(tab) {
+    ['mockup', 'prompt', 'code'].forEach(t => {
+      document.getElementById(`stitch${t.charAt(0).toUpperCase() + t.slice(1)}Container`).classList.add('hidden');
+      document.getElementById(`stitchTab-${t}`).className = 'px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+    });
+
+    document.getElementById(`stitch${tab.charAt(0).toUpperCase() + tab.slice(1)}Container`).classList.remove('hidden');
+    document.getElementById(`stitchTab-${tab}`).className = 'px-3 py-1 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition';
+  }
+
+  function copyStitchPrompt() {
+    const text = document.getElementById('stitchCompiledPromptText').innerText;
+    navigator.clipboard.writeText(text);
+    triggerConfetti();
+    showToast('🧵 Prompt de Stitch copiado.');
+  }
+
+  function copyStitchReactCode() {
+    const text = document.getElementById('stitchGeneratedCodeText').innerText;
+    navigator.clipboard.writeText(text);
+    triggerConfetti();
+    showToast('⚛️ Código React copiado al portapapeles.');
+  }
+
+  function openStitchWeb() {
+    window.open('https://stitch.withgoogle.com', '_blank');
+  }
+
+  // Memory & Save
   function addLearningMemoryRow() {
     const today = new Date().toLocaleDateString('es-ES');
     appState.memory.unshift({
@@ -1123,63 +1676,38 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
   function saveLearningMemory() {
     saveAllChanges();
     triggerConfetti();
-    showToast('✓ Memoria Viva guardada correctamente.');
+    showToast('✓ Memoria Viva guardada.');
   }
 
   function saveAllChanges() {
     try {
-      localStorage.setItem('tonigravity_state_v3', JSON.stringify(appState));
-      showToast('✓ Configuración guardada en LocalStorage.');
+      localStorage.setItem('tonigravity_state_v4', JSON.stringify(appState));
+      showToast('✓ Estado guardado en LocalStorage.');
     } catch (e) {
       console.error(e);
     }
   }
 
-  // Modal Briefing Logic
-  function openPromptBuilderModal() {
-    updateCompiledPrompt();
-    document.getElementById('promptBuilderModal').classList.remove('hidden');
-  }
-
-  function closePromptBuilderModal() {
-    document.getElementById('promptBuilderModal').classList.add('hidden');
-  }
-
-  function updateCompiledPrompt() {
-    const name = document.getElementById('pb-name').value;
-    const slug = document.getElementById('pb-slug').value;
-    const category = document.getElementById('pb-category').value;
-    const db = document.getElementById('pb-db').value;
-    const auth = document.getElementById('pb-auth').value;
-    const ai = document.getElementById('pb-ai').value;
-    const tagline = document.getElementById('pb-tagline').value;
-
-    const compiled = `Inicializa un nuevo proyecto aplicando las 5 Directrices Maestras de Drive:
-
-- Nombre: ${name}
-- Slug: ${slug}
-- Categoría: ${category}
-- Tagline: ${tagline}
-- Base de Datos: ${db}
-- Autenticación: ${auth}
-- Integración IA: ${ai}
-- Legal & RGPD: Titular Antonio Javier García García (DNI 34799350M, Madrid) y Sello "By Toni"
-- Frontend Stack: React 19 + TypeScript + Vite + Tailwind CSS Clean`;
-
-    document.getElementById('pb-compiled-prompt').innerText = compiled;
-  }
-
-  ['pb-name', 'pb-slug', 'pb-category', 'pb-db', 'pb-auth', 'pb-ai', 'pb-tagline'].forEach(id => {
-    document.getElementById(id)?.addEventListener('input', updateCompiledPrompt);
-    document.getElementById(id)?.addEventListener('change', updateCompiledPrompt);
-  });
-
-  function copyCompiledBriefingPrompt() {
-    const text = document.getElementById('pb-compiled-prompt').innerText;
+  function copyCommand(id) {
+    const text = document.getElementById(id).innerText;
     navigator.clipboard.writeText(text);
-    closePromptBuilderModal();
     triggerConfetti();
-    showToast('🚀 Briefing copiado al portapapeles.');
+    showToast('✓ Comando copiado.');
+  }
+
+  function simulateWorkspaceSync() {
+    showToast('🔄 Comprobando los 9 repositorios...');
+    setTimeout(() => {
+      triggerConfetti();
+      showToast('✓ Todos los repositorios sincronizados.');
+    }, 700);
+  }
+
+  function testSkillPrompt(title) {
+    const prompt = `Activa la skill "${title}" y ejecuta su protocolo.`;
+    navigator.clipboard.writeText(prompt);
+    triggerConfetti();
+    showToast(`Prompt de "${title}" copiado.`);
   }
 
   function exportConfigJSON() {
@@ -1229,21 +1757,6 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     reader.readAsText(file);
   }
 
-  function simulateWorkspaceSync() {
-    showToast('🔄 Comprobando estado de los 9 repositorios...');
-    setTimeout(() => {
-      triggerConfetti();
-      showToast('✓ Todos los proyectos sincronizados al 100%.');
-    }, 800);
-  }
-
-  function testSkillPrompt(title) {
-    const prompt = `Activa la skill "${title}" y genera la solución optimizada siguiendo su protocolo.`;
-    navigator.clipboard.writeText(prompt);
-    triggerConfetti();
-    showToast(`Prompt para "${title}" copiado.`);
-  }
-
   function showToast(message) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
@@ -1260,7 +1773,7 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
         particleCount: 50,
         spread: 60,
         origin: { y: 0.85 },
-        colors: ['#2563eb', '#3b82f6', '#10b981', '#f59e0b']
+        colors: ['#2563eb', '#3b82f6', '#9333ea', '#10b981']
       });
     }
   }
@@ -1273,6 +1786,8 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     renderSkillsGrid();
     renderProjectsGrid();
     renderMemoryTable();
+    updateBriefingCompiledPrompt();
+    updateStitchDesign();
   });
 </script>
 </body>
