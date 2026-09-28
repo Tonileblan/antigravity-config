@@ -559,6 +559,56 @@
       .dashboard-body { grid-template-columns: 1fr; }
       .directives-view-grid, .rules-view-grid, .briefing-view-grid { grid-template-columns: 1fr; }
     }
+  
+    /* INLINE CUSTOM DROPDOWN EDITOR */
+    .custom-inline-editor {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: 100%;
+    }
+    .custom-inline-editor input {
+      flex: 1;
+      height: 32px;
+      font-size: 1.2rem;
+    }
+    .btn-inline-save {
+      height: 32px;
+      padding: 0 0.8rem;
+      background: var(--accent-blue, #2563eb);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .btn-inline-save:hover {
+      background: #1d4ed8;
+    }
+    .btn-inline-cancel {
+      height: 32px;
+      padding: 0 0.8rem;
+      background: var(--bg-hover, #334155);
+      color: var(--text-muted, #94a3b8);
+      border: 1px solid var(--border-color, #334155);
+      border-radius: 6px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .btn-inline-cancel:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+
   </style>
 </head>
 <body>
@@ -790,7 +840,7 @@
 
             <div class="form-group">
               <label class="form-label">3. Tipo de Proyecto</label>
-              <select id="b-type" onchange="handleCustomDropdownChange('b-type', 'b-type-custom')" class="form-select">
+              <select id="b-type" onchange="handleSelectWithCustom('b-type', 'Escribe el tipo de app personalizado...')" class="form-select">
                 <option value="Web App (SaaS / Dashboard Pro)">Web App (SaaS / Dashboard Pro)</option>
                 <option value="Membresía / Comunidad Privada & Cursos (LMS)">Membresía / Comunidad Privada &amp; Cursos (LMS)</option>
                 <option value="Mobile App (PWA / iOS & Android / Flutter)">Mobile App (PWA / iOS &amp; Android / Flutter)</option>
@@ -799,14 +849,13 @@
                 <option value="Plataforma de Trading & Analítica Algorítmica">Plataforma de Trading &amp; Analítica Algorítmica</option>
                 <option value="Agente Autónomo / Bot Multiplataforma (WhatsApp/TG)">Agente Autónomo / Bot Multiplataforma</option>
                 <option value="Herramienta Interna / CLI & Backend">Herramienta Interna / CLI &amp; Backend</option>
-                <option value="__custom__">✏️ Escribir tipo personalizado...</option>
+                <option value="__custom__">✏️ + Escribir tipo personalizado...</option>
               </select>
-              <input type="text" id="b-type-custom" placeholder="Escribe el tipo de app personalizado..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">4. Nicho de Mercado</label>
-              <select id="b-niche" onchange="handleNicheDropdownChange()" class="form-select">
+              <select id="b-niche" onchange="handleSelectWithCustom('b-niche', 'Escribe el nicho personalizado...')" class="form-select">
                 <option value="Salud & Bienestar">Salud, Belleza &amp; Bienestar (Clínicas &amp; Estética)</option>
                 <option value="Educación & E-learning">Educación &amp; E-learning (EdTech / Cursos)</option>
                 <option value="Finanzas & Trading">Finanzas, Inversión &amp; Trading (FinTech)</option>
@@ -817,26 +866,24 @@
                 <option value="Movilidad & Talleres">Movilidad, Talleres &amp; Tiendas Físicas</option>
                 <option value="Legal & Consultoría">Legal, Gestorías &amp; Consultoría Profesional</option>
                 <option value="Creadores & Media">Creadores de Contenido &amp; Creator Economy</option>
-                <option value="__custom__">✏️ Escribir nicho personalizado...</option>
+                <option value="__custom__">✏️ + Escribir nicho personalizado...</option>
               </select>
-              <input type="text" id="b-niche-custom" placeholder="Escribe el nicho personalizado..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">5. Subnicho Específico</label>
-              <select id="b-subniche" onchange="handleCustomDropdownChange('b-subniche', 'b-subniche-custom')" class="form-select">
+              <select id="b-subniche" onchange="handleSelectWithCustom('b-subniche', 'Escribe el subnicho específico...')" class="form-select">
                 <option value="Clínicas Dentales & Odontología">Clínicas Dentales &amp; Odontología</option>
                 <option value="Fisioterapia & Osteopatía">Fisioterapia &amp; Osteopatía</option>
                 <option value="Psicología & Terapia Online">Psicología &amp; Terapia Online</option>
                 <option value="Medicina Estética & Spa">Medicina Estética &amp; Spa</option>
-                <option value="__custom__">✏️ Escribir subnicho personalizado...</option>
+                <option value="__custom__">✏️ + Escribir subnicho personalizado...</option>
               </select>
-              <input type="text" id="b-subniche-custom" placeholder="Escribe el subnicho específico..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">6A. Monetización del Desarrollador (Toni / Dev)</label>
-              <select id="b-monetization-dev" onchange="handleCustomDropdownChange('b-monetization-dev', 'b-monetization-dev-custom')" class="form-select">
+              <select id="b-monetization-dev" onchange="handleSelectWithCustom('b-monetization-dev', 'Escribe cómo monetizamos como dev...')" class="form-select">
                 <option value="SaaS Suscripción Recurrente (Stripe Billing mensual/anual)">SaaS Suscripción Recurrente (Stripe Billing mensual/anual)</option>
                 <option value="Setup Fee Inicial + Mantenimiento Mensual Recurrente">Setup Fee Inicial + Mantenimiento Mensual Recurrente</option>
                 <option value="Venta de Licencia de Software / Código (Lifetime / One-time)">Venta de Licencia de Software (Pago Único / One-Time)</option>
@@ -844,14 +891,13 @@
                 <option value="Pago por Uso / Créditos de API con Margen (Tokens IA)">Pago por Uso / Créditos de API con Margen (Tokens IA)</option>
                 <option value="Freemium / Lead Magnet para Consultoría y Servicios Pro">Freemium / Lead Magnet para Consultoría y Servicios</option>
                 <option value="Uso Interno de Toni / I+D Propio (Sin Cobro Directo)">Uso Interno de Toni / I+D Propio (Sin Cobro Directo)</option>
-                <option value="__custom__">✏️ Escribir modelo de monetización dev...</option>
+                <option value="__custom__">✏️ + Escribir monetización dev personalizada...</option>
               </select>
-              <input type="text" id="b-monetization-dev-custom" placeholder="Escribe cómo monetizamos como desarrolladores..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">6B. Monetización del Usuario Final (Negocio / Cliente)</label>
-              <select id="b-monetization-user" onchange="handleCustomDropdownChange('b-monetization-user', 'b-monetization-user-custom')" class="form-select">
+              <select id="b-monetization-user" onchange="handleSelectWithCustom('b-monetization-user', 'Escribe cómo genera ingresos el usuario final...')" class="form-select">
                 <option value="Cobro de Servicios / Consultas / Citas Online integradas">Cobro de Servicios / Consultas / Citas Online integradas</option>
                 <option value="Membresía VIP / Suscripción de Contenido para sus Alumnos">Membresía VIP / Suscripción para sus Alumnos o Clientes</option>
                 <option value="Venta de Productos / E-commerce (Catálogo & Checkout)">Venta de Productos / E-commerce (Catálogo &amp; Checkout)</option>
@@ -860,43 +906,45 @@
                 <option value="Cursos / Infoproductos / Descargas Digitales (LMS)">Cursos / Infoproductos / Descargas Digitales (LMS)</option>
                 <option value="Publicidad / Patrocinios / Afiliación y Sponsors">Publicidad / Patrocinios / Afiliación y Sponsors</option>
                 <option value="Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)">Herramienta Operativa Interna (Ahorro de Costes / Sin Cobro)</option>
-                <option value="__custom__">✏️ Escribir monetización del usuario...</option>
+                <option value="__custom__">✏️ + Escribir monetización usuario personalizada...</option>
               </select>
-              <input type="text" id="b-monetization-user-custom" placeholder="Escribe cómo genera ingresos el usuario final..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">7. Base de Datos / Persistencia</label>
-              <select id="b-db" onchange="handleCustomDropdownChange('b-db', 'b-db-custom')" class="form-select">
+              <select id="b-db" onchange="handleSelectWithCustom('b-db', 'Escribe la base de datos personalizada...')" class="form-select">
                 <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
                 <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
                 <option value="SQLite / DuckDB Local-First">SQLite / DuckDB Local-First</option>
-                <option value="__custom__">✏️ Escribir base de datos personalizada...</option>
+                <option value="PostgreSQL Vanilla / Neon DB">PostgreSQL Vanilla / Neon DB</option>
+                <option value="Firebase Firestore / Cloud Firestore">Firebase Firestore / Cloud Firestore</option>
+                <option value="__custom__">✏️ + Escribir base de datos personalizada...</option>
               </select>
-              <input type="text" id="b-db-custom" placeholder="Escribe la base de datos..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">8. Autenticación &amp; Roles</label>
-              <select id="b-auth" onchange="handleCustomDropdownChange('b-auth', 'b-auth-custom')" class="form-select">
+              <select id="b-auth" onchange="handleSelectWithCustom('b-auth', 'Escribe el esquema de autenticación...')" class="form-select">
                 <option value="Supabase Auth (Email + Magic Link + Google OAuth) [Multi-Role]">Supabase Auth Multi-Role (Admin + Staff + Cliente)</option>
                 <option value="Supabase Auth Estándar (Email + Password)">Supabase Auth Estándar (Email + Password)</option>
                 <option value="No - Acceso Público / Sin Login">No - Acceso Público / Sin Login</option>
-                <option value="__custom__">✏️ Escribir sistema de autenticación...</option>
+                <option value="Clerk / Auth0 Multi-Tenant">Clerk / Auth0 Multi-Tenant</option>
+                <option value="NextAuth / Auth.js con JWT">NextAuth / Auth.js con JWT</option>
+                <option value="__custom__">✏️ + Escribir sistema de autenticación...</option>
               </select>
-              <input type="text" id="b-auth-custom" placeholder="Escribe el esquema de autenticación..." oninput="updateBriefingCompiledPrompt()" class="form-input hidden" style="margin-top: 0.4rem;">
             </div>
 
             <div class="form-group">
               <label class="form-label">9. Motor de IA / API</label>
-              <select id="b-ai" onchange="handleAIDropdownChange()" class="form-select">
+              <select id="b-ai" onchange="handleSelectWithCustom('b-ai', 'Escribe el motor o API de IA...')" class="form-select">
                 <option value="gemini">✨ Google Gemini AI (2.0 Flash / Pro) [SSE]</option>
                 <option value="claude">🧠 Anthropic Claude (3.7 Sonnet)</option>
                 <option value="openai">🤖 OpenAI Platform (GPT-4o / o3-mini)</option>
                 <option value="openrouter">🌐 OpenRouter Gateway (Multi-Modelo)</option>
                 <option value="deepseek">⚡ DeepSeek V3 / Groq (Inferencia Rápida)</option>
-                <option value="custom">🖥️ API Local / Ollama</option>
+                <option value="custom">🖥️ API Local / Ollama (Llama 3 / Mistral)</option>
                 <option value="none">🚫 Sin IA / Aplicación Clásica</option>
+                <option value="__custom__">✏️ + Escribir motor de IA personalizado...</option>
               </select>
             </div>
 
@@ -3022,86 +3070,142 @@ DOCUMENTACIÓN Y RECURSOS:
     showToast('⚡ Prompt Maestro de Inicialización copiado.');
   }
 
-  // Helper: Get value from Select or Custom Input
-  function getDropdownOrCustomValue(selectId, customInputId) {
+// =========================================================================
+  // SEAMLESS IN-DROPDOWN CUSTOM OPTIONS SYSTEM
+  // =========================================================================
+  const previousSelectValues = {};
+
+  function handleSelectWithCustom(selectId, placeholderText) {
     const select = document.getElementById(selectId);
-    const customInput = document.getElementById(customInputId);
-    if (!select) return '';
+    if (!select) return;
+
     if (select.value === '__custom__') {
-      return customInput ? customInput.value.trim() : '';
+      showInlineCustomEditor(selectId, placeholderText);
+    } else {
+      previousSelectValues[selectId] = select.value;
+      if (selectId === 'b-niche') {
+        handleNicheChangeInternal();
+      } else if (selectId === 'b-ai') {
+        handleAIChangeInternal();
+      }
+      updateBriefingCompiledPrompt();
+      updateStitchDesign();
     }
-    return select.value;
   }
 
-  // Handle Dropdown Change for custom write-in options
-  function handleCustomDropdownChange(selectId, customInputId) {
+  function showInlineCustomEditor(selectId, placeholder) {
     const select = document.getElementById(selectId);
-    const customInput = document.getElementById(customInputId);
-    if (!select || !customInput) return;
+    if (!select) return;
 
-    if (select.value === '__custom__') {
-      customInput.classList.remove('hidden');
-      if (typeof customInput.focus === 'function') customInput.focus();
-    } else {
-      customInput.classList.add('hidden');
+    let editor = document.getElementById(selectId + '-inline-editor');
+    if (!editor) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'custom-inline-editor';
+      wrapper.id = selectId + '-inline-editor';
+      wrapper.innerHTML = `
+        <input type="text" id="${selectId}-custom-input" class="form-input" placeholder="${placeholder || 'Escribe tu opción personalizada...'}" style="flex: 1; height: 32px;">
+        <button type="button" class="btn-inline-save" onclick="saveInlineCustomOption('${selectId}')" title="Guardar opción en el desplegable">✓ Listo</button>
+        <button type="button" class="btn-inline-cancel" onclick="cancelInlineCustomOption('${selectId}')" title="Cancelar y volver">✕</button>
+      `;
+      select.parentNode.insertBefore(wrapper, select);
+      editor = wrapper;
     }
+
+    select.classList.add('hidden');
+    editor.classList.remove('hidden');
+    const input = document.getElementById(selectId + '-custom-input');
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 50);
+      input.onkeydown = function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveInlineCustomOption(selectId);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          cancelInlineCustomOption(selectId);
+        }
+      };
+    }
+  }
+
+  function saveInlineCustomOption(selectId) {
+    const select = document.getElementById(selectId);
+    const input = document.getElementById(selectId + '-custom-input');
+    const editor = document.getElementById(selectId + '-inline-editor');
+    if (!select || !input) return;
+
+    const customText = input.value.trim();
+    if (customText) {
+      let existingOpt = Array.from(select.options).find(o => o.value.toLowerCase() === customText.toLowerCase() || o.textContent.replace('✏️ ', '').trim().toLowerCase() === customText.toLowerCase());
+      if (existingOpt) {
+        existingOpt.selected = true;
+      } else {
+        const newOpt = document.createElement('option');
+        newOpt.value = customText;
+        newOpt.textContent = '✏️ ' + customText;
+        
+        const customTrigger = select.querySelector('option[value="__custom__"]');
+        if (customTrigger) {
+          select.insertBefore(newOpt, customTrigger);
+        } else {
+          select.appendChild(newOpt);
+        }
+        newOpt.selected = true;
+      }
+      previousSelectValues[selectId] = select.value;
+      showToast(`✨ Opción "${customText}" agregada al desplegable.`);
+    } else {
+      select.value = previousSelectValues[selectId] || select.options[0]?.value || '';
+    }
+
+    if (editor) editor.classList.add('hidden');
+    select.classList.remove('hidden');
+
+    if (selectId === 'b-niche') {
+      handleNicheChangeInternal();
+    } else if (selectId === 'b-ai') {
+      handleAIChangeInternal();
+    }
+
     updateBriefingCompiledPrompt();
     updateStitchDesign();
   }
 
-  // Handle Niche Dropdown Change (cascades subniche options + custom inputs)
-  function handleNicheDropdownChange() {
-    const nicheSelect = document.getElementById('b-niche');
-    const nicheCustom = document.getElementById('b-niche-custom');
-    const subSelect = document.getElementById('b-subniche');
-    const subCustom = document.getElementById('b-subniche-custom');
+  function cancelInlineCustomOption(selectId) {
+    const select = document.getElementById(selectId);
+    const editor = document.getElementById(selectId + '-inline-editor');
+    if (!select) return;
 
+    const prev = previousSelectValues[selectId];
+    if (prev && prev !== '__custom__') {
+      select.value = prev;
+    } else {
+      select.selectedIndex = 0;
+    }
+
+    if (editor) editor.classList.add('hidden');
+    select.classList.remove('hidden');
+    updateBriefingCompiledPrompt();
+  }
+
+  function handleNicheChangeInternal() {
+    const nicheSelect = document.getElementById('b-niche');
+    const subSelect = document.getElementById('b-subniche');
     if (!nicheSelect || !subSelect) return;
 
-    if (nicheSelect.value === '__custom__') {
-      if (nicheCustom) {
-        nicheCustom.classList.remove('hidden');
-        if (typeof nicheCustom.focus === 'function') nicheCustom.focus();
-      }
-      subSelect.innerHTML = `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
-      subSelect.value = '__custom__';
-      if (subCustom) {
-        subCustom.classList.remove('hidden');
-      }
-    } else {
-      if (nicheCustom) {
-        nicheCustom.classList.add('hidden');
-      }
-      const niche = nicheSelect.value;
-      const options = NICHE_DATA[niche] || ["General / Servicios"];
-      subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
-        `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
-      if (subCustom) {
-        subCustom.classList.add('hidden');
-      }
-    }
-    updateBriefingCompiledPrompt();
-    updateStitchDesign();
+    const niche = nicheSelect.value;
+    const options = NICHE_DATA[niche] || ["General / Servicios", "Especialistas / Consultoría", "Gestión & Operaciones"];
+    subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
+      `<option value="__custom__">✏️ + Escribir subnicho personalizado...</option>`;
   }
 
-  // Handle AI Dropdown Change (Direct Briefing AI selection + custom write-in)
-  function handleAIDropdownChange() {
+  function handleAIChangeInternal() {
     const aiSelect = document.getElementById('b-ai');
-    const aiCustom = document.getElementById('b-ai-custom');
     const label = document.getElementById('briefing-active-ai-label');
     const archSelect = document.getElementById('b-ai-arch');
     const dot = document.getElementById('briefing-ai-indicator-dot');
-
     if (!aiSelect) return;
-
-    if (aiSelect.value === '__custom__') {
-      if (aiCustom) {
-        aiCustom.classList.remove('hidden');
-        if (typeof aiCustom.focus === 'function') aiCustom.focus();
-      }
-    } else {
-      if (aiCustom) aiCustom.classList.add('hidden');
-    }
 
     const val = aiSelect.value;
     if (val === 'none') {
@@ -3110,13 +3214,44 @@ DOCUMENTACIÓN Y RECURSOS:
       if (archSelect) archSelect.classList.add('hidden');
     } else {
       if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
-      const meta = AI_PROVIDERS_META[val] || { name: aiCustom?.value || 'Motor IA Personalizado' };
+      const meta = AI_PROVIDERS_META[val] || { name: val };
       if (label) label.innerText = `${meta.name || val}`;
       if (archSelect) archSelect.classList.remove('hidden');
     }
+  }
 
-    updateBriefingCompiledPrompt();
-    updateStitchDesign();
+  // Set dropdown value or create custom option at end
+  function setDropdownOrCustom(selectId, legacyInputId, value, customValue) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    const target = (customValue || value || '').trim();
+    if (!target) return;
+
+    let opt = Array.from(select.options).find(o => o.value === target || o.textContent.trim() === target || o.textContent.replace('✏️ ', '').trim() === target);
+    if (opt) {
+      opt.selected = true;
+    } else {
+      const newOpt = document.createElement('option');
+      newOpt.value = target;
+      newOpt.textContent = '✏️ ' + target;
+      const customTrigger = select.querySelector('option[value="__custom__"]');
+      if (customTrigger) {
+        select.insertBefore(newOpt, customTrigger);
+      } else {
+        select.appendChild(newOpt);
+      }
+      newOpt.selected = true;
+    }
+    previousSelectValues[selectId] = select.value;
+  }
+
+  function getDropdownOrCustomValue(selectId, legacyCustomId) {
+    const select = document.getElementById(selectId);
+    if (!select) return '';
+    if (select.value === '__custom__') {
+      return previousSelectValues[selectId] || '';
+    }
+    return select.value;
   }
 
   // Handle Project Name Change
@@ -3308,32 +3443,19 @@ DOCUMENTACIÓN Y RECURSOS:
     // Set Niche & Subniche
     const nicheSelect = document.getElementById('b-niche');
     if (nicheSelect) {
-      setDropdownOrCustom('b-niche', 'b-niche-custom', project.niche, project.nicheCustom);
-      
-      const subSelect = document.getElementById('b-subniche');
-      const subCustom = document.getElementById('b-subniche-custom');
-      if (nicheSelect.value === '__custom__') {
-        subSelect.innerHTML = `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
-        subSelect.value = '__custom__';
-        if (subCustom) {
-          subCustom.classList.remove('hidden');
-          subCustom.value = project.subnicheCustom || project.subniche || '';
-        }
-      } else {
-        const options = NICHE_DATA[nicheSelect.value] || ["General / Servicios"];
-        subSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
-          `<option value="__custom__">✏️ Escribir subnicho personalizado...</option>`;
-        setDropdownOrCustom('b-subniche', 'b-subniche-custom', project.subniche, project.subnicheCustom);
-      }
+      setDropdownOrCustom('b-niche', null, project.niche, project.nicheCustom);
+      handleNicheChangeInternal();
+      setDropdownOrCustom('b-subniche', null, project.subniche, project.subnicheCustom);
     }
 
     // Set other dropdowns
-    setDropdownOrCustom('b-type', 'b-type-custom', project.type, project.typeCustom);
-    setDropdownOrCustom('b-monetization-dev', 'b-monetization-dev-custom', project.monetizationDev || project.monetization, project.monetizationDevCustom || project.monetizationCustom);
-    setDropdownOrCustom('b-monetization-user', 'b-monetization-user-custom', project.monetizationUser || 'Cobro de Servicios / Consultas / Citas Online integradas', project.monetizationUserCustom || '');
-    setDropdownOrCustom('b-db', 'b-db-custom', project.db, project.dbCustom);
-    setDropdownOrCustom('b-auth', 'b-auth-custom', project.auth, project.authCustom);
-    setDropdownOrCustom('b-ai', 'b-ai-custom', project.ai, project.aiCustom);
+    setDropdownOrCustom('b-type', null, project.type, project.typeCustom);
+    setDropdownOrCustom('b-monetization-dev', null, project.monetizationDev || project.monetization, project.monetizationDevCustom || project.monetizationCustom);
+    setDropdownOrCustom('b-monetization-user', null, project.monetizationUser || 'Cobro de Servicios / Consultas / Citas Online integradas', project.monetizationUserCustom || '');
+    setDropdownOrCustom('b-db', null, project.db, project.dbCustom);
+    setDropdownOrCustom('b-auth', null, project.auth, project.authCustom);
+    setDropdownOrCustom('b-ai', null, project.ai, project.aiCustom);
+    handleAIChangeInternal();
     if (document.getElementById('b-ai-arch')) {
       document.getElementById('b-ai-arch').value = project.aiArch || 'supabase_edge';
     }
@@ -3379,14 +3501,15 @@ DOCUMENTACIÓN Y RECURSOS:
       const problemEl = document.getElementById('b-problem');
       if (problemEl) problemEl.value = '';
 
-      // Reset dropdowns to standard defaults and hide custom inputs
+      // Reset dropdowns to standard defaults
       ['b-type', 'b-monetization-dev', 'b-monetization-user', 'b-db', 'b-auth', 'b-ai'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.selectedIndex = 0;
-        const customEl = document.getElementById(`${id}-custom`);
-        if (customEl) {
-          customEl.value = '';
-          customEl.classList.add('hidden');
+        if (el) {
+          el.selectedIndex = 0;
+          previousSelectValues[id] = el.value;
+          const editor = document.getElementById(`${id}-inline-editor`);
+          if (editor) editor.classList.add('hidden');
+          el.classList.remove('hidden');
         }
       });
 
@@ -3396,10 +3519,11 @@ DOCUMENTACIÓN Y RECURSOS:
       const nicheSelect = document.getElementById('b-niche');
       if (nicheSelect) {
         nicheSelect.selectedIndex = 0;
-        handleNicheDropdownChange();
+        previousSelectValues['b-niche'] = nicheSelect.value;
+        handleNicheChangeInternal();
       }
 
-      handleAIDropdownChange();
+      handleAIChangeInternal();
 
       const activeBadge = document.getElementById('activeProjectBadge');
       if (activeBadge) activeBadge.innerText = 'Nuevo-Proyecto';
@@ -3556,14 +3680,14 @@ DOCUMENTACIÓN Y RECURSOS:
   function updateBriefingCompiledPrompt() {
     const name = document.getElementById('b-name')?.value || 'Mi-Proyecto';
     const slug = document.getElementById('b-slug')?.value || 'mia_proyecto';
-    const type = getDropdownOrCustomValue('b-type', 'b-type-custom') || 'Web App (SaaS / Dashboard Pro)';
-    const niche = getDropdownOrCustomValue('b-niche', 'b-niche-custom') || 'Salud & Bienestar';
-    const subniche = getDropdownOrCustomValue('b-subniche', 'b-subniche-custom') || 'Clínicas & Servicios';
-    const monetizationDev = getDropdownOrCustomValue('b-monetization-dev', 'b-monetization-dev-custom') || 'SaaS Suscripción Recurrente (Stripe Billing)';
-    const monetizationUser = getDropdownOrCustomValue('b-monetization-user', 'b-monetization-user-custom') || 'Cobro de Servicios / Citas Online';
-    const db = getDropdownOrCustomValue('b-db', 'b-db-custom') || 'Sí - Supabase PostgreSQL';
-    const auth = getDropdownOrCustomValue('b-auth', 'b-auth-custom') || 'Supabase Auth';
-    const tagline = document.getElementById('b-tagline')?.value || 'Solución integral';
+    const type = getDropdownOrCustomValue('b-type') || 'Web App (SaaS / Dashboard Pro)';
+    const niche = getDropdownOrCustomValue('b-niche') || 'Salud & Bienestar';
+    const subniche = getDropdownOrCustomValue('b-subniche') || 'Clínicas & Servicios';
+    const monetizationDev = getDropdownOrCustomValue('b-monetization-dev') || 'SaaS Suscripción Recurrente (Stripe Billing)';
+    const monetizationUser = getDropdownOrCustomValue('b-monetization-user') || 'Cobro de Servicios / Citas Online';
+    const db = getDropdownOrCustomValue('b-db') || 'Sí - Supabase PostgreSQL';
+    const auth = getDropdownOrCustomValue('b-auth') || 'Supabase Auth';
+    const tagline = document.getElementById('b-problem')?.value || document.getElementById('b-tagline')?.value || 'Solución integral';
     
     const ai = getDropdownOrCustomValue('b-ai', 'b-ai-custom') || 'gemini';
     const archMode = document.getElementById('b-ai-arch')?.value || 'supabase_edge';
@@ -3610,7 +3734,7 @@ ${visualRef ? `- URL de Referencia Visual / Inspiración: ${visualRef}` : ''}
   }
 
   // Attach event listeners to all input & custom inputs
-  ['b-name', 'b-slug', 'b-type', 'b-type-custom', 'b-niche', 'b-niche-custom', 'b-subniche', 'b-subniche-custom', 'b-monetization-dev', 'b-monetization-dev-custom', 'b-monetization-user', 'b-monetization-user-custom', 'b-db', 'b-db-custom', 'b-auth', 'b-auth-custom', 'b-ai-custom', 'b-problem'].forEach(id => {
+  ['b-name', 'b-slug', 'b-type', 'b-niche', 'b-subniche', 'b-monetization-dev', 'b-monetization-user', 'b-db', 'b-auth', 'b-ai', 'b-ai-arch', 'b-problem'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', updateBriefingCompiledPrompt);
     document.getElementById(id)?.addEventListener('change', updateBriefingCompiledPrompt);
   });
