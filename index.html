@@ -2092,33 +2092,47 @@
       const content = document.getElementById(t);
       const btn = document.getElementById(`tabBtn_${t.replace('View', '')}`);
       if (t === tabId) {
-        if (content) content.classList.remove('hidden');
+        if (content) {
+          content.classList.remove('hidden');
+          content.style.display = '';
+        }
         if (btn) btn.classList.add('active');
       } else {
-        if (content) content.classList.add('hidden');
+        if (content) {
+          content.classList.add('hidden');
+          content.style.display = 'none';
+        }
         if (btn) btn.classList.remove('active');
       }
     });
 
-    if (tabId === 'directricesView') {
-      renderDirectivesList();
-      renderActiveDirectiveDetails();
+    try {
+      if (tabId === 'directricesView') {
+        renderDirectivesList();
+        renderActiveDirectiveDetails();
+      }
+      if (tabId === 'rulesView') {
+        renderRulesList();
+        renderActiveRuleDetails();
+      }
+      if (tabId === 'skillsView') {
+        renderSkillsGrid();
+      }
+      if (tabId === 'sopView') {
+        renderMemoryTable();
+      }
+      if (tabId === 'syncView') {
+        renderProjectsGrid();
+      }
+      if (tabId === 'briefingView') {
+        updateBriefingCompiledPrompt();
+      }
+      if (tabId === 'stitchView') {
+        updateStitchDesign();
+      }
+    } catch (e) {
+      console.error('Error during tab switch:', e);
     }
-    if (tabId === 'rulesView') {
-      renderRulesList();
-      renderActiveRuleDetails();
-    }
-    if (tabId === 'skillsView') {
-      renderSkillsGrid();
-    }
-    if (tabId === 'sopView') {
-      renderMemoryTable();
-    }
-    if (tabId === 'syncView') {
-      renderProjectsGrid();
-    }
-    if (tabId === 'briefingView') updateBriefingCompiledPrompt();
-    if (tabId === 'stitchView') updateStitchDesign();
   }
 
   function selectDirective(id) {
@@ -2579,41 +2593,51 @@
   }
 
   function createNewProjectDraft() {
-    const newId = 'proj_' + Date.now();
-    appState.currentProjectId = newId;
+    try {
+      const newId = 'proj_' + Date.now();
+      appState.currentProjectId = newId;
 
-    document.getElementById('b-name').value = 'Nuevo-Proyecto';
-    document.getElementById('b-slug').value = 'com_nuevo';
-    document.getElementById('b-tagline').value = '';
+      const nameEl = document.getElementById('b-name');
+      if (nameEl) nameEl.value = 'Nuevo-Proyecto';
+      const slugEl = document.getElementById('b-slug');
+      if (slugEl) slugEl.value = 'com_nuevo';
+      const problemEl = document.getElementById('b-problem');
+      if (problemEl) problemEl.value = '';
 
-    // Reset dropdowns to standard defaults and hide custom inputs
-    ['b-type', 'b-monetization-dev', 'b-monetization-user', 'b-db', 'b-auth', 'b-ai'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.selectedIndex = 0;
-      const customEl = document.getElementById(`${id}-custom`);
-      if (customEl) {
-        customEl.value = '';
-        customEl.classList.add('hidden');
+      // Reset dropdowns to standard defaults and hide custom inputs
+      ['b-type', 'b-monetization-dev', 'b-monetization-user', 'b-db', 'b-auth', 'b-ai'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.selectedIndex = 0;
+        const customEl = document.getElementById(`${id}-custom`);
+        if (customEl) {
+          customEl.value = '';
+          customEl.classList.add('hidden');
+        }
+      });
+
+      const aiArch = document.getElementById('b-ai-arch');
+      if (aiArch) aiArch.value = 'supabase_edge';
+
+      const nicheSelect = document.getElementById('b-niche');
+      if (nicheSelect) {
+        nicheSelect.selectedIndex = 0;
+        handleNicheDropdownChange();
       }
-    });
 
-    if (document.getElementById('b-ai-arch')) {
-      document.getElementById('b-ai-arch').value = 'supabase_edge';
+      handleAIDropdownChange();
+
+      const activeBadge = document.getElementById('activeProjectBadge');
+      if (activeBadge) activeBadge.innerText = 'Nuevo-Proyecto';
+
+      const sidebarName = document.getElementById('sidebarActiveProjectName');
+      if (sidebarName) sidebarName.innerText = 'Nuevo-Proyecto';
+
+      updateBriefingCompiledPrompt();
+      updateStitchDesign();
+    } catch (e) {
+      console.error('Error in createNewProjectDraft:', e);
     }
 
-    const nicheSelect = document.getElementById('b-niche');
-    if (nicheSelect) {
-      nicheSelect.selectedIndex = 0;
-      handleNicheDropdownChange();
-    }
-
-    handleAIDropdownChange();
-
-    const activeBadge = document.getElementById('activeProjectBadge');
-    if (activeBadge) activeBadge.innerText = 'Nuevo-Proyecto';
-
-    updateBriefingCompiledPrompt();
-    updateStitchDesign();
     switchTab('briefingView');
     showToast('✨ Nuevo borrador preparado en el Briefing.');
   }
@@ -2803,20 +2827,28 @@ ${visualRef ? `- URL de Referencia Visual / Inspiración: ${visualRef}` : ''}
 - Cumplimiento Legal: Titular Antonio Javier García García (DNI 34799350M, Madrid), rutas /privacidad, /aviso-legal, /terminos y sello "By Toni".
 - Stack Frontend: React 19 + TypeScript + Vite + Tailwind CSS Clean.`;
 
-    if (document.getElementById('b-compiled-prompt')) document.getElementById('b-compiled-prompt').innerText = prompt;
+    const promptEl = document.getElementById('compiledBriefingPromptTextarea') || document.getElementById('b-compiled-prompt');
+    if (promptEl) {
+      if ('value' in promptEl) promptEl.value = prompt;
+      else promptEl.innerText = prompt;
+    }
   }
 
   // Attach event listeners to all input & custom inputs
-  ['b-name', 'b-slug', 'b-type', 'b-type-custom', 'b-niche', 'b-niche-custom', 'b-subniche', 'b-subniche-custom', 'b-monetization-dev', 'b-monetization-dev-custom', 'b-monetization-user', 'b-monetization-user-custom', 'b-db', 'b-db-custom', 'b-auth', 'b-auth-custom', 'b-ai-custom', 'b-tagline'].forEach(id => {
+  ['b-name', 'b-slug', 'b-type', 'b-type-custom', 'b-niche', 'b-niche-custom', 'b-subniche', 'b-subniche-custom', 'b-monetization-dev', 'b-monetization-dev-custom', 'b-monetization-user', 'b-monetization-user-custom', 'b-db', 'b-db-custom', 'b-auth', 'b-auth-custom', 'b-ai-custom', 'b-problem'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', updateBriefingCompiledPrompt);
     document.getElementById(id)?.addEventListener('change', updateBriefingCompiledPrompt);
   });
 
   function copyBriefingPrompt() {
-    const text = document.getElementById('b-compiled-prompt').innerText;
-    navigator.clipboard.writeText(text);
-    triggerConfetti();
-    showToast('🚀 Briefing copiado al portapapeles.');
+    const promptEl = document.getElementById('compiledBriefingPromptTextarea') || document.getElementById('b-compiled-prompt');
+    const text = promptEl ? (promptEl.value || promptEl.innerText || '') : '';
+    if (text) {
+      navigator.clipboard.writeText(text).then(() => {
+        triggerConfetti();
+        showToast('🚀 Briefing copiado al portapapeles.');
+      });
+    }
   }
 
   function passBriefingToStitch() {
