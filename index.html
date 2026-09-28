@@ -81,9 +81,9 @@
 </head>
 <body class="p-4 md:p-8">
 
-<div class="max-w-6xl mx-auto space-y-6">
+<div class="max-w-7xl mx-auto space-y-6">
 
-  <!-- HEADER -->
+  <!-- HEADER (Solo botón Proyecto Nuevo) -->
   <header class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
     <div>
       <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-blue-700 text-xs font-semibold uppercase tracking-wider mb-3">
@@ -114,15 +114,9 @@
       </p>
     </div>
     
-    <div class="flex flex-wrap gap-2 w-full md:w-auto">
-      <button onclick="switchTab('briefingView')" class="px-4 py-2.5 bg-blue-600 text-white hover:bg-blue-700 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>✨</span> Briefing Ágil
-      </button>
-      <button onclick="switchTab('stitchView')" class="px-4 py-2.5 bg-purple-600 text-white hover:bg-purple-700 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>🎨</span> Diseñar con Stitch IA
-      </button>
-      <button onclick="openProjectsManagerModal()" class="px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
-        <span>🗂️</span> Mis Proyectos
+    <div>
+      <button onclick="createNewProjectDraft(); switchTab('briefingView');" class="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-xl transition shadow-md flex items-center gap-2 transform hover:-translate-y-0.5">
+        <span class="text-base">✨</span> Proyecto Nuevo
       </button>
     </div>
   </header>
@@ -147,31 +141,121 @@
     </div>
   </div>
 
-  <!-- NAVIGATION TABS BAR -->
-  <div class="bg-slate-200/80 p-1 rounded-xl flex gap-1 overflow-x-auto text-xs md:text-sm font-medium">
-    <button id="tabBtn_directrices" onclick="switchTab('directricesView')" class="tab-btn active flex-1 py-2.5 px-3 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition whitespace-nowrap text-center">
-      🏛️ 5 Directrices Maestras
-    </button>
-    <button id="tabBtn_briefing" onclick="switchTab('briefingView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      📐 Briefing &amp; Nuevo Proyecto
-    </button>
-    <button id="tabBtn_stitch" onclick="switchTab('stitchView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      🎨 Stitch UI Studio (Gemini)
-    </button>
-    <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      🛡️ Reglas Globales
-    </button>
-    <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      🧩 Skills &amp; MCP (8)
-    </button>
-    <button id="tabBtn_sop" onclick="switchTab('sopView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      📋 Directiva SOP
-    </button>
-    <button id="tabBtn_sync" onclick="switchTab('syncView')" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center">
-      🔄 Sync Mac ↔ Win
-    </button>
-  </div>
+  <!-- MAIN APP LAYOUT: SIDEBAR + CONTENT -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    
+    <!-- SIDEBAR DE NAVEGACIÓN ORGANIZADA -->
+    <aside class="lg:col-span-3 space-y-4 lg:sticky lg:top-6 self-start">
+      
+      <!-- Card del Menú Lateral -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 card-shadow space-y-5">
+        
+        <!-- SECCIÓN 1: DESARROLLO -->
+        <div class="space-y-1.5">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-3 py-1 font-mono flex items-center justify-between">
+            <span>🚀 Desarrollo</span>
+            <span class="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded font-bold">PROYECTOS</span>
+          </div>
+          
+          <nav class="space-y-1 text-xs">
+            <button id="tabBtn_briefing" onclick="switchTab('briefingView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">📐</span>
+                <span>Nuevo Proyecto &amp; Briefing</span>
+              </div>
+              <span class="text-[10px] font-mono text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full font-bold">10 PASOS</span>
+            </button>
 
+            <button onclick="openProjectsManagerModal()" class="w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">🗂️</span>
+                <span>Mis Proyectos Guardados</span>
+              </div>
+              <span id="savedProjectsCountBadge" class="text-[10px] font-mono text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full font-bold">2</span>
+            </button>
+
+            <button id="tabBtn_stitch" onclick="switchTab('stitchView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">🎨</span>
+                <span>Stitch UI Studio</span>
+              </div>
+              <span class="text-[10px] font-mono text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full font-bold">IA UI</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="border-t border-slate-100"></div>
+
+        <!-- SECCIÓN 2: CONFIGURACIONES & GOBERNANZA -->
+        <div class="space-y-1.5">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-3 py-1 font-mono flex items-center justify-between">
+            <span>⚙️ Configuración</span>
+            <span class="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-bold">GOBERNANZA</span>
+          </div>
+
+          <nav class="space-y-1 text-xs">
+            <button id="tabBtn_directrices" onclick="switchTab('directricesView')" class="tab-btn active w-full flex items-center justify-between p-2.5 rounded-xl transition text-left bg-blue-50 text-blue-900 border border-blue-200 font-bold shadow-xs">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">🏛️</span>
+                <span>5 Directrices Maestras</span>
+              </div>
+              <span class="text-[10px] font-mono text-blue-700 bg-white border border-blue-200 px-1.5 py-0.5 rounded">6 DOCS</span>
+            </button>
+
+            <button id="tabBtn_rules" onclick="switchTab('rulesView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">🛡️</span>
+                <span>Reglas Globales</span>
+              </div>
+              <span class="text-[10px] font-mono text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">RULES/</span>
+            </button>
+
+            <button id="tabBtn_skills" onclick="switchTab('skillsView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">🧩</span>
+                <span>Skills &amp; MCP</span>
+              </div>
+              <span class="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">8 MCP</span>
+            </button>
+
+            <button id="tabBtn_sop" onclick="switchTab('sopView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">📋</span>
+                <span>Directiva SOP &amp; Memoria</span>
+              </div>
+              <span class="text-[10px] font-mono text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">SOP</span>
+            </button>
+
+            <button id="tabBtn_sync" onclick="switchTab('syncView')" class="tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">🔄</span>
+                <span>Sync Mac ↔ Win</span>
+              </div>
+              <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">100%</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="border-t border-slate-100"></div>
+
+        <!-- Mini Active Project Card in Sidebar -->
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Proyecto en Edición:</div>
+          <div class="flex items-center justify-between">
+            <span id="sidebarActiveProjectName" class="text-xs font-bold text-slate-900 truncate max-w-[150px]">Clinica-Dental</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </div>
+          <button onclick="switchTab('briefingView')" class="w-full text-center py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition shadow-2xs">
+            Continuar Editando
+          </button>
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- ÁREA PRINCIPAL DE CONTENIDO (Pestañas Dinámicas) -->
+    <main class="lg:col-span-9 space-y-6">
   <!-- ========================================================================= -->
   <!-- TAB 1: DIRECTRICES MAESTRAS -->
   <!-- ========================================================================= -->
@@ -1109,7 +1193,10 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
+    </main>
+  </div>
+
+    <!-- FOOTER -->
   <footer class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
     <div class="flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -1733,10 +1820,14 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
       const btn = document.getElementById(`tabBtn_${t.replace('View', '')}`);
       if (t === tabId) {
         if (content) content.classList.remove('hidden');
-        if (btn) btn.className = 'tab-btn active flex-1 py-2.5 px-3 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition whitespace-nowrap text-center';
+        if (btn) {
+          btn.className = 'tab-btn active w-full flex items-center justify-between p-2.5 rounded-xl transition text-left bg-blue-50 text-blue-900 border border-blue-200 font-bold shadow-xs';
+        }
       } else {
         if (content) content.classList.add('hidden');
-        if (btn) btn.className = 'tab-btn flex-1 py-2.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap text-center';
+        if (btn) {
+          btn.className = 'tab-btn w-full flex items-center justify-between p-2.5 rounded-xl transition text-left text-slate-700 hover:bg-slate-50 font-semibold';
+        }
       }
     });
 
@@ -1986,8 +2077,10 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     `).join('');
 
     const current = appState.savedProjects.find(p => p.id === appState.currentProjectId) || appState.savedProjects[0];
-    if (current && activeBadge) {
-      activeBadge.innerText = current.name;
+    if (current) {
+      if (activeBadge) activeBadge.innerText = current.name;
+      const sidebarActive = document.getElementById('sidebarActiveProjectName');
+      if (sidebarActive) sidebarActive.innerText = current.name;
     }
   }
 
