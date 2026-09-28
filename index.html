@@ -325,8 +325,8 @@
       display: none !important;
     }
 
-    /* DIRECTIVES VIEW (Two-Pane) */
-    .directives-view-grid, .rules-view-grid {
+    /* DIRECTIVES, RULES & SKILLS VIEW (Two-Pane) */
+    .directives-view-grid, .rules-view-grid, .skills-view-grid {
       display: grid;
       grid-template-columns: 280px 1fr;
       height: 100%;
@@ -334,7 +334,7 @@
       overflow: hidden;
     }
 
-    .directives-list-col, .rules-list-col {
+    .directives-list-col, .rules-list-col, .skills-list-col {
       border-right: 1px solid var(--border-color);
       padding: 1.2rem;
       overflow-y: auto;
@@ -344,7 +344,7 @@
       background: #F8FAFC;
     }
 
-    .dir-item-card, .rule-item-card {
+    .dir-item-card, .rule-item-card, .skill-item-card {
       padding: 0.8rem 1rem;
       border-radius: 6px;
       border: 1px solid var(--border-light);
@@ -353,17 +353,17 @@
       transition: all 0.15s;
     }
 
-    .dir-item-card:hover, .rule-item-card:hover {
+    .dir-item-card:hover, .rule-item-card:hover, .skill-item-card:hover {
       border-color: var(--border-color);
       background: #F1F5F9;
     }
 
-    .dir-item-card.active, .rule-item-card.active {
+    .dir-item-card.active, .rule-item-card.active, .skill-item-card.active {
       background: var(--color-blue-bg);
       border-color: #93C5FD;
     }
 
-    .directives-viewer-col, .rules-viewer-col {
+    .directives-viewer-col, .rules-viewer-col, .skills-viewer-col {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -1238,18 +1238,80 @@
       </div>
 
       <!-- =======================================================================
-           TAB 5: SKILLS & MCP TOOLS
+           TAB 5: SKILLS & MCP TOOLS (Lector & Editor en Vivo)
            ======================================================================= -->
-      <div id="skillsView" class="tab-content hidden tab-scroll-pane">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-light); margin-bottom: 1.2rem;">
-          <div>
-            <h2 class="type-lg">Servidores MCP &amp; Skills Registrados</h2>
-            <p class="type-sm" style="color: var(--text-muted);">Herramientas integradas para ejecución autónoma, control de contexto y automatizaciones.</p>
+      <div id="skillsView" class="tab-content hidden">
+        <div class="skills-view-grid">
+          
+          <!-- Skills List Subcolumn -->
+          <div class="skills-list-col">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span class="type-xs" style="color: var(--text-muted);">Skills &amp; MCP (<span id="skillsCountBadge">9</span>) :</span>
+              <button onclick="createNewSkillPrompt()" class="btn-action btn-secondary" style="min-height: 24px; padding: 0.1rem 0.6rem; font-size: 1.1rem;" title="Crear nueva Skill personalizada">+ Nueva</button>
+            </div>
+            <div id="skillsListContainer" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <!-- Injected dynamically -->
+            </div>
           </div>
-          <button onclick="copyAllSkillsPrompt()" class="btn-action btn-blue">⚡ Inyectar Todos los Skills</button>
-        </div>
-        <div id="skillsGridContainer" class="cards-grid">
-          <!-- Injected dynamically -->
+
+          <!-- Skill Viewer & Editor Subcolumn -->
+          <div class="skills-viewer-col">
+            <div class="viewer-header">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                  <span id="activeSkillIcon" style="font-size: 1.8rem;">📊</span>
+                  <h2 id="activeSkillTitle" class="type-lg">Estudios de Mercado &amp; Monetización</h2>
+                  <span id="activeSkillFilename" class="font-mono type-xs" style="background: var(--bg-subtle); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-light);">skills/market-opportunity-analyzer/SKILL.md</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-top: 0.2rem;">
+                  <p id="activeSkillDescription" class="type-sm" style="color: var(--text-secondary);">Generador de estudios de mercado, micro-nichos desatendidos, monetización y planes Lean Startup.</p>
+                  <span id="activeSkillTypeBadge" class="font-mono type-xs" style="background: #F3E8FF; color: #7E22CE; padding: 0.1rem 0.5rem; border-radius: 4px; border: 1px solid #E9D5FF;">Estrategia &amp; Negocio</span>
+                </div>
+              </div>
+
+              <!-- View Mode Toggle & Status -->
+              <div style="display: flex; align-items: center; gap: 0.8rem;">
+                <div style="display: flex; gap: 0.4rem; background: var(--bg-subtle); padding: 0.2rem; border-radius: 6px; border: 1px solid var(--border-light);">
+                  <button onclick="setSkillViewMode('preview')" id="skillViewMode-preview" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.8rem;">📖 Lectura</button>
+                  <button onclick="setSkillViewMode('editor')" id="skillViewMode-editor" class="btn-action btn-secondary" style="min-height: 28px; padding: 0.2rem 0.8rem;">✏️ Editor</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview Mode -->
+            <div id="skillPreviewContainer" class="viewer-body prose-light">
+              <!-- Rendered Markdown injected -->
+            </div>
+
+            <!-- Editor Mode -->
+            <div id="skillEditorContainer" class="viewer-body hidden" style="display: flex; flex-direction: column; gap: 0.8rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-muted);" class="font-mono">
+                <span>Editor Markdown de Skill / Protocolo:</span>
+                <span id="skillEditorWordCount">0 caracteres</span>
+              </div>
+              <textarea id="skillMarkdownTextarea" oninput="onSkillTextareaInput()" style="flex: 1; min-height: 380px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; padding: 1.0rem; background: #0F172A; color: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; resize: none;"></textarea>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button onclick="deleteActiveSkillIfCustom()" id="btnDeleteCustomSkill" class="btn-action btn-secondary" style="color: var(--color-error); border-color: #FECACA; display: none;">🗑️ Eliminar Skill</button>
+                <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-left: auto;">
+                  <button onclick="resetActiveSkillToDefault()" class="btn-action btn-secondary">🔄 Restablecer</button>
+                  <button onclick="setSkillViewMode('preview')" class="btn-action btn-secondary">Cancelar</button>
+                  <button onclick="saveActiveSkillEdit()" class="btn-action btn-primary">✓ Guardar Cambios</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Viewer Footer Actions -->
+            <div class="viewer-footer">
+              <div style="display: flex; gap: 0.6rem;">
+                <button onclick="copyActiveSkillMarkdown()" class="btn-action btn-secondary">📋 Copiar MD</button>
+                <button onclick="downloadActiveSkillMarkdown()" class="btn-action btn-secondary">📥 Descargar SKILL.md</button>
+                <button onclick="copyAllSkillsPrompt()" class="btn-action btn-secondary">📦 Copiar Todos</button>
+              </div>
+              <button onclick="copyActiveSkillPrompt()" class="btn-action btn-blue">⚡ Inyectar Prompt / Probar</button>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
@@ -2075,15 +2137,249 @@
 ];
 
   const DEFAULT_SKILLS = [
-    { id: 'pencil-dev', title: 'Pencil Visual AI', icon: '🎨', type: 'Diseño & Canvas', desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.' },
-    { id: 'stitch', title: 'Google Stitch (Project Nemo)', icon: '🧵', type: 'Generación UI Gemini', desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.' },
-    { id: 'ui-ux-expert', title: 'UI/UX Desktop Expert', icon: '✨', type: 'Experiencia de Usuario', desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.' },
-    { id: 'mobile-ui-ux-expert', title: 'Mobile UI/UX Expert', icon: '📱', type: 'Mobile & PWA', desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.' },
-    { id: 'market-opportunity-analyzer', title: 'Estudios de Mercado & Monetización', icon: '📊', type: 'Estrategia & Negocio', desc: 'Generador de estudios de mercado, micro-nichos desatendidos, monetización y planes Lean Startup.' },
-    { id: 'accidental-data-loss-prevention', title: 'Data Loss Prevention', icon: '🛡️', type: 'Seguridad', desc: 'Bloqueo de comandos destructivos que provoquen pérdida irreversible de datos.' },
-    { id: 'telegram', title: 'Telegram Bot MCP', icon: '✈️', type: 'Notificaciones', desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.' },
-    { id: 'whatsapp', title: 'WhatsApp Baileys MCP', icon: '💬', type: 'Mensajería', desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.' },
-    { id: 'supabase-mcp', title: 'Supabase MCP Management', icon: '🗄️', type: 'Base de Datos', desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.' }
+    {
+      id: 'market-opportunity-analyzer',
+      filename: 'skills/market-opportunity-analyzer/SKILL.md',
+      title: 'Estudios de Mercado & Monetización',
+      shortTitle: 'Estudios de Mercado',
+      icon: '📊',
+      type: 'Estrategia & Negocio',
+      desc: 'Generador de estudios de mercado, micro-nichos desatendidos, monetización y planes Lean Startup.',
+      active: true,
+      markdownContent: `# 📊 GENERADOR DE ESTUDIOS DE MERCADO, OPORTUNIDADES Y MONETIZACIÓN
+
+## PROPÓSITO
+Transformar una palabra clave, concepto o frase semilla del usuario en un análisis estratégico de mercado completo, identificando necesidades insatisfechas, micro-nichos rentables, modelos de monetización y un plan de validación ágil.
+
+## INSTRUCCIONES DE EJECUCIÓN
+Cuando el usuario proporcione una palabra o frase (ej. "café de especialidad", "IA para abogados", "gimnasios boutique", "app salud hormonal"), ejecuta las siguientes 5 fases:
+
+---
+
+### FASE 1: DESGLOSE DEL CONCEPTO Y SEGMENTACIÓN DE NICHOS
+1. **Macro-concepto**: Define la industria principal y tamaño de mercado.
+2. **Definición de Micro-nichos**: Divide el mercado general en al menos 3 micro-nichos desatendidos (*Long Tail*).
+3. **Perfil del Buyer Persona / Early Adopter**: Describe al cliente primario con mayor urgencia y disposición de pago.
+
+---
+
+### FASE 2: ANÁLISIS DE PUNTOS DE DOLOR Y "JOBS-TO-BE-DONE" (JTBD)
+1. **Puntos de dolor reales (Pain Points)**: Ineficiencias o quejas de la oferta generalista actual.
+2. **Trabajo por Hacer (JTBD)**: Problema funcional, emocional o social que busca resolver.
+3. **Brechas de Mercado**: Oportunidades claras por clientes insatisfechos.
+
+---
+
+### FASE 3: ESTRATEGIAS DE MONETIZACIÓN Y MODELOS DE NEGOCIO
+- **Opción A (Modelo Recurrente / Escala)**: SaaS, Membresía, Suscripción.
+- **Opción B (Modelo Directo / High Ticket)**: B2B Corporativo, Consultoría especializada.
+- **Opción C (Modelo Alternativo / Bajo Riesgo)**: Marketplace, Afiliación, Comisiones (CPA).
+
+---
+
+### FASE 4: ANÁLISIS COMPETITIVO Y DIFERENCIACIÓN
+1. **Barreras de Entrada y Competencia Directa e Indirecta**.
+2. **Factores Clave de Diferenciación**: Ventajas únicas sin competir por precio.
+
+---
+
+### FASE 5: PLAN DE VALIDACIÓN MÍNIMA VIABLE (LEAN STARTUP)
+1. **Hipótesis Crítica a Validar**: La suposición más riesgosa del modelo.
+2. **Experimento de Bajo Costo (Smoke Test / MVP)**: Pasos concretos de validación en 7 días.
+3. **Métricas Clave de Éxito**: Tasas de conversión y coste de adquisición estimado.
+`
+    },
+    {
+      id: 'pencil-dev',
+      filename: 'skills/pencil-dev/SKILL.md',
+      title: 'Pencil Visual AI (pen.dev)',
+      shortTitle: 'Pencil Visual AI',
+      icon: '🎨',
+      type: 'Diseño & Canvas',
+      desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.',
+      active: true,
+      markdownContent: `# 🎨 Pencil (pen.dev) - AI Design Canvas & MCP Integration
+
+Pencil (**pen.dev**) es un lienzo de diseño visual "Design-as-Code" que permite a los agentes de IA (Antigravity, Claude, Gemini) leer, crear y editar diseños de interfaz guardados en formato \`.pen\`.
+
+---
+
+## 🛠️ 1. Comandos Principales de la CLI
+
+\`\`\`bash
+# Crear nuevo diseño
+pen --out diseño.pen --prompt "Crea un dashboard financiero con Dark Glassmorphism" --agent gemini
+
+# Modificar diseño existente
+pen --in diseño.pen --out diseño_v2.pen --prompt "Añade barra de navegación superior con buscador"
+
+# Exportar a imagen PNG
+pen --in diseño.pen --out diseño.pen --export ./preview.png --export-type png --export-scale 2
+
+# Modo interactivo MCP
+pen interactive -i diseño.pen -o diseño_actualizado.pen
+\`\`\`
+
+---
+
+## 🔌 2. Herramientas del Servidor MCP de Pencil
+
+- **\`browser\`**: Carga URLs, convierte páginas web en nodos de Pencil, toma screenshots e inspecciona el DOM.
+- **\`get_app_state\`**: Obtiene nodos seleccionados y jerarquía del canvas.
+- **\`get_style\`**: Carga paletas y tokens de diseño.
+- **\`execute\`**: Modifica y renderiza código dinámicamente en el canvas.
+`
+    },
+    {
+      id: 'stitch',
+      filename: 'skills/stitch/SKILL.md',
+      title: 'Google Stitch (Project Nemo)',
+      shortTitle: 'Google Stitch UI',
+      icon: '🧵',
+      type: 'Generación UI Gemini',
+      desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.',
+      active: true,
+      markdownContent: `# 🧵 Google Stitch (Project Nemo) - UI Generation & Sync
+
+Integración oficial de Google Stitch (stitch.withgoogle.com) para acelerar la creación de interfaces web y móviles reactivas de alta fidelidad.
+
+---
+
+## 🚀 Capacidades Principales
+- **Generación de UI con Gemini**: Creación de componentes React limpios basados en especificaciones estructuradas.
+- **Design Tokens**: Generación de paletas semánticas, espaciados en rem (base 10px) y tokens CSS3.
+- **Sincronización Bidireccional**: Exportación de pantallas directamente al código fuente del proyecto.
+`
+    },
+    {
+      id: 'ui-ux-expert',
+      filename: 'skills/ui-ux-expert/SKILL.md',
+      title: 'UI/UX Desktop Expert',
+      shortTitle: 'UI/UX Desktop',
+      icon: '✨',
+      type: 'Experiencia de Usuario',
+      desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.',
+      active: true,
+      markdownContent: `# ✨ UI/UX Desktop Expert & Design Guidelines
+
+Directiva especializada en diseño visual, estética premium y experiencia de usuario para aplicaciones web y de escritorio.
+
+---
+
+## 🎯 Principios Fundamentales
+1. **Rich Aesthetics & WOW Factor**: Paletas HSL cuidadas, Dark Glassmorphism y tipografía Google Fonts (Inter, Outfit).
+2. **Cero Diálogos Nativos**: Todo el feedback debe presentarse visualmente en el DOM mediante Toasts animados o modales dedicados.
+3. **Micro-interacciones**: Estados hover, active y skeleton loaders que hagan sentir la aplicación viva y reactiva.
+4. **Accesibilidad (WCAG 2.1 AA)**: Ratios de contraste ≥ 4.5:1 y foco de navegación visible por teclado.
+`
+    },
+    {
+      id: 'mobile-ui-ux-expert',
+      filename: 'skills/mobile-ui-ux-expert/SKILL.md',
+      title: 'Mobile UI/UX Expert',
+      shortTitle: 'Mobile UI/UX',
+      icon: '📱',
+      type: 'Mobile & PWA',
+      desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.',
+      active: true,
+      markdownContent: `# 📱 Mobile UI/UX Expert & Touch Ergonomics
+
+Especialización en diseño ergonómico para smartphones y Progressive Web Apps (PWAs).
+
+---
+
+## 📐 Reglas de Ergonomía Táctil
+- **Zonas Táctiles (Touch Targets)**: Tamaño mínimo de botón de 48x48px con espaciado adecuado.
+- **Thumb Zone**: Ubicación de acciones primarias y barra de navegación en el tercio inferior de la pantalla.
+- **Viewport Seguro**: Respetar safe-area-inset para notch y barra de navegación de iOS/Android.
+- **Medidas en rem**: Base tipográfica de 10px (\`html { font-size: 62.5%; }\`).
+`
+    },
+    {
+      id: 'accidental-data-loss-prevention',
+      filename: 'skills/accidental-data-loss-prevention/SKILL.md',
+      title: 'Data Loss Prevention (DLP)',
+      shortTitle: 'Data Loss Prevention',
+      icon: '🛡️',
+      type: 'Seguridad',
+      desc: 'Bloqueo de comandos destructivos que provoquen pérdida irreversible de datos.',
+      active: true,
+      markdownContent: `# 🛡️ Accidental Data Loss Prevention Skill
+
+Protocolo de seguridad obligatorio para prevenir pérdidas irreversibles de datos en proyectos y bases de datos.
+
+---
+
+## ⚠️ Verificaciones Obligatorias
+- **Confirmación Explícita**: Solicitar confirmación previa antes de ejecutar \`DROP TABLE\`, \`rm -rf\`, \`git reset --hard\` o mutaciones destructivas.
+- **Backups Previos**: Crear copias de seguridad de tablas o ficheros antes de refactorizaciones mayores.
+- **Zonas Protegidas**: Respetar los archivos declarados como inmutables en \`.antigravityrules\`.
+`
+    },
+    {
+      id: 'supabase-mcp',
+      filename: 'skills/supabase-mcp/SKILL.md',
+      title: 'Supabase MCP Management',
+      shortTitle: 'Supabase MCP',
+      icon: '🗄️',
+      type: 'Base de Datos',
+      desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.',
+      active: true,
+      markdownContent: `# 🗄️ Supabase MCP Management & PostgreSQL Inspector
+
+Herramientas para administración, consulta e inspección de bases de datos PostgreSQL en Supabase.
+
+---
+
+## 📋 Protocolos de Base de Datos
+- **Aislamiento Multi-Esquema**: Esquemas dedicados (\`mia_*\` para propios, \`com_*\` para clientes). NUNCA usar \`public\`.
+- **RLS Obligatorio (100%)**: Todas las tablas deben habilitar Row Level Security con \`auth.uid() = user_id\`.
+- **Migraciones Versionadas**: Registro en \`supabase/migrations/YYYYMMDD_init_<esquema>.sql\`.
+- **Permisos de Esquema**: Ejecutar \`GRANT USAGE ON SCHEMA\` a los roles \`anon\` y \`authenticated\`.
+`
+    },
+    {
+      id: 'telegram',
+      filename: 'skills/telegram/SKILL.md',
+      title: 'Telegram Bot MCP',
+      shortTitle: 'Telegram Bot MCP',
+      icon: '✈️',
+      type: 'Notificaciones',
+      desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.',
+      active: true,
+      markdownContent: `# ✈️ Telegram Bot MCP & Real-time Alerts
+
+Integración con la API de Telegram Bots para automatizaciones y notificaciones críticas.
+
+---
+
+## 🚀 Capacidades
+- **Notificaciones de Despliegue**: Alertas automáticas al completar builds en Vercel.
+- **Logs de Errores**: Streaming de excepciones en tiempo real a canales privados.
+- **Comandos Interactivos**: Recepción de órdenes remotas para arrancar tareas o scripts.
+`
+    },
+    {
+      id: 'whatsapp',
+      filename: 'skills/whatsapp/SKILL.md',
+      title: 'WhatsApp Baileys MCP',
+      shortTitle: 'WhatsApp Baileys',
+      icon: '💬',
+      type: 'Mensajería',
+      desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.',
+      active: true,
+      markdownContent: `# 💬 WhatsApp Baileys MCP & Multi-Device Messaging
+
+Automatización y conexión con WhatsApp Web mediante el protocolo Baileys.
+
+---
+
+## 📲 Casos de Uso
+- **Recordatorios de Citas**: Notificaciones automáticas a clientes de clínicas y talleres.
+- **Confirmación de Pedidos**: Mensajes transaccionales de e-commerce.
+- **Atención al Cliente**: Respuestas automáticas con IA y enrutamiento a agentes humanos.
+`
+    }
   ];
 
   const DEFAULT_PROJECTS = [
@@ -2202,10 +2498,12 @@
     memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
     activeDirectiveId: 'dir_supabase',
     activeRuleId: 'rule_sop_clean_sdd',
+    activeSkillId: 'market-opportunity-analyzer',
     activeGuideId: 'CLASE-01',
     guidesCategoryFilter: 'all',
     ruleViewMode: 'preview',
     directiveViewMode: 'preview',
+    skillViewMode: 'preview',
     stitchDesign: {
       palette: 'blue_royal',
       primaryColor: '#2563eb',
@@ -2235,20 +2533,23 @@
         } else {
           appState.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
         }
-        if (parsed.skills && Array.isArray(parsed.skills) && parsed.skills.length) {
+        if (parsed.skills && Array.isArray(parsed.skills) && parsed.skills.length >= 9 && parsed.skills[0].markdownContent && parsed.skills[0].markdownContent.length > 50) {
           appState.skills = parsed.skills;
         } else {
           appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
         }
+        if (parsed.activeSkillId) appState.activeSkillId = parsed.activeSkillId;
         if (parsed.memory) appState.memory = parsed.memory;
         if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
         if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
       } else {
         appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
+        appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
       }
     } catch (e) {
       console.error(e);
       appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
+      appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
     }
   }
 
@@ -2812,41 +3113,226 @@ DOCUMENTACIÓN Y RECURSOS:
     `).join('');
   }
 
-  function renderSkillsGrid() {
-    const container = document.getElementById('skillsGridContainer');
+  // ============================================================================
+  // SKILLS & MCP MASTER VIEWER & LIVE MARKDOWN EDITOR (skills/)
+  // ============================================================================
+  function renderSkillsList() {
+    const container = document.getElementById('skillsListContainer');
     if (!container) return;
     if (!appState.skills || !appState.skills.length) {
       appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
     }
-    container.innerHTML = appState.skills.map(skill => `
-      <div class="skill-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem;">
-          <span style="font-size: 2.2rem;">${skill.icon}</span>
-          <span class="nav-badge" style="background: #F3E8FF; color: #7E22CE; border-color: #E9D5FF; font-size: 1.05rem;">${skill.type}</span>
+    const countBadge = document.getElementById('skillsCountBadge');
+    if (countBadge) countBadge.innerText = appState.skills.length;
+
+    container.innerHTML = appState.skills.map(skill => {
+      const isActive = skill.id === appState.activeSkillId;
+      return `
+        <div onclick="selectSkill('${skill.id}')" class="skill-item-card ${isActive ? 'active' : ''}">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
+            <div style="display: flex; align-items: center; gap: 0.8rem;">
+              <span style="font-size: 1.6rem;">${skill.icon || '🧩'}</span>
+              <div>
+                <h4 class="type-sm" style="font-weight: 700; color: ${isActive ? 'var(--color-primary-dark)' : 'var(--text-primary)'};">${skill.shortTitle || skill.title}</h4>
+                <div class="font-mono type-xs" style="color: var(--text-muted);">${skill.filename || `skills/${skill.id}/SKILL.md`}</div>
+              </div>
+            </div>
+            <span class="nav-badge" style="background: #F3E8FF; color: #7E22CE; border-color: #E9D5FF; font-size: 0.95rem;">${skill.type}</span>
+          </div>
+          <p class="type-xs truncate" style="color: var(--text-secondary); margin-top: 0.2rem;">${skill.desc || ''}</p>
         </div>
-        <h4 class="type-sm" style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem;">${skill.title}</h4>
-        <p class="type-xs" style="color: var(--text-secondary); line-height: 1.5; flex: 1; margin-bottom: 1.0rem;">${skill.desc}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.8rem; border-top: 1px solid var(--border-light); margin-top: auto;">
-          <span class="font-mono type-xs" style="color: #059669; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
-            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10B981; display: inline-block;"></span> Activo
-          </span>
-          <button onclick="testSkillPrompt('${skill.title}', '${skill.id}')" class="btn-action btn-secondary" style="min-height: 26px; padding: 0.2rem 0.8rem; font-size: 1.1rem;">
-            ⚡ Probar
-          </button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
-  function testSkillPrompt(title, id) {
-    const promptText = `Por favor, activa y utiliza la herramienta / skill "${title}" (${id || ''}) para ejecutar la siguiente tarea...`;
-    navigator.clipboard.writeText(promptText).then(() => {
-      showToast(`⚡ Invocación de "${title}" copiada al portapapeles.`);
+  function selectSkill(id) {
+    appState.activeSkillId = id;
+    renderSkillsList();
+    renderActiveSkillDetails();
+  }
+
+  function renderActiveSkillDetails() {
+    if (!appState.skills || !appState.skills.length) {
+      appState.skills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
+    }
+    const skill = appState.skills.find(s => s.id === appState.activeSkillId) || appState.skills[0];
+    if (!skill) return;
+
+    appState.activeSkillId = skill.id;
+
+    const iconEl = document.getElementById('activeSkillIcon');
+    const titleEl = document.getElementById('activeSkillTitle');
+    const filenameEl = document.getElementById('activeSkillFilename');
+    const descEl = document.getElementById('activeSkillDescription');
+    const badgeEl = document.getElementById('activeSkillTypeBadge');
+    const btnDelete = document.getElementById('btnDeleteCustomSkill');
+
+    if (iconEl) iconEl.innerText = skill.icon || '🧩';
+    if (titleEl) titleEl.innerText = skill.title || 'Skill MCP';
+    if (filenameEl) filenameEl.innerText = skill.filename || `skills/${skill.id}/SKILL.md`;
+    if (descEl) descEl.innerText = skill.desc || '';
+    if (badgeEl) badgeEl.innerText = skill.type || 'Herramienta';
+
+    const isDefault = DEFAULT_SKILLS.some(d => d.id === skill.id);
+    if (btnDelete) {
+      btnDelete.style.display = isDefault ? 'none' : 'inline-flex';
+    }
+
+    const previewContainer = document.getElementById('skillPreviewContainer');
+    if (previewContainer) {
+      previewContainer.innerHTML = renderMarkdownSafely(skill.markdownContent);
+    }
+
+    const textarea = document.getElementById('skillMarkdownTextarea');
+    if (textarea) {
+      textarea.value = skill.markdownContent || '';
+      onSkillTextareaInput();
+    }
+  }
+
+  function setSkillViewMode(mode) {
+    appState.skillViewMode = mode;
+    const previewEl = document.getElementById('skillPreviewContainer');
+    const editorEl = document.getElementById('skillEditorContainer');
+    const btnPreview = document.getElementById('skillViewMode-preview');
+    const btnEditor = document.getElementById('skillViewMode-editor');
+
+    if (mode === 'preview') {
+      if (previewEl) previewEl.classList.remove('hidden');
+      if (editorEl) editorEl.classList.add('hidden');
+      if (btnPreview) { btnPreview.classList.add('btn-primary'); btnPreview.classList.remove('btn-secondary'); }
+      if (btnEditor) { btnEditor.classList.add('btn-secondary'); btnEditor.classList.remove('btn-primary'); }
+      renderActiveSkillDetails();
+    } else {
+      if (previewEl) previewEl.classList.add('hidden');
+      if (editorEl) editorEl.classList.remove('hidden');
+      if (btnEditor) { btnEditor.classList.add('btn-primary'); btnEditor.classList.remove('btn-secondary'); }
+      if (btnPreview) { btnPreview.classList.add('btn-secondary'); btnPreview.classList.remove('btn-primary'); }
+      const textarea = document.getElementById('skillMarkdownTextarea');
+      if (textarea) {
+        textarea.focus();
+        onSkillTextareaInput();
+      }
+    }
+  }
+
+  function onSkillTextareaInput() {
+    const textarea = document.getElementById('skillMarkdownTextarea');
+    const wordCount = document.getElementById('skillEditorWordCount');
+    if (textarea && wordCount) {
+      const len = textarea.value.length;
+      const words = textarea.value.split(/\s+/).filter(Boolean).length;
+      wordCount.innerText = `${len} caracteres · ${words} palabras`;
+    }
+  }
+
+  function saveActiveSkillEdit() {
+    const textarea = document.getElementById('skillMarkdownTextarea');
+    if (!textarea) return;
+    const newMarkdown = textarea.value;
+    const skill = appState.skills.find(s => s.id === appState.activeSkillId);
+    if (skill) {
+      skill.markdownContent = newMarkdown;
+      renderActiveSkillDetails();
+      setSkillViewMode('preview');
+      saveAllChanges();
+      showToast('✓ Cambios guardados en el Skill.');
+    }
+  }
+
+  function resetActiveSkillToDefault() {
+    const orig = DEFAULT_SKILLS.find(d => d.id === appState.activeSkillId);
+    const current = appState.skills.find(s => s.id === appState.activeSkillId);
+    if (orig && current) {
+      if (confirm('¿Deseas restablecer este Skill a su contenido original de fábrica?')) {
+        current.markdownContent = orig.markdownContent;
+        renderActiveSkillDetails();
+        saveAllChanges();
+        showToast('✓ Skill restablecido al original.');
+      }
+    } else {
+      showToast('Este es un Skill personalizado, no tiene original por defecto.');
+    }
+  }
+
+  function copyActiveSkillMarkdown() {
+    const skill = appState.skills.find(s => s.id === appState.activeSkillId);
+    if (!skill || !skill.markdownContent) return;
+    navigator.clipboard.writeText(skill.markdownContent).then(() => {
+      showToast(`📋 Markdown de "${skill.title}" copiado al portapapeles.`);
     });
   }
 
+  function downloadActiveSkillMarkdown() {
+    const skill = appState.skills.find(s => s.id === appState.activeSkillId);
+    if (!skill) return;
+    const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(skill.markdownContent || '');
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = `SKILL-${skill.id}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast(`📥 ${a.download} descargada.`);
+  }
+
+  function copyActiveSkillPrompt() {
+    const skill = appState.skills.find(s => s.id === appState.activeSkillId);
+    if (!skill) return;
+    const promptText = `================================================================================\nSKILL / PROTOCOLO ACTIVO: ${skill.title} (${skill.id})\nArchivo: ${skill.filename || `skills/${skill.id}/SKILL.md`}\nCategoría: ${skill.type}\n================================================================================\n\n${skill.markdownContent}\n`;
+    navigator.clipboard.writeText(promptText).then(() => {
+      showToast(`⚡ Prompt de "${skill.title}" copiado para inyección.`);
+    });
+  }
+
+  function createNewSkillPrompt() {
+    const title = prompt('Introduce el nombre de la nueva Skill / Protocolo:', 'Nueva Skill Especializada');
+    if (!title) return;
+    const id = prompt('Identificador clave (slug, ej: data-analyzer):', title.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+    if (!id) return;
+    const type = prompt('Categoría / Tipo (ej: IA & Prompting, Backend, Diseño, Automatización):', 'Estrategia & IA') || 'General';
+
+    const newSkill = {
+      id: id,
+      filename: `skills/${id}/SKILL.md`,
+      title: title,
+      shortTitle: title,
+      icon: '🧩',
+      type: type,
+      desc: `Skill personalizada "${title}" agregada desde Tonigravity Studio.`,
+      active: true,
+      markdownContent: `# 🧩 SKILL: ${title}\n\n> **ID:** \`${id}\`  \n> **Categoría:** ${type}  \n> **Estado:** ACTIVO  \n\n---\n\n## 1. Propósito y Alcance\nDescribe aquí el objetivo del skill y cómo debe comportarse el agente...\n\n---\n\n## 2. Instrucciones de Ejecución Paso a Paso\n1. **Paso 1**: [Acción inicial]\n2. **Paso 2**: [Procesamiento]\n3. **Paso 3**: [Validación y entrega]\n`
+    };
+
+    appState.skills.push(newSkill);
+    appState.activeSkillId = id;
+    renderSkillsList();
+    renderActiveSkillDetails();
+    setSkillViewMode('editor');
+    saveAllChanges();
+    showToast(`✓ Nueva Skill "${title}" creada. ¡Ahora puedes redactarla!`);
+  }
+
+  function deleteActiveSkillIfCustom() {
+    const skill = appState.skills.find(s => s.id === appState.activeSkillId);
+    if (!skill) return;
+    const isDefault = DEFAULT_SKILLS.some(d => d.id === skill.id);
+    if (isDefault) {
+      showToast('❌ Las skills del sistema base no se pueden eliminar.');
+      return;
+    }
+    if (confirm(`¿Estás seguro de eliminar la skill personalizada "${skill.title}"?`)) {
+      appState.skills = appState.skills.filter(s => s.id !== skill.id);
+      appState.activeSkillId = appState.skills[0]?.id || 'market-opportunity-analyzer';
+      renderSkillsList();
+      renderActiveSkillDetails();
+      saveAllChanges();
+      showToast('🗑️ Skill personalizada eliminada.');
+    }
+  }
+
   function copyAllSkillsPrompt() {
-    const skillsList = (appState.skills || DEFAULT_SKILLS).map(s => `- **${s.title}** (${s.id}): ${s.desc}`).join('\n');
+    const skillsList = (appState.skills || DEFAULT_SKILLS).map(s => `- **${s.title}** (${s.id} - ${s.type}): ${s.desc}`).join('\n');
     const promptText = `================================================================================\nSERVIDORES MCP & SKILLS AUTORIZADOS\n================================================================================\n\n${skillsList}\n\nPor favor, utiliza estos MCP servers y skills según se requiera en el flujo de desarrollo.\n`;
     navigator.clipboard.writeText(promptText).then(() => {
       showToast('⚡ Catálogo de Skills & MCP copiado al portapapeles.');
@@ -2991,7 +3477,8 @@ DOCUMENTACIÓN Y RECURSOS:
         renderActiveRuleDetails();
       }
       if (tabId === 'skillsView') {
-        renderSkillsGrid();
+        renderSkillsList();
+        renderActiveSkillDetails();
       }
       if (tabId === 'sopView') {
         renderMemoryTable();
@@ -4798,7 +5285,8 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
     renderActiveDirectiveDetails();
     renderRulesList();
     renderActiveRuleDetails();
-    renderSkillsGrid();
+    renderSkillsList();
+    renderActiveSkillDetails();
     renderProjectsGrid();
     renderMemoryTable();
     renderSavedProjectsDropdown();
