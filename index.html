@@ -2574,7 +2574,8 @@
     renderSavedProjectsDropdown();
     updateBriefingCompiledPrompt();
     updateStitchDesign();
-    showToast(`✓ Proyecto "${project.name}" cargado.`);
+    switchTab('briefingView');
+    showToast(`✓ Proyecto "${project.name}" cargado en Briefing.`);
   }
 
   function createNewProjectDraft() {
@@ -2613,7 +2614,8 @@
 
     updateBriefingCompiledPrompt();
     updateStitchDesign();
-    showToast('✨ Nuevo borrador en blanco preparado.');
+    switchTab('briefingView');
+    showToast('✨ Nuevo borrador preparado en el Briefing.');
   }
 
   function duplicateProject(projectId) {
