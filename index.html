@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tonigravity • Control Central de Directrices, Skills y Agentes IA</title>
+  
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            orbitron: ['Orbitron', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              400: '#2dd4bf',
+              500: '#14b8a6',
+              600: '#0d9488',
+              glow: '#06b6d4',
+            },
+            quantum: {
+              purple: '#a855f7',
+              violet: '#6366f1',
+              cyan: '#06b6d4',
+              neon: '#38bdf8'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- External Libraries -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #060913;
+      color: #f1f5f9;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.06) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .glass-panel-glow {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.2);
+    }
+    .quantum-border {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.5), rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5));
+      padding: 1px;
+      border-radius: 1rem;
+    }
+    .quantum-gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    /* Markdown Styles in preview */
+    .prose-dark h1 { font-size: 1.5rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.75rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+    .prose-dark h2 { font-size: 1.25rem; font-weight: 700; color: #38bdf8; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+    .prose-dark h3 { font-size: 1.1rem; font-weight: 600; color: #a5b4fc; margin-top: 1rem; margin-bottom: 0.5rem; }
+    .prose-dark p { margin-bottom: 0.75rem; line-height: 1.6; color: #cbd5e1; }
+    .prose-dark ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #cbd5e1; }
+    .prose-dark ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; color: #cbd5e1; }
+    .prose-dark li { margin-bottom: 0.25rem; }
+    .prose-dark code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: rgba(30, 41, 59, 0.8); color: #38bdf8; padding: 0.2rem 0.4rem; border-radius: 0.25rem; }
+    .prose-dark pre { background: #090d16; border: 1px solid #1e293b; padding: 0.85rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+    .prose-dark pre code { background: transparent; padding: 0; color: #e2e8f0; }
+    .prose-dark blockquote { border-left: 3px solid #6366f1; padding-left: 0.85rem; color: #94a3b8; margin: 0.75rem 0; font-style: italic; }
+    .prose-dark table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.875rem; }
+    .prose-dark th { background: #1e293b; color: #f8fafc; text-align: left; padding: 0.5rem 0.75rem; border: 1px solid #334155; }
+    .prose-dark td { padding: 0.5rem 0.75rem; border: 1px solid #334155; color: #cbd5e1; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- TOP HEADER / BRANDING -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 sticky top-0 z-40 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+        <div class="flex items-center gap-3">
+          <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 border border-indigo-500/30 shadow-lg shadow-indigo-500/20">
+            <svg class="w-7 h-7" viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="orbG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#06B6D4" />
+                  <stop offset="50%" stop-color="#6366F1" />
+                  <stop offset="100%" stop-color="#A855F7" />
+                </linearGradient>
+              </defs>
+              <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="url(#orbG)" stroke-width="3" transform="rotate(-30 50 50)" />
+              <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="#06B6D4" stroke-width="2.5" transform="rotate(45 50 50)" />
+              <circle cx="50" cy="50" r="16" fill="url(#orbG)" />
+              <path d="M43 43 H57 M50 43 V57" stroke="#0B0F19" stroke-width="3.5" stroke-linecap="round" />
+            </svg>
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-950 animate-pulse"></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-orbitron font-extrabold text-xl tracking-wider text-white">TONI<span class="quantum-gradient-text">GRAVITY</span></h1>
+              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">v2.6 OS</span>
+            </div>
+            <p class="text-xs text-slate-400 font-medium">Control Central de Directrices, Skills &amp; Comportamiento IA</p>
+          </div>
+        </div>
+
+        <!-- Mobile Sync Indicator -->
+        <div class="md:hidden flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>SYNC OK</span>
+        </div>
+      </div>
+
+      <!-- Quick Metrics & Actions -->
+      <div class="flex items-center flex-wrap gap-2.5 w-full md:w-auto justify-end">
+        
+        <!-- Environment Indicator -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-900/90 border border-slate-800 rounded-lg text-xs font-mono text-slate-300">
+          <span id="osBadge" class="text-sky-400 font-semibold">🍎 macOS</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-emerald-400 flex items-center gap-1">
+            <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> 9 Repos al día
+          </span>
+        </div>
+
+        <!-- Master Prompt Quick Copy Button -->
+        <button onclick="copyMasterInitPrompt()" class="px-3.5 py-1.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white text-xs font-semibold rounded-lg shadow-md shadow-indigo-600/20 transition flex items-center gap-1.5">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+          <span>Copiar Prompt Maestro</span>
+        </button>
+
+        <!-- Save/Sync Button -->
+        <button onclick="saveAllChanges()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1.5">
+          <i data-lucide="save" class="w-3.5 h-3.5"></i>
+          <span>Guardar Estado</span>
+        </button>
+
+        <!-- Reset Button -->
+        <button onclick="resetDefaults()" title="Restaurar directrices iniciales" class="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 rounded-lg transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN NAV TABS -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto no-scrollbar gap-1 border-t border-slate-800/60 pt-1 pb-1 text-sm font-medium">
+      <button onclick="switchTab('directrices')" id="tab-btn-directrices" class="tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-sky-400 bg-slate-900/90 border border-sky-500/30 font-semibold transition">
+        <i data-lucide="landmark" class="w-4 h-4"></i>
+        <span>5 Directrices Maestras</span>
+        <span class="px-1.5 py-0.2 bg-sky-500/20 text-[11px] rounded-full font-mono">6</span>
+      </button>
+
+      <button onclick="switchTab('rules')" id="tab-btn-rules" class="tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 transition">
+        <i data-lucide="shield-check" class="w-4 h-4"></i>
+        <span>Reglas Globales</span>
+        <span id="activeRulesCount" class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[11px] rounded-full font-mono">2</span>
+      </button>
+
+      <button onclick="switchTab('skills')" id="tab-btn-skills" class="tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 transition">
+        <i data-lucide="cpu" class="w-4 h-4"></i>
+        <span>Skills &amp; MCP</span>
+        <span class="px-1.5 py-0.2 bg-slate-800 text-slate-400 text-[11px] rounded-full font-mono">8</span>
+      </button>
+
+      <button onclick="switchTab('sop')" id="tab-btn-sop" class="tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 transition">
+        <i data-lucide="file-code-2" class="w-4 h-4"></i>
+        <span>Directivas SOP &amp; Memoria Viva</span>
+      </button>
+
+      <button onclick="switchTab('sync')" id="tab-btn-sync" class="tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 transition">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        <span>Sync Mac ↔ Windows</span>
+      </button>
+
+      <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 transition">
+        <i data-lucide="sliders" class="w-4 h-4"></i>
+        <span>Persona &amp; Ajustes</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: DIRECTRICES MAESTRAS (VIEWER & LIVE EDITOR) -->
+    <!-- ========================================================================= -->
+    <section id="tab-content-directrices" class="space-y-6">
+      
+      <!-- Top Overview Banner -->
+      <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-56 h-56 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+              <span>🏛️</span> Normativa Inviolable del Ecosistema Toni
+            </div>
+            <h2 class="text-2xl font-bold text-white tracking-tight">Directrices Técnicas &amp; Protocolo de Desarrollo</h2>
+            <p class="text-sm text-slate-300 max-w-3xl mt-1 leading-relaxed">
+              Cualquier proyecto (web, móvil, agente o script) hereda automáticamente las <strong>5 Directrices Maestras</strong> de Google Drive. Puedes inspeccionarlas, editarlas y probar el generador de prompts en 1 clic.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="openPromptBuilderModal()" class="px-4 py-2.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Nuevo Proyecto (Briefing Ágil)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Directives Workspace (Sidebar + Editor/Viewer) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Sidebar: Directives Selector List -->
+        <div class="lg:col-span-4 space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider px-1">
+            <span>Directrices Disponibles</span>
+            <span class="font-mono text-slate-500">6 Archivos</span>
+          </div>
+
+          <div id="directivesListContainer" class="space-y-2">
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Right Content: Interactive Editor / Preview Panel -->
+        <div class="lg:col-span-8 glass-panel rounded-2xl border border-slate-800 p-6 space-y-5">
+          
+          <!-- Directive Header & View Switcher -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-800 gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="activeDirIcon" class="text-xl">🗄️</span>
+                <h3 id="activeDirTitle" class="text-lg font-bold text-white">Directriz Maestra #1: Supabase</h3>
+              </div>
+              <p id="activeDirSummary" class="text-xs text-slate-400 mt-0.5">Esquema aislado, RLS obligatorio y foreign key user_id.</p>
+            </div>
+
+            <!-- View Modes: Live Markdown Preview / Raw Editor -->
+            <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+              <button onclick="setDirectiveViewMode('preview')" id="viewMode-preview" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold transition flex items-center gap-1.5">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Vista Previa</span>
+              </button>
+              <button onclick="setDirectiveViewMode('editor')" id="viewMode-editor" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                <span>Editar Markdown</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Directive Quick Rules Pills -->
+          <div>
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Reglas Clave de esta Directriz:</span>
+            <div id="activeDirRulesList" class="flex flex-wrap gap-1.5 mt-2">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Preview Mode Container -->
+          <div id="directivePreviewContainer" class="prose-dark max-h-[540px] overflow-y-auto p-4 bg-slate-950/60 rounded-xl border border-slate-800/80">
+            <!-- Rendered Markdown will appear here -->
+          </div>
+
+          <!-- Editor Mode Container (Hidden by default) -->
+          <div id="directiveEditorContainer" class="hidden space-y-3">
+            <textarea id="directiveMarkdownTextarea" rows="18" class="w-full font-mono text-xs bg-slate-950 text-slate-200 border border-slate-800 rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none leading-relaxed resize-y"></textarea>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-mono">Los cambios se guardan localmente en memoria y LocalStorage.</span>
+              <button onclick="saveActiveDirectiveEdit()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>Aplicar Cambios a esta Directriz</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-800 gap-3">
+            <button onclick="copyActiveDirectiveMarkdown()" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 text-xs font-medium rounded-xl transition flex items-center gap-2">
+              <i data-lucide="copy" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span>Copiar Texto Completo</span>
+            </button>
+
+            <button onclick="copyActiveDirectivePrompt()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 shadow-sm">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>Copiar Prompt de Aplicación Rápida</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: REGLAS GLOBALES (RULES/) -->
+    <!-- ========================================================================= -->
+    <section id="tab-content-rules" class="hidden space-y-6">
+      
+      <div class="glass-panel rounded-2xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white">Reglas Globales Activas de Antigravity</h2>
+          <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+            Estas reglas se cargan en la carpeta <code class="text-sky-400 bg-slate-900 px-1.5 py-0.5 rounded">~/.gemini/config/rules/</code> y se inyectan en cada conversación para gobernar el comportamiento de los agentes.
+          </p>
+        </div>
+        <button onclick="openNewRuleModal()" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Crear Nueva Regla</span>
+        </button>
+      </div>
+
+      <div id="rulesGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: SKILLS & SERVIDORES MCP -->
+    <!-- ========================================================================= -->
+    <section id="tab-content-skills" class="hidden space-y-6">
+      
+      <div class="glass-panel rounded-2xl p-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+              <span>⚡</span> Catálogo Multiplataforma
+            </div>
+            <h2 class="text-xl font-bold text-white">Skills Especializadas &amp; Servidores MCP</h2>
+            <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+              Habilidades cargadas bajo demanda con cheatsheets de instrucciones y herramientas conectadas a través del protocolo Model Context Protocol (MCP).
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs font-mono text-slate-300">
+              <span class="text-emerald-400 font-bold">5 Eager</span> / 23 Lazy
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="skillsGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: DIRECTIVAS SOP & MEMORIA VIVA -->
+    <!-- ========================================================================= -->
+    <section id="tab-content-sop" class="hidden space-y-6">
+      
+      <div class="glass-panel rounded-2xl p-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-400 text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+              <span>📋</span> Procedimiento Operativo Estándar
+            </div>
+            <h2 class="text-xl font-bold text-white">Directiva de Tarea (SOP) &amp; Memoria Viva</h2>
+            <p class="text-xs text-slate-300 mt-1 max-w-3xl leading-relaxed">
+              Estructura estandarizada con tabla de auto-corrección ("Memoria Viva"). Cualquier tarea compleja o script recurrente documenta aquí sus casos borde y soluciones para que Antigravity no repita errores.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="exportSOPTemplate()" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-xl transition flex items-center gap-2">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Descargar Directiva-ejemplo.md</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOP Template Interactive Editor -->
+      <div class="glass-panel rounded-2xl p-6 space-y-6">
+        
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-2 font-mono text-sm text-amber-400 font-semibold">
+            <i data-lucide="brain" class="w-4 h-4"></i>
+            <span>Tabla de Aprendizajes &amp; Auto-Corrección (Memoria Viva)</span>
+          </div>
+          <button onclick="addLearningMemoryRow()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 border border-slate-700">
+            <i data-lucide="plus" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Añadir Aprendizaje</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead>
+              <tr class="bg-slate-900/90 text-slate-400 border-b border-slate-800">
+                <th class="py-3 px-3">Fecha</th>
+                <th class="py-3 px-3">Error Detectado</th>
+                <th class="py-3 px-3">Causa Raíz</th>
+                <th class="py-3 px-3">Solución / Parche Aplicado</th>
+                <th class="py-3 px-3">Prevención Futura</th>
+                <th class="py-3 px-3 text-right">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="learningMemoryTableBody" class="divide-y divide-slate-800/60">
+              <!-- Injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 flex justify-end">
+          <button onclick="saveLearningMemory()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-2">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>Guardar Memoria Viva</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: SYNC MULTIPLATAFORMA (MAC ↔ WINDOWS) -->
+    <!-- ========================================================================= -->
+    <section id="tab-content-sync" class="hidden space-y-6">
+      
+      <div class="glass-panel rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+            <span>🔄</span> Sincronización Automática Bidireccional
+          </div>
+          <h2 class="text-xl font-bold text-white">Estado de Sincronización de Workspace</h2>
+          <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+            Supervisa los 9 repositorios y genera comandos de sincronización rápida para ejecutar en la terminal de macOS o en PowerShell de Windows.
+          </p>
+        </div>
+        <button onclick="simulateWorkspaceSync()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          <span>Comprobar Todos los Repos</span>
+        </button>
+      </div>
+
+      <!-- Commands Quick Copy Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- macOS Sync Box -->
+        <div class="p-5 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 font-semibold text-sky-400 text-sm">
+              <span>🍎</span> Comandos para macOS / Linux (Terminal)
+            </div>
+            <button onclick="copyCommand('macSyncCmd')" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <pre id="macSyncCmd" class="bg-slate-950 p-3 rounded-xl text-xs font-mono text-emerald-400 overflow-x-auto border border-slate-800/80">cd ~/Proyectos/antigravity-config
+./sync.sh "Actualizadas directrices maestras"</pre>
+        </div>
+
+        <!-- Windows Sync Box -->
+        <div class="p-5 bg-slate-900/90 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 font-semibold text-violet-400 text-sm">
+              <span>💻</span> Comandos para Windows (PowerShell)
+            </div>
+            <button onclick="copyCommand('winSyncCmd')" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <pre id="winSyncCmd" class="bg-slate-950 p-3 rounded-xl text-xs font-mono text-emerald-400 overflow-x-auto border border-slate-800/80">cd C:\Proyectos\antigravity-config
+.\sync.ps1 "Actualizadas directrices maestras"</pre>
+        </div>
+
+      </div>
+
+      <!-- Repositories Grid -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">Repositorios Registrados en projects.json:</h3>
+        <div id="projectsListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 6: PERSONA & AJUSTES GLOBALES -->
+    <!-- ========================================================================= -->
+    <section id="tab-content-settings" class="hidden space-y-6">
+      
+      <div class="glass-panel rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white">Configuración de Comportamiento &amp; Agente</h2>
+        <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+          Personaliza los parámetros de razonamiento, modo de desarrollo, política de commits y exportación de copias de seguridad.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Persona Mode Card -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4">
+          <h3 class="text-sm font-bold text-sky-400 uppercase tracking-wider font-mono flex items-center gap-2">
+            <i data-lucide="user-cog" class="w-4 h-4"></i>
+            <span>Modo Operativo del Agente</span>
+          </h3>
+
+          <div class="space-y-2.5">
+            <label class="flex items-start gap-3 p-3 bg-slate-950/80 rounded-xl border border-indigo-500/40 cursor-pointer">
+              <input type="radio" name="agentMode" value="autonomous_architect" checked class="mt-1 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="text-xs font-bold text-white">Arquitecto Full-Stack Autónomo (Recomendado)</div>
+                <div class="text-[11px] text-slate-400">Aplica las 5 directrices, valida TypeScript, resuelve dependencias y hace deploy sin interrupciones innecesarias.</div>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-950/40 rounded-xl border border-slate-800 cursor-pointer hover:border-slate-700">
+              <input type="radio" name="agentMode" value="strict_audit" class="mt-1 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="text-xs font-bold text-white">Auditor Riguroso &amp; Seguridad Zero-Trust</div>
+                <div class="text-[11px] text-slate-400">Prioriza validación de esquemas Zod, RLS estricto y prevención de fugas de datos antes de escribir código UI.</div>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 p-3 bg-slate-950/40 rounded-xl border border-slate-800 cursor-pointer hover:border-slate-700">
+              <input type="radio" name="agentMode" value="vibe_creator" class="mt-1 text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="text-xs font-bold text-white">Vibe Coding &amp; Ultra-Fast Prototyping</div>
+                <div class="text-[11px] text-slate-400">Enfoque en velocidad de entrega visual, diseño WOW premium e interactividad instantánea.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Global Backup & Export Card -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4">
+          <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider font-mono flex items-center gap-2">
+            <i data-lucide="archive" class="w-4 h-4"></i>
+            <span>Exportación y Backup JSON</span>
+          </h3>
+
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Puedes exportar toda la configuración de directrices, reglas y memoria viva en un archivo JSON unificado para respaldarla o transferirla a otra máquina.
+          </p>
+
+          <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+            <button onclick="exportConfigJSON()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Exportar Backup (JSON)</span>
+            </button>
+
+            <label class="px-4 py-2.5 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Importar Backup</span>
+              <input type="file" accept=".json" onchange="importConfigJSON(event)" class="hidden">
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: PROMPT BUILDER / BRIEFING ÁGIL -->
+  <!-- ========================================================================= -->
+  <div id="promptBuilderModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-panel-glow max-w-3xl w-full rounded-2xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Generador de Briefing Ágil (Prompt Maestro)</h3>
+            <p class="text-xs text-slate-400">Configura los parámetros clave y genera el prompt con las 5 directrices maestras preintegradas.</p>
+          </div>
+        </div>
+        <button onclick="closePromptBuilderModal()" class="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form Grid with Dropdowns -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+        
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Nombre del Proyecto</label>
+          <input type="text" id="pb-name" value="Clinica-Dental" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Slug / Identificador</label>
+          <input type="text" id="pb-slug" value="com_clinicadental" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500 font-mono">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Categoría del Proyecto</label>
+          <select id="pb-category" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500">
+            <option value="Comercial / Clientes">Comercial / Clientes (com_*)</option>
+            <option value="Suite Toni (Propio / I+D)">Suite Toni Propio / I+D (mia_*)</option>
+            <option value="Prototipo Rápido / Demo">Prototipo Rápido / Demo</option>
+            <option value="Herramienta Interna / CLI">Herramienta Interna / CLI</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Base de Datos / Supabase</label>
+          <select id="pb-db" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500">
+            <option value="Sí - Supabase PostgreSQL (Esquema Aislado)">Sí - Supabase PostgreSQL (Esquema Aislado)</option>
+            <option value="No - Sin Base de Datos / Local Storage">No - Sin Base de Datos / Local Storage</option>
+            <option value="SQLite / DuckDB Local">SQLite / DuckDB Local</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Autenticación</label>
+          <select id="pb-auth" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500">
+            <option value="Sí - Supabase Auth (Email + Magic Link)">Sí - Supabase Auth (Email + Magic Link)</option>
+            <option value="Sí - OAuth (Google / GitHub)">Sí - OAuth (Google / GitHub)</option>
+            <option value="No - Acceso Público / Libre">No - Acceso Público / Libre</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Integración de IA</label>
+          <select id="pb-ai" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500">
+            <option value="Asistente Conversacional / Chatbot (SSE)">Asistente Conversacional / Chatbot (SSE)</option>
+            <option value="Agente Autónomo / Tool Calling">Agente Autónomo / Tool Calling</option>
+            <option value="Análisis & Procesamiento de Datos">Análisis & Procesamiento de Datos</option>
+            <option value="No Requiere IA">No Requiere IA</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block font-semibold text-slate-300 mb-1">Propuesta de Valor / Tagline (1 Frase)</label>
+          <input type="text" id="pb-tagline" value="Gestión odontológica inteligente con recordatorios automáticos por WhatsApp." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 outline-none focus:border-cyan-500">
+        </div>
+      </div>
+
+      <!-- Compiled Prompt Preview -->
+      <div class="space-y-2">
+        <label class="block font-mono text-xs font-bold text-indigo-400 uppercase tracking-wider">Prompt Generado para Antigravity:</label>
+        <pre id="pb-compiled-prompt" class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-emerald-400 overflow-x-auto border border-slate-800 max-h-48"></pre>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closePromptBuilderModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg">Cerrar</button>
+        <button onclick="copyCompiledBriefingPrompt()" class="px-5 py-2 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-xs font-bold rounded-lg shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span>Copiar Prompt Maestro al Portapapeles</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-5 text-center text-xs text-slate-400 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>© 2026 Antonio Javier García García (DNI 34799350M, Madrid)</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span class="font-mono text-indigo-400">Tonigravity Suite</span>
+        <span>•</span>
+        <span class="font-semibold text-slate-300">Desarrollado con excelencia · By Toni</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOAST NOTIFICATION POPUP -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 max-w-sm bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl transition-all duration-300 transform translate-y-24 opacity-0 flex items-center gap-3">
+    <div id="toastIcon" class="text-cyan-400">
+      <i data-lucide="check-circle" class="w-5 h-5"></i>
+    </div>
+    <div id="toastMessage" class="text-xs font-medium">Acción completada con éxito.</div>
+  </div>
+
+  <!-- MAIN SCRIPT APPLICATION -->
+  <script>
+    // ==========================================
+    // 1. DATA INITIALIZATION & STATE
+    // ==========================================
+    const DEFAULT_DIRECTIVES = [
+      {
+        id: 'dir_definicion',
+        number: 0,
+        title: '📐 Protocolo de Definición & Briefing Ágil',
+        shortTitle: '0. Briefing Ágil',
+        icon: '📐',
+        summary: 'Protocolo para inicializar proyectos sin duplicidades heredando las 5 directrices maestras.',
+        rules: [
+          'Heredar el 100% de aspectos técnicos fijos sin preguntar en el briefing',
+          'Nomenclatura obligatoria: mia_* para propios, com_* para clientes',
+          'Inicialización con un único Prompt Maestro estandarizado'
+        ],
+        markdownContent: `# 📐 Directriz de Definición de Proyecto y Briefing Ágil (By Toni)
+
+> **Ubicación Google Drive:** \`Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directriz-Definicion-Proyecto.md\`  
+> **Estado:** Obligatoria en la fase de conceptualización y arranque de cualquier nuevo desarrollo
+
+Esta directriz establece el protocolo simplificado para inicializar cualquier nuevo proyecto de software dentro del ecosistema de Toni.
+
+Al basarse en las **5 Directrices Maestras**, elimina la duplicidad y las preguntas redundantes sobre aspectos técnicos fijos (RGPD, arquitectura multi-esquema en Supabase, branding o registro central), permitiendo definir un nuevo proyecto en pocos minutos.`
+      },
+      {
+        id: 'dir_supabase',
+        number: 1,
+        title: '🗄️ Directriz Maestra #1: Supabase Multi-Esquema (PostgreSQL)',
+        shortTitle: '1. Supabase PostgreSQL',
+        icon: '🗄️',
+        summary: 'Aislamiento lógico estricto (mia_* / com_*), RLS al 100% y foreign key user_id.',
+        rules: [
+          'Esquema dedicado (mia_* / com_*) mediante CREATE SCHEMA IF NOT EXISTS',
+          'Prohibición total de alojar tablas en el esquema public',
+          'Row Level Security (RLS) habilitado en el 100% de las tablas',
+          'user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE DEFAULT auth.uid()',
+          'Índices B-Tree en todas las claves foráneas'
+        ],
+        markdownContent: `# 🗄️ Directriz Maestra #1: Arquitectura de Datos y Supabase Multi-Esquema (PostgreSQL)
+
+> **Estado:** Obligatoria en el 100% de los proyectos con base de datos  
+> **Responsable:** Toni (Antonio Javier García García)
+
+## 🎯 1. Principio Fundamental de Aislamiento
+Todo desarrollo utilizará la instancia centralizada de Supabase PostgreSQL con esquemas aislados:
+- **Suite Propia (I+D Toni):** Prefijo obligatorio \`mia_\` (ej. \`mia_bytoniproyect\`, \`mia_vitatrading\`).
+- **Proyectos Comerciales (Clientes):** Prefijo obligatorio \`com_\` (ej. \`com_bicicletas\`, \`com_control61\`).
+- **Prohibición:** Queda terminantemente prohibido usar el esquema \`public\`.`
+      },
+      {
+        id: 'dir_security',
+        number: 2,
+        title: '🛡️ Directriz Maestra #2: Seguridad, Auth & Route Guards',
+        shortTitle: '2. Seguridad & Auth',
+        icon: '🛡️',
+        summary: 'Sesiones JWT con Supabase Auth, protección de rutas mediante Route Guards y Zero-Trust.',
+        rules: [
+          'Supabase Auth con Magic Link o contraseña y OAuth opcional',
+          'Route Guards en React Router para impedir renderizado sin sesión activa',
+          'Validación tipada estricta con esquemas Zod / TypeScript',
+          'Cero secretos o claves service_role en el bundle del frontend'
+        ],
+        markdownContent: `# 🛡️ Directriz Maestra #2: Seguridad, Autenticación y Route Guards
+
+> **Estado:** Obligatoria en todos los proyectos con áreas privadas
+
+## 🔒 1. Gestión de Sesión
+- Supabase Auth gestionado con JWT estándar y refresco automático de tokens.
+- Ninguna vista privada puede renderizarse sin previa verificación de sesión en Route Guards.`
+      },
+      {
+        id: 'dir_ai',
+        number: 3,
+        title: '🤖 Directriz Maestra #3: Inteligencia Artificial & Streaming SSE',
+        shortTitle: '3. IA Streaming SSE',
+        icon: '🤖',
+        summary: 'Streaming en tiempo real SSE (< 400ms), prompts desacoplados y multi-modelo resiliente.',
+        rules: [
+          'Server-Sent Events (SSE) para texto y asistentes en tiempo real',
+          'Prompts del sistema aislados en capas de servicio dedicadas',
+          'Reintentos exponenciales con jitter ante rate limits (429)',
+          'Soporte agnóstico: Gemini, Claude 3.5, GPT-4o, DeepSeek'
+        ],
+        markdownContent: `# 🤖 Directriz Maestra #3: Inteligencia Artificial, Streaming SSE y Agentes
+
+## ⚡ 1. Experiencia de Usuario en Streaming
+- Toda respuesta conversacional debe transmitirse carácter a carácter en tiempo real vía Server-Sent Events (SSE).`
+      },
+      {
+        id: 'dir_rgpd',
+        number: 4,
+        title: '⚖️ Directriz Maestra #4: Privacidad, RGPD y Branding "By Toni"',
+        shortTitle: '4. RGPD & By Toni',
+        icon: '⚖️',
+        summary: 'Titular Antonio Javier García García (DNI 34799350M, Madrid), páginas legales y sello By Toni.',
+        rules: [
+          'Titular legal obligatorio: Antonio Javier García García, DNI 34799350M, Madrid',
+          'Generación de 3 rutas legales: /privacidad, /aviso-legal y /terminos',
+          'Banner de cookies y ejercicio de derechos ARCO conforme a la AEPD',
+          'Sello distintivo oficial "By Toni" en el pie de página de toda aplicación'
+        ],
+        markdownContent: `# ⚖️ Directriz Maestra #4: Privacidad, RGPD y Branding "By Toni"
+
+## 🏛️ 1. Datos Identificativos del Titular Legal
+- **Titular:** Antonio Javier García García
+- **DNI:** 34799350M
+- **Domicilio Legal:** Madrid (España)`
+      },
+      {
+        id: 'dir_drive',
+        number: 5,
+        title: '📂 Directriz Maestra #5: Registro Central y Control en Drive',
+        shortTitle: '5. Control Drive',
+        icon: '📂',
+        summary: 'Catálogo en Registro_Proyectos_Toni.csv y ficha técnica INFO_PROYECTO.md.',
+        rules: [
+          'Registro obligatorio en Apps-Desarrollo/Registro_Proyectos_Toni.csv',
+          'Ficha técnica INFO_PROYECTO.md con arquitectura y tabla de cumplimiento',
+          'Sincronización de carpetas de documentación en Google Drive'
+        ],
+        markdownContent: `# 📂 Directriz Maestra #5: Registro Central y Control Documental en Google Drive
+
+## 📊 1. Registro Maestro
+Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su ID, slug, categoría, estado y esquema de base de datos.`
+      }
+    ];
+
+    const DEFAULT_RULES = [
+      {
+        id: 'rule_master_directives',
+        filename: '5-directrices-maestras.md',
+        title: '🏛️ Las 5 Directrices Maestras de Toni',
+        description: 'Aplica de forma obligatoria las normas de Supabase (mia_/com_), Auth JWT, IA Streaming SSE, RGPD Toni (DNI 34799350M) y Control Drive.',
+        active: true,
+        scope: 'Global (Todas las Apps & Tareas)'
+      },
+      {
+        id: 'rule_auto_sync',
+        filename: 'auto-sync.md',
+        title: '🔄 Auto-Sync Mac & Windows',
+        description: 'Comprobación de commits remotos antes de empezar, sincronización fast-forward y auto-commit al terminar hitos.',
+        active: true,
+        scope: 'Multi-Machine (Git & Skills)'
+      }
+    ];
+
+    const DEFAULT_SKILLS = [
+      {
+        id: 'pencil-dev',
+        title: 'Pencil Visual AI',
+        icon: '🎨',
+        type: 'Diseño & Canvas',
+        desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.',
+        active: true
+      },
+      {
+        id: 'stitch',
+        title: 'Google Stitch (Project Nemo)',
+        icon: '🧵',
+        type: 'Generación UI Gemini',
+        desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.',
+        active: true
+      },
+      {
+        id: 'ui-ux-expert',
+        title: 'UI/UX Desktop Expert',
+        icon: '✨',
+        type: 'Experiencia de Usuario',
+        desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.',
+        active: true
+      },
+      {
+        id: 'mobile-ui-ux-expert',
+        title: 'Mobile UI/UX Expert',
+        icon: '📱',
+        type: 'Mobile & PWA',
+        desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.',
+        active: true
+      },
+      {
+        id: 'accidental-data-loss-prevention',
+        title: 'Data Loss Prevention',
+        icon: '🛡️',
+        type: 'Seguridad',
+        desc: 'Bloqueo automático de comandos destructivos que provoquen pérdida irreversible de datos.',
+        active: true
+      },
+      {
+        id: 'telegram',
+        title: 'Telegram Bot MCP',
+        icon: '✈️',
+        type: 'Notificaciones',
+        desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.',
+        active: true
+      },
+      {
+        id: 'whatsapp',
+        title: 'WhatsApp Baileys MCP',
+        icon: '💬',
+        type: 'Mensajería',
+        desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.',
+        active: true
+      },
+      {
+        id: 'supabase-mcp',
+        title: 'Supabase MCP Management',
+        icon: '🗄️',
+        type: 'Base de Datos',
+        desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.',
+        active: true
+      }
+    ];
+
+    const DEFAULT_PROJECTS = [
+      { name: 'Control61-Web', slug: 'com_control61', path: 'Control61-Web', schema: 'com_control61', url: 'https://control61.vercel.app' },
+      { name: 'EduStack-AI', slug: 'mia_edustack', path: 'EduStack-AI', schema: 'mia_academy', url: 'https://edustack-app-ten.vercel.app' },
+      { name: 'Bicicletas-Puertanueva', slug: 'com_bicicletas', path: 'Bicicletas-Puertanueva', schema: 'com_bicicletas', url: 'https://bicicletas-puertanueva.vercel.app' },
+      { name: 'ByToniProyect', slug: 'mia_bytoniproyect', path: 'ByToniProyect', schema: 'mia_bytoniproyect', url: 'https://bytoni-proyect.vercel.app' },
+      { name: 'Flow-Girl', slug: 'mia_flowgirl', path: 'Flow-Girl', schema: 'mia_flowgirl', url: 'https://flowgirl.vercel.app' },
+      { name: 'Flowmind', slug: 'mia_flowmind', path: 'Flowmind', schema: 'mia_flowmind', url: 'https://flowmind.vercel.app' },
+      { name: 'IA-Trading', slug: 'mia_iatrading', path: 'IA-Trading', schema: 'mia_iatrading', url: 'https://algo-wizard-pro.vercel.app' },
+      { name: 'Vita-Trading', slug: 'mia_vitatrading', path: 'Vita-Trading', schema: 'mia_vitatrading', url: 'https://vita-trading.vercel.app' },
+      { name: 'antigravity-config', slug: 'antigravity-config', path: 'antigravity-config', schema: 'config', url: 'https://tonigravity.vercel.app' }
+    ];
+
+    const DEFAULT_MEMORY = [
+      {
+        date: '28/09/2026',
+        error: 'Vite build type error en canvas-confetti types',
+        cause: 'Falta de declaración @types/canvas-confetti en TypeScript strict',
+        patch: 'Instalado @types/canvas-confetti y añadido type fallback',
+        prevention: 'Verificar siempre tipos antes de exportar componentes visuales'
+      },
+      {
+        date: '27/09/2026',
+        error: 'Supabase schema permissions en tablas de nuevo proyecto',
+        cause: 'No se ejecutó GRANT USAGE ON SCHEMA a los roles anon y authenticated',
+        patch: 'Añadido GRANT USAGE ON SCHEMA {schema} TO anon, authenticated, service_role en el init script',
+        prevention: 'Incluir siempre la directriz de permisos en la plantilla SQL'
+      }
+    ];
+
+    // Reactive State
+    let appState = {
+      directives: JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES)),
+      rules: JSON.parse(JSON.stringify(DEFAULT_RULES)),
+      skills: JSON.parse(JSON.stringify(DEFAULT_SKILLS)),
+      projects: JSON.parse(JSON.stringify(DEFAULT_PROJECTS)),
+      memory: JSON.parse(JSON.stringify(DEFAULT_MEMORY)),
+      activeDirectiveId: 'dir_supabase',
+      directiveViewMode: 'preview',
+      activeTab: 'directrices'
+    };
+
+    // Load from LocalStorage if available
+    function loadSavedState() {
+      try {
+        const saved = localStorage.getItem('tonigravity_state_v2');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.directives) appState.directives = parsed.directives;
+          if (parsed.rules) appState.rules = parsed.rules;
+          if (parsed.memory) appState.memory = parsed.memory;
+        }
+      } catch (e) {
+        console.error('Error loading saved state:', e);
+      }
+    }
+
+    // ==========================================
+    // 2. RENDERING FUNCTIONS
+    // ==========================================
+    function renderDirectivesList() {
+      const container = document.getElementById('directivesListContainer');
+      container.innerHTML = appState.directives.map(dir => {
+        const isActive = dir.id === appState.activeDirectiveId;
+        return `
+          <div onclick="selectDirective('${dir.id}')" class="p-3.5 rounded-xl cursor-pointer transition-all duration-200 border ${isActive ? 'bg-indigo-600/20 border-indigo-500 shadow-md shadow-indigo-500/10' : 'bg-slate-900/70 border-slate-800/80 hover:bg-slate-800/60 hover:border-slate-700'}">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="text-base">${dir.icon}</span>
+                <div>
+                  <h4 class="text-xs font-bold ${isActive ? 'text-white' : 'text-slate-200'}">${dir.shortTitle}</h4>
+                  <p class="text-[11px] text-slate-400 line-clamp-1">${dir.summary}</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono font-bold ${isActive ? 'text-cyan-400' : 'text-slate-500'}">#${dir.number}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderActiveDirectiveDetails() {
+      const dir = appState.directives.find(d => d.id === appState.activeDirectiveId) || appState.directives[0];
+      
+      document.getElementById('activeDirIcon').innerText = dir.icon;
+      document.getElementById('activeDirTitle').innerText = dir.title;
+      document.getElementById('activeDirSummary').innerText = dir.summary;
+
+      // Rules Pills
+      const rulesList = document.getElementById('activeDirRulesList');
+      rulesList.innerHTML = dir.rules.map(r => `
+        <span class="px-2.5 py-1 bg-slate-900 border border-slate-800 text-sky-300 rounded-lg text-[11px] font-medium flex items-center gap-1.5">
+          <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i>
+          <span>${r}</span>
+        </span>
+      `).join('');
+
+      // Preview (Markdown parsed)
+      const previewContainer = document.getElementById('directivePreviewContainer');
+      const sanitizedHTML = DOMPurify.sanitize(marked.parse(dir.markdownContent));
+      previewContainer.innerHTML = sanitizedHTML;
+
+      // Textarea editor
+      document.getElementById('directiveMarkdownTextarea').value = dir.markdownContent;
+
+      lucide.createIcons();
+    }
+
+    function renderRulesGrid() {
+      const container = document.getElementById('rulesGridContainer');
+      container.innerHTML = appState.rules.map(rule => `
+        <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3 relative overflow-hidden">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <span class="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                <i data-lucide="shield" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h3 class="text-sm font-bold text-white">${rule.title}</h3>
+                <span class="text-[10px] font-mono text-slate-400 font-semibold">${rule.filename}</span>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" ${rule.active ? 'checked' : ''} onchange="toggleRuleActive('${rule.id}')" class="sr-only peer">
+              <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+            </label>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">${rule.description}</p>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[11px] font-mono text-slate-400">
+            <span>Ámbito: <strong class="text-indigo-300 font-medium">${rule.scope}</strong></span>
+            <span class="px-2 py-0.5 rounded-full ${rule.active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'} font-bold">${rule.active ? 'ACTIVA' : 'INACTIVA'}</span>
+          </div>
+        </div>
+      `).join('');
+      
+      const activeCount = appState.rules.filter(r => r.active).length;
+      document.getElementById('activeRulesCount').innerText = activeCount;
+      lucide.createIcons();
+    }
+
+    function renderSkillsGrid() {
+      const container = document.getElementById('skillsGridContainer');
+      container.innerHTML = appState.skills.map(skill => `
+        <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">${skill.icon}</span>
+              <div>
+                <h4 class="text-xs font-bold text-white">${skill.title}</h4>
+                <span class="text-[10px] font-mono text-cyan-400 font-semibold">${skill.type}</span>
+              </div>
+            </div>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">${skill.desc}</p>
+          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="font-mono text-[10px] text-slate-400">SKILL.md ready</span>
+            <button onclick="testSkillPrompt('${skill.title}')" class="text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1">
+              <span>Probar</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderProjectsGrid() {
+      const container = document.getElementById('projectsListContainer');
+      container.innerHTML = appState.projects.map(proj => `
+        <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <h4 class="text-xs font-bold text-white">${proj.name}</h4>
+            </div>
+            <a href="${proj.url}" target="_blank" class="text-sky-400 hover:text-sky-300 text-[10px] font-mono flex items-center gap-1">
+              <span>Vercel</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+          <div class="text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>Esquema: <strong class="text-indigo-300">${proj.schema}</strong></span>
+            <span class="text-emerald-400 font-bold">100% Sincronizado</span>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderMemoryTable() {
+      const tbody = document.getElementById('learningMemoryTableBody');
+      tbody.innerHTML = appState.memory.map((item, index) => `
+        <tr class="hover:bg-slate-900/50 transition">
+          <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap">${item.date}</td>
+          <td class="py-2.5 px-3 text-red-300 font-semibold">${item.error}</td>
+          <td class="py-2.5 px-3 text-slate-300">${item.cause}</td>
+          <td class="py-2.5 px-3 text-emerald-300">${item.patch}</td>
+          <td class="py-2.5 px-3 text-cyan-300">${item.prevention}</td>
+          <td class="py-2.5 px-3 text-right">
+            <button onclick="deleteMemoryRow(${index})" class="text-slate-500 hover:text-red-400">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // 3. INTERACTION & LOGIC HANDLERS
+    // ==========================================
+    function switchTab(tabId) {
+      appState.activeTab = tabId;
+      
+      const tabIds = ['directrices', 'rules', 'skills', 'sop', 'sync', 'settings'];
+      tabIds.forEach(id => {
+        const content = document.getElementById(`tab-content-${id}`);
+        const btn = document.getElementById(`tab-btn-${id}`);
+        if (id === tabId) {
+          content.classList.remove('hidden');
+          btn.className = 'tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-sky-400 bg-slate-900/90 border border-sky-500/30 font-semibold transition';
+        } else {
+          content.classList.add('hidden');
+          btn.className = 'tab-btn px-4 py-2 rounded-lg flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 transition';
+        }
+      });
+    }
+
+    function selectDirective(id) {
+      appState.activeDirectiveId = id;
+      renderDirectivesList();
+      renderActiveDirectiveDetails();
+    }
+
+    function setDirectiveViewMode(mode) {
+      appState.directiveViewMode = mode;
+      const preview = document.getElementById('directivePreviewContainer');
+      const editor = document.getElementById('directiveEditorContainer');
+      const btnPreview = document.getElementById('viewMode-preview');
+      const btnEditor = document.getElementById('viewMode-editor');
+
+      if (mode === 'preview') {
+        preview.classList.remove('hidden');
+        editor.classList.add('hidden');
+        btnPreview.className = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold transition flex items-center gap-1.5';
+        btnEditor.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5';
+      } else {
+        preview.classList.add('hidden');
+        editor.classList.remove('hidden');
+        btnEditor.className = 'px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold transition flex items-center gap-1.5';
+        btnPreview.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5';
+      }
+    }
+
+    function saveActiveDirectiveEdit() {
+      const newMarkdown = document.getElementById('directiveMarkdownTextarea').value;
+      const dir = appState.directives.find(d => d.id === appState.activeDirectiveId);
+      if (dir) {
+        dir.markdownContent = newMarkdown;
+        renderActiveDirectiveDetails();
+        setDirectiveViewMode('preview');
+        saveAllChanges();
+        showToast('✓ Cambios guardados en la directriz.', 'success');
+      }
+    }
+
+    function toggleRuleActive(id) {
+      const rule = appState.rules.find(r => r.id === id);
+      if (rule) {
+        rule.active = !rule.active;
+        renderRulesGrid();
+        saveAllChanges();
+        showToast(`Regla "${rule.title}" ${rule.active ? 'activada' : 'desactivada'}.`);
+      }
+    }
+
+    function copyActiveDirectiveMarkdown() {
+      const dir = appState.directives.find(d => d.id === appState.activeDirectiveId);
+      if (dir) {
+        navigator.clipboard.writeText(dir.markdownContent);
+        triggerConfetti();
+        showToast('✓ Markdown copiado al portapapeles.', 'success');
+      }
+    }
+
+    function copyActiveDirectivePrompt() {
+      const dir = appState.directives.find(d => d.id === appState.activeDirectiveId);
+      const prompt = `Aplica la ${dir.title}: Asegura el estricto cumplimiento de sus reglas en este desarrollo.`;
+      navigator.clipboard.writeText(prompt);
+      triggerConfetti();
+      showToast('✓ Prompt de aplicación rápida copiado.', 'success');
+    }
+
+    function copyMasterInitPrompt() {
+      const masterPrompt = `Inicializa un nuevo proyecto en Antigravity aplicando las 5 Directrices Maestras de Toni:
+1. Supabase PostgreSQL: Esquema aislado (mia_* o com_*), RLS al 100% y user_id UUID REFERENCES auth.users(id).
+2. Seguridad & Auth: Supabase Auth JWT y Route Guards protegidos.
+3. IA & Streaming: Server-Sent Events (SSE) y prompts desacoplados en servicios.
+4. RGPD & Branding: Titular Antonio Javier García García (DNI 34799350M, Madrid) y sello "By Toni".
+5. Control Drive: Registro en Registro_Proyectos_Toni.csv e INFO_PROYECTO.md.`;
+      navigator.clipboard.writeText(masterPrompt);
+      triggerConfetti();
+      showToast('⚡ Prompt Maestro de Inicialización copiado.', 'success');
+    }
+
+    function copyCommand(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text);
+      triggerConfetti();
+      showToast('✓ Comando de sincronización copiado.');
+    }
+
+    function addLearningMemoryRow() {
+      const today = new Date().toLocaleDateString('es-ES');
+      const newRow = {
+        date: today,
+        error: 'Nuevo caso borde identificado',
+        cause: 'Razón técnica del fallo',
+        patch: 'Solución aplicada en el código',
+        prevention: 'Directriz preventiva'
+      };
+      appState.memory.unshift(newRow);
+      renderMemoryTable();
+      showToast('Fila añadida a la Memoria Viva.');
+    }
+
+    function deleteMemoryRow(index) {
+      appState.memory.splice(index, 1);
+      renderMemoryTable();
+      saveAllChanges();
+    }
+
+    function saveLearningMemory() {
+      saveAllChanges();
+      triggerConfetti();
+      showToast('✓ Memoria Viva guardada correctamente.', 'success');
+    }
+
+    function saveAllChanges() {
+      try {
+        localStorage.setItem('tonigravity_state_v2', JSON.stringify(appState));
+        showToast('✓ Estado de Tonigravity guardado en LocalStorage.', 'success');
+      } catch (e) {
+        console.error('Error saving:', e);
+      }
+    }
+
+    function resetDefaults() {
+      if (confirm('¿Restaurar todas las directrices y reglas a sus valores de fábrica?')) {
+        localStorage.removeItem('tonigravity_state_v2');
+        appState.directives = JSON.parse(JSON.stringify(DEFAULT_DIRECTIVES));
+        appState.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+        appState.memory = JSON.parse(JSON.stringify(DEFAULT_MEMORY));
+        renderDirectivesList();
+        renderActiveDirectiveDetails();
+        renderRulesGrid();
+        renderMemoryTable();
+        showToast('Valores restaurados por defecto.');
+      }
+    }
+
+    // Modal Prompt Builder Logic
+    function openPromptBuilderModal() {
+      updateCompiledPrompt();
+      document.getElementById('promptBuilderModal').classList.remove('hidden');
+    }
+
+    function closePromptBuilderModal() {
+      document.getElementById('promptBuilderModal').classList.add('hidden');
+    }
+
+    function updateCompiledPrompt() {
+      const name = document.getElementById('pb-name').value;
+      const slug = document.getElementById('pb-slug').value;
+      const category = document.getElementById('pb-category').value;
+      const db = document.getElementById('pb-db').value;
+      const auth = document.getElementById('pb-auth').value;
+      const ai = document.getElementById('pb-ai').value;
+      const tagline = document.getElementById('pb-tagline').value;
+
+      const compiled = `Inicializa un nuevo proyecto aplicando las 5 Directrices Maestras de Drive:
+
+- Nombre: ${name}
+- Slug: ${slug}
+- Categoría: ${category}
+- Tagline: ${tagline}
+- Base de Datos: ${db}
+- Autenticación: ${auth}
+- Integración IA: ${ai}
+- Legal & RGPD: Titular Antonio Javier García García (DNI 34799350M, Madrid) y Sello "By Toni"
+- Frontend Stack: React 19 + TypeScript + Vite + Tailwind CSS Dark Glassmorphism`;
+
+      document.getElementById('pb-compiled-prompt').innerText = compiled;
+    }
+
+    // Attach listeners to modal inputs
+    ['pb-name', 'pb-slug', 'pb-category', 'pb-db', 'pb-auth', 'pb-ai', 'pb-tagline'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updateCompiledPrompt);
+      document.getElementById(id)?.addEventListener('change', updateCompiledPrompt);
+    });
+
+    function copyCompiledBriefingPrompt() {
+      const text = document.getElementById('pb-compiled-prompt').innerText;
+      navigator.clipboard.writeText(text);
+      closePromptBuilderModal();
+      triggerConfetti();
+      showToast('🚀 Briefing Maestro copiado al portapapeles.', 'success');
+    }
+
+    function exportConfigJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "tonigravity-backup.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('✓ Backup JSON descargado.');
+    }
+
+    function exportSOPTemplate() {
+      const dir = appState.directives.find(d => d.id === 'dir_definicion');
+      const text = `# DIRECTIVA DE TAREA (SOP): EJEMPLO\n\n${dir ? dir.markdownContent : ''}`;
+      const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(text);
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "Directiva-ejemplo.md");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('✓ Directiva-ejemplo.md descargada.');
+    }
+
+    function importConfigJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.directives) appState.directives = imported.directives;
+          if (imported.rules) appState.rules = imported.rules;
+          if (imported.memory) appState.memory = imported.memory;
+          saveAllChanges();
+          renderDirectivesList();
+          renderActiveDirectiveDetails();
+          renderRulesGrid();
+          renderMemoryTable();
+          showToast('✓ Configuración importada con éxito.', 'success');
+        } catch (err) {
+          alert('Error al leer el archivo JSON.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function simulateWorkspaceSync() {
+      showToast('🔄 Comprobando estado de los 9 repositorios...');
+      setTimeout(() => {
+        triggerConfetti();
+        showToast('✓ Todos los proyectos sincronizados al 100%.', 'success');
+      }, 900);
+    }
+
+    function testSkillPrompt(title) {
+      const prompt = `Activa la skill "${title}" y genera la solución optimizada siguiendo su protocolo.`;
+      navigator.clipboard.writeText(prompt);
+      triggerConfetti();
+      showToast(`Prompt de prueba para "${title}" copiado.`);
+    }
+
+    // UI Toast Notification
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMessage.innerText = message;
+      if (type === 'success') {
+        toastIcon.innerHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>`;
+      } else {
+        toastIcon.innerHTML = `<i data-lucide="info" class="w-5 h-5 text-cyan-400"></i>`;
+      }
+      lucide.createIcons();
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3200);
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 60,
+          spread: 60,
+          origin: { y: 0.85 },
+          colors: ['#06b6d4', '#6366f1', '#a855f7', '#10b981']
+        });
+      }
+    }
+
+    // ==========================================
+    // 4. ONLOAD INITIALIZATION
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedState();
+      renderDirectivesList();
+      renderActiveDirectiveDetails();
+      renderRulesGrid();
+      renderSkillsGrid();
+      renderProjectsGrid();
+      renderMemoryTable();
+      lucide.createIcons();
+
+      // Detect OS for Badge
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const osBadge = document.getElementById('osBadge');
+      if (osBadge) {
+        osBadge.innerText = isMac ? '🍎 macOS Detectado' : '💻 Windows Detectado';
+      }
+    });
+  </script>
+</body>
+</html>
