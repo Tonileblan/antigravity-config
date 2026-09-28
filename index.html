@@ -257,82 +257,125 @@
     <!-- ÁREA PRINCIPAL DE CONTENIDO (Pestañas Dinámicas) -->
     <main class="lg:col-span-9 space-y-6">
   <!-- ========================================================================= -->
-  <!-- TAB 1: DIRECTRICES MAESTRAS -->
+  <!-- TAB 1: DIRECTRICES MAESTRAS (LECTURA COMPLETA & EDICIÓN INTEGRAL) -->
   <!-- ========================================================================= -->
   <div id="directricesView" class="tab-content space-y-6">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      <!-- Left Column: Directives List -->
+      <!-- Left Column: Directives Selector -->
       <div class="lg:col-span-4 space-y-3">
         <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
           <span>Seleccionar Directriz</span>
-          <span class="font-mono text-slate-400">6 Archivos</span>
+          <span class="font-mono text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded">6 Protocolos</span>
         </div>
 
         <div id="directivesListContainer" class="space-y-2.5">
           <!-- Injected dynamically via JS -->
         </div>
+
+        <!-- Quick Summary Box -->
+        <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-2 text-xs">
+          <div class="font-bold text-blue-900 flex items-center gap-1.5">
+            <span>🛡️</span> Gobernanza Absoluta
+          </div>
+          <p class="text-blue-800 text-[11px] leading-relaxed">
+            Estas directrices se inyectan automáticamente en todas las creaciones de proyectos, garantizando código limpio, seguro y 100% legal sin configuraciones repetitivas.
+          </p>
+        </div>
       </div>
 
-      <!-- Right Column: Interactive Content Viewer & Editor -->
-      <div class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 card-shadow space-y-5">
+      <!-- Right Column: Full-Height Content Viewer & Live Editor -->
+      <div class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 card-shadow space-y-6">
         
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-100 gap-3">
+        <!-- Header of Active Directive -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 border-b border-slate-100 gap-4">
           <div>
-            <div class="flex items-center gap-2">
-              <span id="activeDirIcon" class="text-2xl">🗄️</span>
-              <h3 id="activeDirTitle" class="text-lg font-bold text-slate-900">Directriz Maestra #1: Supabase</h3>
+            <div class="flex items-center gap-2.5">
+              <span id="activeDirIcon" class="text-3xl">🗄️</span>
+              <div>
+                <h3 id="activeDirTitle" class="text-lg md:text-xl font-extrabold text-slate-900 tracking-tight">Directriz Maestra #1: Supabase</h3>
+                <span id="activeDirFilename" class="text-[10px] font-mono text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">01_Arquitectura_Datos_Supabase.md</span>
+              </div>
             </div>
-            <p id="activeDirSummary" class="text-xs text-slate-500 mt-1">Esquema aislado, RLS obligatorio y foreign key user_id.</p>
+            <p id="activeDirSummary" class="text-xs text-slate-600 mt-2 leading-relaxed">Esquema aislado, RLS obligatorio y foreign key user_id.</p>
           </div>
 
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium border border-slate-200">
-            <button onclick="setDirectiveViewMode('preview')" id="viewMode-preview" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition">
-              📖 Vista Formateada
+          <!-- View Mode Switcher -->
+          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium border border-slate-200 self-stretch sm:self-auto justify-center">
+            <button onclick="setDirectiveViewMode('preview')" id="viewMode-preview" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 font-bold shadow-sm transition flex items-center gap-1.5">
+              <span>📖</span> Vista Lectura
             </button>
-            <button onclick="setDirectiveViewMode('editor')" id="viewMode-editor" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
-              ✏️ Editor Markdown
+            <button onclick="setDirectiveViewMode('editor')" id="viewMode-editor" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 font-semibold transition flex items-center gap-1.5">
+              <span>✏️</span> Modo Editor
             </button>
           </div>
         </div>
 
+        <!-- Rules Badges -->
         <div>
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Reglas Clave de Cumplimiento:</span>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Reglas Clave de Cumplimiento:</span>
           <div id="activeDirRulesList" class="flex flex-wrap gap-1.5 mt-2">
             <!-- Injected dynamically -->
           </div>
         </div>
 
-        <div id="directivePreviewContainer" class="prose-light max-h-[460px] overflow-y-auto p-5 bg-slate-50 border border-slate-200 rounded-xl leading-relaxed">
+        <!-- Full Document Reader (Unrestricted Height) -->
+        <div id="directivePreviewContainer" class="prose-light p-6 bg-slate-50/70 border border-slate-200 rounded-2xl leading-relaxed text-slate-800 min-h-[400px]">
           <!-- Injected rendered Markdown -->
         </div>
 
-        <div id="directiveEditorContainer" class="hidden space-y-3">
-          <textarea id="directiveMarkdownTextarea" rows="16" class="w-full font-mono text-xs bg-slate-900 text-slate-100 border border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 leading-relaxed resize-y"></textarea>
+        <!-- Full-Height Live Editor -->
+        <div id="directiveEditorContainer" class="hidden space-y-4">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-mono">
+            <span>Editor Markdown (Soporta sintaxis completa de Antigravity):</span>
+            <span id="editorWordCount" class="text-blue-600 font-bold">0 caracteres</span>
+          </div>
+
+          <textarea id="directiveMarkdownTextarea" rows="22" oninput="onDirectiveTextareaInput()" class="w-full font-mono text-xs bg-slate-900 text-slate-100 border border-slate-800 rounded-2xl p-5 focus:outline-none focus:ring-2 focus:ring-blue-500 leading-relaxed resize-y shadow-inner"></textarea>
           
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-slate-400 font-mono">Los cambios se guardan localmente en memoria y LocalStorage.</span>
-            <button onclick="saveActiveDirectiveEdit()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
-              <span>✓</span> Aplicar Cambios
-            </button>
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex items-center gap-2">
+              <button onclick="resetActiveDirectiveToDefault()" class="px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition shadow-2xs">
+                🔄 Restablecer Original
+              </button>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="setDirectiveViewMode('preview')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition">
+                Cancelar
+              </button>
+              <button onclick="saveActiveDirectiveEdit()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-md">
+                <span>✓</span> Guardar y Aplicar Cambios
+              </button>
+            </div>
           </div>
         </div>
 
+        <!-- Bottom Actions Bar -->
         <div class="flex flex-wrap items-center justify-between pt-4 border-t border-slate-100 gap-3">
-          <button onclick="copyActiveDirectiveMarkdown()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition flex items-center gap-2">
-            <span>📋</span> Copiar Texto Completo
-          </button>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="copyActiveDirectiveMarkdown()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition flex items-center gap-2">
+              <span>📋</span> Copiar Markdown Completo
+            </button>
+            <button onclick="downloadActiveDirectiveMarkdown()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition flex items-center gap-2">
+              <span>📥</span> Descargar .md
+            </button>
+          </div>
 
-          <button onclick="copyActiveDirectivePrompt()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 shadow-sm">
-            <span>⚡</span> Copiar Prompt de Aplicación
-          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="setDirectiveViewMode('editor')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition shadow-sm flex items-center gap-2">
+              <span>✏️</span> Editar este Documento
+            </button>
+            <button onclick="copyActiveDirectivePrompt()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition flex items-center gap-2 shadow-sm">
+              <span>⚡</span> Copiar Prompt de Inyección
+            </button>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
-
-  <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
   <!-- TAB 2: BRIEFING & NUEVO PROYECTO (EXTENDIDO) -->
   <!-- ========================================================================= -->
   <div id="briefingView" class="tab-content hidden space-y-6">
@@ -1329,188 +1372,102 @@
   };
 
   const DEFAULT_DIRECTIVES = [
-    {
-      id: 'dir_definicion',
-      number: 0,
-      title: '📐 Protocolo de Definición & Briefing Ágil',
-      shortTitle: '0. Briefing Ágil',
-      icon: '📐',
-      summary: 'Protocolo para inicializar proyectos sin duplicidades heredando las 5 directrices maestras.',
-      rules: [
-        'Heredar el 100% de aspectos técnicos fijos sin preguntar en el briefing',
-        'Nomenclatura obligatoria: mia_* para propios, com_* para clientes',
-        'Inicialización con un único Prompt Maestro estandarizado'
-      ],
-      markdownContent: `# 📐 Directriz de Definición de Proyecto y Briefing Ágil (By Toni)
-
-> **Ubicación Google Drive:** \`Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directriz-Definicion-Proyecto.md\`  
-> **Estado:** Obligatoria en la fase de conceptualización y arranque de cualquier nuevo desarrollo
-
-Esta directriz establece el protocolo simplificado para inicializar cualquier nuevo proyecto de software dentro del ecosistema de Toni.
-
-Al basarse en las **5 Directrices Maestras**, elimina la duplicidad y las preguntas redundantes sobre aspectos técnicos fijos (RGPD, arquitectura multi-esquema en Supabase, branding o registro central), permitiendo definir un nuevo proyecto en pocos minutos.`
-    },
-    {
-      id: 'dir_supabase',
-      number: 1,
-      title: '🗄️ Directriz Maestra #1: Supabase Multi-Esquema (PostgreSQL)',
-      shortTitle: '1. Supabase PostgreSQL',
-      icon: '🗄️',
-      summary: 'Aislamiento lógico estricto (mia_* / com_*), RLS al 100% y foreign key user_id.',
-      rules: [
-        'Esquema dedicado (mia_* / com_*) mediante CREATE SCHEMA IF NOT EXISTS',
-        'Prohibición total de alojar tablas en el esquema public',
-        'Row Level Security (RLS) habilitado en el 100% de las tablas',
-        'user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE DEFAULT auth.uid()',
-        'Índices B-Tree en todas las claves foráneas'
-      ],
-      markdownContent: `# 🗄️ Directriz Maestra #1: Arquitectura de Datos y Supabase Multi-Esquema (PostgreSQL)
-
-> **Estado:** Obligatoria en el 100% de los proyectos con base de datos  
-> **Responsable:** Toni (Antonio Javier García García)
-
-## 🎯 1. Principio Fundamental de Aislamiento
-Todo desarrollo utilizará la instancia centralizada de Supabase PostgreSQL con esquemas aislados:
-- **Suite Propia (I+D Toni):** Prefijo obligatorio \`mia_\` (ej. \`mia_bytoniproyect\`, \`mia_vitatrading\`).
-- **Proyectos Comerciales (Clientes):** Prefijo obligatorio \`com_\` (ej. \`com_bicicletas\`, \`com_control61\`).
-- **Prohibición:** Queda terminantemente prohibido usar el esquema \`public\`.`
-    },
-    {
-      id: 'dir_security',
-      number: 2,
-      title: '🛡️ Directriz Maestra #2: Seguridad, Auth & Route Guards',
-      shortTitle: '2. Seguridad & Auth',
-      icon: '🛡️',
-      summary: 'Sesiones JWT con Supabase Auth, protección de rutas mediante Route Guards y Zero-Trust.',
-      rules: [
-        'Supabase Auth con Magic Link o contraseña y OAuth opcional',
-        'Route Guards en React Router para impedir renderizado sin sesión activa',
-        'Validación tipada estricta con esquemas Zod / TypeScript',
-        'Cero secretos o claves service_role en el bundle del frontend'
-      ],
-      markdownContent: `# 🛡️ Directriz Maestra #2: Seguridad, Autenticación y Route Guards
-
-> **Estado:** Obligatoria en todos los proyectos con áreas privadas
-
-## 🔒 1. Gestión de Sesión
-- Supabase Auth gestionado con JWT estándar y refresco automático de tokens.
-- Ninguna vista privada puede renderizarse sin previa verificación de sesión en Route Guards.`
-    },
-    {
-      id: 'dir_ai',
-      number: 3,
-      title: '🤖 Directriz Maestra #3: Inteligencia Artificial & Streaming SSE',
-      shortTitle: '3. IA Streaming SSE',
-      icon: '🤖',
-      summary: 'Streaming en tiempo real SSE (< 400ms), prompts desacoplados y multi-modelo resiliente.',
-      rules: [
-        'Server-Sent Events (SSE) para texto y asistentes en tiempo real',
-        'Prompts del sistema aislados en capas de servicio dedicadas',
-        'Reintentos exponenciales con jitter ante rate limits (429)',
-        'Soporte agnóstico: Gemini, Claude 3.5, GPT-4o, DeepSeek'
-      ],
-      markdownContent: `# 🤖 Directriz Maestra #3: Inteligencia Artificial, Streaming SSE y Agentes
-
-## ⚡ 1. Experiencia de Usuario en Streaming
-- Toda respuesta conversacional debe transmitirse carácter a carácter en tiempo real vía Server-Sent Events (SSE).`
-    },
-    {
-      id: 'dir_rgpd',
-      number: 4,
-      title: '⚖️ Directriz Maestra #4: Privacidad, RGPD y Branding "By Toni"',
-      shortTitle: '4. RGPD & By Toni',
-      icon: '⚖️',
-      summary: 'Titular Antonio Javier García García (DNI 34799350M, Madrid), páginas legales y sello By Toni.',
-      rules: [
-        'Titular legal obligatorio: Antonio Javier García García, DNI 34799350M, Madrid',
-        'Generación de 3 rutas legales: /privacidad, /aviso-legal y /terminos',
-        'Banner de cookies y ejercicio de derechos ARCO conforme a la AEPD',
-        'Sello distintivo oficial "By Toni" en el pie de página de toda aplicación'
-      ],
-      markdownContent: `# ⚖️ Directriz Maestra #4: Privacidad, RGPD y Branding "By Toni"
-
-## 🏛️ 1. Datos Identificativos del Titular Legal
-- **Titular:** Antonio Javier García García
-- **DNI:** 34799350M
-- **Domicilio Legal:** Madrid (España)`
-    },
-    {
-      id: 'dir_drive',
-      number: 5,
-      title: '📂 Directriz Maestra #5: Registro Central y Control en Drive',
-      shortTitle: '5. Control Drive',
-      icon: '📂',
-      summary: 'Catálogo en Registro_Proyectos_Toni.csv y ficha técnica INFO_PROYECTO.md.',
-      rules: [
-        'Registro obligatorio en Apps-Desarrollo/Registro_Proyectos_Toni.csv',
-        'Ficha técnica INFO_PROYECTO.md con arquitectura y tabla de cumplimiento',
-        'Sincronización de carpetas de documentación en Google Drive'
-      ],
-      markdownContent: `# 📂 Directriz Maestra #5: Registro Central y Control Documental en Google Drive
-
-## 📊 1. Registro Maestro
-Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su ID, slug, categoría, estado y esquema de base de datos.`
-    }
-  ];
-
-  const DEFAULT_RULES = [
-    {
-      id: 'rule_master_directives',
-      filename: '5-directrices-maestras.md',
-      title: '🏛️ Las 5 Directrices Maestras de Toni',
-      description: 'Aplica obligatoriamente las normas de Supabase (mia_/com_), Auth JWT, IA Streaming SSE, RGPD Toni (DNI 34799350M) y Control Drive.',
-      active: true,
-      scope: 'Global (Todas las Apps & Tareas)'
-    },
-    {
-      id: 'rule_auto_sync',
-      filename: 'auto-sync.md',
-      title: '🔄 Auto-Sync Mac & Windows',
-      description: 'Comprobación de commits remotos antes de empezar, sincronización fast-forward y auto-commit al terminar hitos.',
-      active: true,
-      scope: 'Multi-Machine (Git & Skills)'
-    }
-  ];
-
-  const DEFAULT_SKILLS = [
-    { id: 'pencil-dev', title: 'Pencil Visual AI', icon: '🎨', type: 'Diseño & Canvas', desc: 'Manipulación de archivos .pen, importación/exportación de UI a código React/Tailwind.' },
-    { id: 'stitch', title: 'Google Stitch (Project Nemo)', icon: '🧵', type: 'Generación UI Gemini', desc: 'Generación de interfaces web y móviles con Gemini 2.0 y servidor Stitch MCP.' },
-    { id: 'ui-ux-expert', title: 'UI/UX Desktop Expert', icon: '✨', type: 'Experiencia de Usuario', desc: 'Directrices de ergonomía, glassmorphism, micro-animaciones y diseño WOW.' },
-    { id: 'mobile-ui-ux-expert', title: 'Mobile UI/UX Expert', icon: '📱', type: 'Mobile & PWA', desc: 'Optimización táctil, responsive viewport y gestos para iOS y Android.' },
-    { id: 'accidental-data-loss-prevention', title: 'Data Loss Prevention', icon: '🛡️', type: 'Seguridad', desc: 'Bloqueo de comandos destructivos que provoquen pérdida irreversible de datos.' },
-    { id: 'telegram', title: 'Telegram Bot MCP', icon: '✈️', type: 'Notificaciones', desc: 'Envío de alertas, logs y actualización de tareas en tiempo real vía Telegram Bot API.' },
-    { id: 'whatsapp', title: 'WhatsApp Baileys MCP', icon: '💬', type: 'Mensajería', desc: 'Integración multi-device para automatización y notificaciones en WhatsApp.' },
-    { id: 'supabase-mcp', title: 'Supabase MCP Management', icon: '🗄️', type: 'Base de Datos', desc: 'Ejecución de migraciones SQL, inspección de esquemas y advisor de rendimiento.' }
-  ];
-
-  const DEFAULT_PROJECTS = [
-    { name: 'Control61-Web', slug: 'com_control61', schema: 'com_control61', url: 'https://control61.vercel.app' },
-    { name: 'EduStack-AI', slug: 'mia_edustack', schema: 'mia_academy', url: 'https://edustack-app-ten.vercel.app' },
-    { name: 'Bicicletas-Puertanueva', slug: 'com_bicicletas', schema: 'com_bicicletas', url: 'https://bicicletas-puertanueva.vercel.app' },
-    { name: 'ByToniProyect', slug: 'mia_bytoniproyect', schema: 'mia_bytoniproyect', url: 'https://bytoni-proyect.vercel.app' },
-    { name: 'Flow-Girl', slug: 'mia_flowgirl', schema: 'mia_flowgirl', url: 'https://flowgirl.vercel.app' },
-    { name: 'Flowmind', slug: 'mia_flowmind', schema: 'mia_flowmind', url: 'https://flowmind.vercel.app' },
-    { name: 'IA-Trading', slug: 'mia_iatrading', schema: 'mia_iatrading', url: 'https://algo-wizard-pro.vercel.app' },
-    { name: 'Vita-Trading', slug: 'mia_vitatrading', schema: 'mia_vitatrading', url: 'https://vita-trading.vercel.app' },
-    { name: 'antigravity-config', slug: 'antigravity-config', schema: 'config', url: 'https://tonigravity.vercel.app' }
-  ];
-
-  const DEFAULT_MEMORY = [
-    {
-      date: '28/09/2026',
-      error: 'Vite build type error en canvas-confetti types',
-      cause: 'Falta de declaración @types/canvas-confetti en TypeScript strict',
-      patch: 'Instalado @types/canvas-confetti y añadido type fallback',
-      prevention: 'Verificar siempre tipos antes de exportar componentes visuales'
-    },
-    {
-      date: '27/09/2026',
-      error: 'Supabase schema permissions en tablas de nuevo proyecto',
-      cause: 'No se ejecutó GRANT USAGE ON SCHEMA a los roles anon y authenticated',
-      patch: 'Añadido GRANT USAGE ON SCHEMA {schema} TO anon, authenticated, service_role en el init script',
-      prevention: 'Incluir siempre la directriz de permisos en la plantilla SQL'
-    }
-  ];
+  {
+    "id": "dir_definicion",
+    "number": 0,
+    "title": "📐 Protocolo de Definición & Briefing Ágil",
+    "shortTitle": "0. Briefing Ágil",
+    "filename": "00_Directriz_Definicion_Proyecto.md",
+    "icon": "📐",
+    "summary": "Protocolo simplificado para inicializar proyectos sin duplicidades heredando las 5 directrices maestras.",
+    "rules": [
+      "Heredar el 100% de aspectos técnicos fijos sin preguntar en el briefing",
+      "Nomenclatura obligatoria: mia_* para propios, com_* para clientes",
+      "Inicialización con un único Prompt Maestro estandarizado"
+    ],
+    "markdownContent": "# 📐 Directriz de Definición de Proyecto y Briefing Ágil (By Toni)\n\n> **Ubicación Google Drive:** `Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directriz-Definicion-Proyecto.md`  \n> **Estado:** Obligatoria en la fase de conceptualización y arranque de cualquier nuevo desarrollo\n\nEsta directriz establece el protocolo simplificado para inicializar cualquier nuevo proyecto de software dentro del ecosistema de Toni.\n\nAl basarse en las **5 Directrices Maestras**, elimina la duplicidad y las preguntas redundantes sobre aspectos técnicos fijos (RGPD, arquitectura multi-esquema en Supabase, branding o registro central), permitiendo definir un nuevo proyecto en pocos minutos.\n\n---\n\n## 🔗 1. Las 5 Directrices Maestras Heredadas\n\nCualquier proyecto inicializado en el ecosistema hereda y aplica de forma **100% automática** las siguientes normas:\n\n| # | Directriz Maestra | Aspectos Estandarizados (Automáticos - No se piden en el briefing) |\n|---|---|---|\n| **1** | **🗄️ Arquitectura de Datos y Supabase** | Esquema PostgreSQL aislado (`mia_*` para suite propia, `com_*` para clientes), RLS (Row Level Security) estricto y clave foránea `user_id` vinculada a `auth.users(id)`. |\n| **2** | **🛡️ Seguridad y Autenticación** | Supabase Auth (JWT), protección de rutas mediante Middleware/Guards y jerarquía estándar de perfiles. |\n| **3** | **🤖 Implementación de IA** | Streaming en tiempo real vía Server-Sent Events (SSE), ejecución segura de modelos en Edge Functions / Backend y protección total de API Keys. |\n| **4** | **⚖️ Privacidad, RGPD y Branding** | Titular legal obligatorio (**Antonio Javier García García**, DNI **34799350M**, Madrid), páginas legales automáticas (`/privacidad`, `/aviso-legal`, `/terminos`), cookies y sello **\"By Toni\"** en el footer. |\n| **5** | **📂 Registro y Control en Google Drive** | Registro automático en `Apps-Desarrollo/Registro_Proyectos_Toni.csv` y creación de carpeta de documentación `Apps-Desarrollo/<App>/INFO_PROYECTO.md`. |\n\n---\n\n## ⚡ 2. Prompt Maestro de Inicialización Rápida\n\nCopia y completa este bloque para inicializar cualquier proyecto en Antigravity en un solo paso:\n\n```text\nInicializa un nuevo proyecto aplicando las 5 Directrices Maestras de Drive con la siguiente configuración:\n\n- Nombre: [Nombre del Proyecto]\n- Slug: [com_nombre / mia_nombre]\n- Categoría: [Suite Toni (Propio / I+D) | Comercial / Clientes | Prototipo Rápido / Demo]\n- Estado: [Idea / Planificación | En Desarrollo | Prototipo / MVP]\n- Tagline: [Resumen en 1 frase de propuesta de valor]\n- Problema Principal: [Descripción breve del dolor que soluciona]\n- Público Objetivo: [A quién va dirigido]\n- Funcionalidades Core:\n  1. [Funcionalidad 1]\n  2. [Funcionalidad 2]\n  3. [Funcionalidad 3]\n- Base de Datos: [Sí - Supabase PostgreSQL (Esquema Aislado) | No - Sin Base de Datos]\n- Autenticación: [Sí - Supabase Auth (Email / Magic Link) | Sí - OAuth | No - Acceso Libre]\n- Roles: [Admin + Usuario Estándar | Admin + Profesional + Cliente | No Aplica]\n- Integración IA: [No Requiere IA | Asistente Conversacional / Chatbot | Análisis de Datos | RAG / Búsqueda Semántica]\n- Proveedor IA: [No Aplica | OpenAI (GPT-4o) | Anthropic (Claude 3.5) | Google Gemini | Groq / Llama 3]\n- Modelo de Negocio: [Gratuito | Suscripción SaaS (Stripe) | Pago Único | Freemium]\n- Frontend: React 19 + TypeScript + Vite\n- Estilo UI: Tailwind CSS + Glassmorphism Dark\n```\n"
+  },
+  {
+    "id": "dir_supabase",
+    "number": 1,
+    "title": "🗄️ Directriz Maestra #1: Supabase Multi-Esquema (PostgreSQL)",
+    "shortTitle": "1. Supabase PostgreSQL",
+    "filename": "01_Arquitectura_Datos_Supabase.md",
+    "icon": "🗄️",
+    "summary": "Aislamiento lógico estricto (mia_* / com_*), RLS al 100% y foreign key user_id.",
+    "rules": [
+      "Esquema dedicado (mia_* / com_*) mediante CREATE SCHEMA IF NOT EXISTS",
+      "Prohibición total de alojar tablas en el esquema public",
+      "Row Level Security (RLS) habilitado en el 100% de las tablas",
+      "user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE DEFAULT auth.uid()",
+      "Índices B-Tree en todas las claves foráneas"
+    ],
+    "markdownContent": "# 🗄️ Directriz Maestra #1: Arquitectura de Datos y Supabase Multi-Esquema (PostgreSQL)\n\n> **Ubicación Google Drive:** `Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directrices > 01_Arquitectura_Supabase.md`  \n> **Estado:** Obligatoria en el 100% de los proyectos con persistencia o base de datos  \n> **Responsable Metodológico:** Toni (Antonio Javier García García)\n\n---\n\n## 🎯 1. Principio Fundamental de Aislamiento Lógico\nTodo desarrollo dentro del ecosistema de Toni que requiera almacenamiento relacional utilizará la instancia centralizada de Supabase PostgreSQL, estructurada mediante **esquemas lógicos aislados** para prevenir colisiones entre aplicaciones y garantizar multi-tenancy seguro:\n\n1. **Suite Propia (I+D Toni / Proyectos Internos):** Prefijo obligatorio `mia_` (ej. `mia_bytoniproyect`, `mia_vitatrading`, `mia_flowmind`, `mia_academy`).\n2. **Proyectos Comerciales (Clientes / Negocios):** Prefijo obligatorio `com_` (ej. `com_bicicletas`, `com_clinicadental`, `com_control61`).\n3. **Prohibición Estricta:** Queda terminantemente prohibido alojar tablas del proyecto en el esquema `public`.\n\n```sql\n-- Creación estándar del esquema del proyecto\nCREATE SCHEMA IF NOT EXISTS mia_nombreproyecto;\nGRANT USAGE ON SCHEMA mia_nombreproyecto TO anon, authenticated, service_role;\n```\n\n---\n\n## 🛡️ 2. Reglas de Row Level Security (RLS) Obligatorio\n- **100% de Cobertura:** Toda tabla creada debe tener RLS habilitado sin excepción:\n  ```sql\n  ALTER TABLE mia_nombreproyecto.tareas ENABLE ROW LEVEL SECURITY;\n  ```\n- **Identificador de Usuario Estándar:** Toda tabla vinculada a un usuario debe incluir:\n  ```sql\n  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE DEFAULT auth.uid()\n  ```\n- **Políticas CRUD Estándar:**\n  ```sql\n  -- Permitir lectura solo a registros propios\n  CREATE POLICY \"Users can view own records\" ON mia_nombreproyecto.tareas\n    FOR SELECT TO authenticated USING (auth.uid() = user_id);\n\n  -- Permitir inserción asociando el user_id autenticado\n  CREATE POLICY \"Users can insert own records\" ON mia_nombreproyecto.tareas\n    FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);\n\n  -- Permitir actualización solo de registros propios\n  CREATE POLICY \"Users can update own records\" ON mia_nombreproyecto.tareas\n    FOR UPDATE TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);\n\n  -- Permitir eliminación solo de registros propios\n  CREATE POLICY \"Users can delete own records\" ON mia_nombreproyecto.tareas\n    FOR DELETE TO authenticated USING (auth.uid() = user_id);\n  ```\n\n---\n\n## ⚡ 3. Indexación y Rendimiento\n- Generar índices B-Tree en todas las claves foráneas (`user_id`, `project_id`, `parent_id`) para evitar Sequential Scans en tablas con RLS.\n  ```sql\n  CREATE INDEX IF NOT EXISTS idx_tareas_user_id ON mia_nombreproyecto.tareas (user_id);\n  CREATE INDEX IF NOT EXISTS idx_tareas_created_at ON mia_nombreproyecto.tareas (created_at DESC);\n  ```\n\n---\n\n## 📜 4. Estándar de Migraciones y Versionado\n- Todo proyecto debe mantener sus scripts de inicialización en `supabase/migrations/`.\n- Nomenclatura obligatoria: `YYYYMMDD_init_<esquema>.sql` (ej. `20260927_init_com_control61.sql`).\n"
+  },
+  {
+    "id": "dir_security",
+    "number": 2,
+    "title": "🛡️ Directriz Maestra #2: Seguridad, Auth & Route Guards",
+    "shortTitle": "2. Seguridad & Auth",
+    "filename": "02_Seguridad_Autenticacion.md",
+    "icon": "🛡️",
+    "summary": "Sesiones JWT con Supabase Auth, protección de rutas mediante Route Guards y Zero-Trust.",
+    "rules": [
+      "Supabase Auth con Magic Link o contraseña y OAuth opcional",
+      "Route Guards en React Router para impedir renderizado sin sesión activa",
+      "Validación tipada estricta con esquemas Zod / TypeScript",
+      "Cero secretos o claves service_role en el bundle del frontend"
+    ],
+    "markdownContent": "# 🛡️ Directriz Maestra #2: Seguridad, Autenticación y Route Guards\n\n> **Ubicación Google Drive:** `Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directrices > 02_Seguridad_Autenticacion.md`  \n> **Estado:** Obligatoria en el 100% de los proyectos con autenticación, login o zonas privadas  \n> **Responsable Metodológico:** Toni (Antonio Javier García García)\n\n---\n\n## 🔒 1. Gestión de Identidad y Sesiones (Supabase Auth)\n- **Motor de Autenticación:** Supabase Auth gestionado con JWT estándar.\n- **Métodos Soportados:** Email con Magic Link o Contraseña segura, más integración OAuth (Google / GitHub) según necesidades del proyecto.\n- **Almacenamiento de Tokens:** Almacenamiento seguro de tokens JWT con refresco transparente mediante el SDK de Supabase o cookies `HttpOnly` en arquitecturas SSR.\n\n---\n\n## 🛡️ 2. Protección de Rutas (Route Guards)\n- **Zero Exposure en Cliente:** Ninguna vista o componente que maneje datos protegidos debe renderizarse sin comprobar previamente el estado de la sesión de Supabase Auth.\n- **Implementación Estándar en React:**\n  ```tsx\n  export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {\n    const { session, loading } = useAuth();\n    if (loading) return <LoadingScreen />;\n    if (!session) return <Navigate to=\"/login\" replace />;\n    return <>{children}</>;\n  };\n  ```\n\n---\n\n## 🧼 3. Validación de Entradas y Zero Trust\n- **Validación Estricta:** Validar esquemas de datos con Zod o TypeScript en todas las fronteras de entrada de datos (formularios, query params, webhooks y APIs externas).\n- **Protección XSS & Inyecciones:** Sanitizar rigurosamente cualquier renderizado dinámico de HTML o Markdown (`DOMPurify` o parsers seguros).\n- **Cero Secretos en el Frontend:**\n  - **PROHIBIDO:** Incluir `SUPABASE_SERVICE_ROLE_KEY`, tokens de OpenAI/Anthropic con facturación directa o claves maestras en el cliente (`VITE_`, `NEXT_PUBLIC_`).\n  - Las operaciones que requieran privilegios de administrador deben aislarse en Edge Functions de Supabase o endpoints backend seguros.\n"
+  },
+  {
+    "id": "dir_ai",
+    "number": 3,
+    "title": "🤖 Directriz Maestra #3: Inteligencia Artificial & Streaming SSE",
+    "shortTitle": "3. IA Streaming SSE",
+    "filename": "03_Inteligencia_Artificial_Streaming.md",
+    "icon": "🤖",
+    "summary": "Streaming en tiempo real SSE (< 400ms), prompts desacoplados y multi-modelo resiliente.",
+    "rules": [
+      "Server-Sent Events (SSE) para texto y asistentes en tiempo real",
+      "Prompts del sistema aislados en capas de servicio dedicadas",
+      "Reintentos exponenciales con jitter ante rate limits (429)",
+      "Soporte agnóstico: Gemini, Claude 3.5, GPT-4o, DeepSeek"
+    ],
+    "markdownContent": "# 🤖 Directriz Maestra #3: Inteligencia Artificial, Streaming SSE y Agentes\n\n> **Ubicación Google Drive:** `Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directrices > 03_Inteligencia_Artificial_Streaming.md`  \n> **Estado:** Obligatoria en proyectos con integración de IA o Agentes Autónomos  \n> **Responsable Metodológico:** Toni (Antonio Javier García García)\n\n---\n\n## ⚡ 1. Experiencia de Usuario en Streaming en Tiempo Real\n- **Server-Sent Events (SSE):** Toda interacción conversacional, generación de código o asistencia con LLMs debe transmitirse mediante Streaming SSE carácter a carácter para maximizar la velocidad percibida y reducir la latencia inicial (< 400ms).\n- **Feedback Visual Fluido:** Estados de carga dinámicos (\"Analizando contexto...\", \"Orquestando agentes...\", \"Generando respuesta...\") y cursor pulsante activo durante la generación.\n\n---\n\n## 🧩 2. Desacoplamiento de Prompts y Capa de Dominio\n- **Aislamiento Total:** Los prompts del sistema (*System Prompts*) y metadatos de comportamiento de IA nunca deben incrustarse en los componentes visuales de React.\n- **Servicio de Dominio Dedicado:** Se ubican en `src/services/aiService.ts` o `src/data/sources/` con funciones fuertemente tipadas y parametrizadas.\n- **Multi-Proveedor Resiliente:** Arquitectura agnóstica para alternar transparentemente entre modelos:\n  - Google Gemini (Gemini 2.0 Flash / Pro)\n  - Anthropic (Claude 3.5 Sonnet)\n  - OpenAI (GPT-4o / GPT-4o-mini)\n  - Modelos de Ultra-Baja Latencia / Open Source (DeepSeek V3/R1, Groq Llama 3)\n\n---\n\n## 🔄 3. Tolerancia a Fallos y Manejo de Rate Limits\n- **Reintentos Exponenciales con Jitter:** En caso de errores `429 Too Many Requests` o `503 Service Unavailable`, implementar reintentos automáticos con retroceso exponencial.\n- **Fallback Automático:** Si un proveedor principal se agota o falla, conmutar opcionalmente a un proveedor secundario preconfigurado.\n- **Persistencia de Sesiones:** Guardar el historial contextual de mensajes de forma compacta (resúmenes o ventanas deslizantes de tokens) en el esquema PostgreSQL del proyecto.\n"
+  },
+  {
+    "id": "dir_rgpd",
+    "number": 4,
+    "title": "⚖️ Directriz Maestra #4: Privacidad, RGPD y Branding \"By Toni\"",
+    "shortTitle": "4. RGPD & By Toni",
+    "filename": "04_Privacidad_RGPD_Branding.md",
+    "icon": "⚖️",
+    "summary": "Titular Antonio Javier García García (DNI 34799350M, Madrid), páginas legales y sello By Toni.",
+    "rules": [
+      "Titular legal obligatorio: Antonio Javier García García, DNI 34799350M, Madrid",
+      "Generación de 3 rutas legales: /privacidad, /aviso-legal y /terminos",
+      "Banner de cookies y ejercicio de derechos ARCO conforme a la AEPD",
+      "Sello distintivo oficial \"By Toni\" en el pie de página de toda aplicación"
+    ],
+    "markdownContent": "# ⚖️ Directriz Maestra #4: Privacidad, RGPD y Branding \"By Toni\"\n\n> **Ubicación Google Drive:** `Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directrices > 04_Privacidad_RGPD_Branding.md`  \n> **Estado:** Obligatoria en el 100% de las aplicaciones web, móviles o herramientas públicas  \n> **Responsable Metodológico:** Toni (Antonio Javier García García)\n\n---\n\n## 🏛️ 1. Datos Identificativos del Titular Legal\nEn todas las aplicaciones que procesen datos de usuarios, formulen cookies o requieran aviso legal bajo normativa española y europea (RGPD / LOPD-GDD):\n- **Titular del Tratamiento y Responsable:** **Antonio Javier García García**\n- **Documento Nacional de Identidad (DNI):** **34799350M**\n- **Domicilio Legal:** Madrid (España)\n- **Contacto Legal:** Correo del proyecto o `contacto@bytoni.dev`\n\n---\n\n## 📄 2. Rutas Legales Obligatorias Pregeneradas\nToda aplicación web de producción debe incluir 3 rutas accesibles desde el pie de página:\n1. `/privacidad`: Política de Privacidad detallando base jurídica, fines del tratamiento y derechos ARCO.\n2. `/aviso-legal`: Aviso Legal con datos identificativos del titular y régimen de responsabilidad.\n3. `/terminos`: Términos y Condiciones de Uso, derechos de propiedad intelectual y limitaciones del servicio.\n\n---\n\n## 🍪 3. Consentimiento de Cookies y LocalStorage\n- Banner no intrusivo pero visible que permita al usuario aceptar o rechazar cookies no esenciales (analítica, personalización) conforme a la guía de la AEPD.\n- Cumplimiento de derechos ARCO: Acceso, Rectificación, Cancelación y Oposición mediante mecanismo sencillo.\n\n---\n\n## ✨ 4. Sello de Autoría y Branding \"By Toni\"\n- Todo pie de página (*Footer*) de las aplicaciones desarrolladas dentro de la suite debe incluir el distintivo oficial:\n  ```html\n  <footer className=\"...\">\n    <span>© 2026 Antonio Javier García García. Todos los derechos reservados.</span>\n    <span className=\"badge-by-toni\">Desarrollado con excelencia · By Toni</span>\n  </footer>\n  ```\n"
+  },
+  {
+    "id": "dir_drive",
+    "number": 5,
+    "title": "📂 Directriz Maestra #5: Registro Central y Control en Drive",
+    "shortTitle": "5. Control Drive",
+    "filename": "05_Registro_Control_Drive.md",
+    "icon": "📂",
+    "summary": "Catálogo en Registro_Proyectos_Toni.csv y ficha técnica INFO_PROYECTO.md.",
+    "rules": [
+      "Registro obligatorio en Apps-Desarrollo/Registro_Proyectos_Toni.csv",
+      "Ficha técnica INFO_PROYECTO.md con arquitectura y tabla de cumplimiento",
+      "Sincronización de carpetas de documentación en Google Drive"
+    ],
+    "markdownContent": "# 📂 Directriz Maestra #5: Registro Central y Control Documental en Google Drive\n\n> **Ubicación Google Drive:** `Google Drive > Mi unidad > 1-Proyectos > Apps-Desarrollo > Directrices > 05_Registro_Control_Drive.md`  \n> **Estado:** Obligatoria al inicializar, documentar y desplegar cualquier proyecto  \n> **Responsable Metodológico:** Toni (Antonio Javier García García)\n\n---\n\n## 🗂️ 1. Estructura Jerárquica de Carpetas en Google Drive\nLa organización central de proyectos en la nube sigue la estructura unificada:\n```text\nGoogle Drive\n └── Mi unidad\n      └── 1-Proyectos\n           └── Apps-Desarrollo\n                ├── Registro_Proyectos_Toni.csv\n                ├── Plantilla_Definicion_Proyecto_Toni.xlsx\n                ├── Directriz-Definicion-Proyecto.md\n                ├── Directrices/\n                └── [Nombre-Proyecto]/\n                     ├── INFO_PROYECTO.md\n                     ├── Briefing/\n                     └── Documentacion/\n```\n\n---\n\n## 📊 2. Registro Maestro en `Registro_Proyectos_Toni.csv`\nCada nuevo proyecto debe registrarse en el archivo CSV maestro con los siguientes campos:\n```csv\nID,Nombre,Slug,Categoria,Estado,TipoApp,EsquemaSupabase,URL_Produccion,Repositorio,FechaCreacion\n```\n\n---\n\n## 📝 3. Ficha Técnica Obligatoria `INFO_PROYECTO.md`\nTodo proyecto en su raíz local y en su carpeta de Drive debe contener una ficha técnica `INFO_PROYECTO.md` que detalle:\n1. **Ficha Resumen:** Nombre, Slug, Tagline, Categoría, Estado.\n2. **Propuesta de Valor & Problema:** Público objetivo y dolores que soluciona.\n3. **Arquitectura Técnica:** Frontend, UI Styling, Backend, Base de Datos (esquema PostgreSQL), Modelo IA.\n4. **Tabla de Cumplimiento de las 5 Directrices Maestras:**\n   - 🗄️ Supabase: Esquema dedicado y RLS.\n   - 🛡️ Auth: Supabase Auth y Route Guards.\n   - 🤖 IA: Streaming SSE y proveedor.\n   - ⚖️ RGPD: Titularidad legal y rutas `/privacidad`, `/aviso-legal`, `/terminos`.\n   - 📂 Drive: Registro en CSV y ficha técnica.\n5. **Guía de Arranque Rápido:** Comandos de instalación, entorno y ejecución local (`npm run dev`).\n"
+  }
+];
 
   const DEFAULT_SAVED_PROJECTS = [
     {
@@ -1607,14 +1564,23 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
 
   function loadSavedState() {
     try {
-      const saved = localStorage.getItem('tonigravity_state_v6') || localStorage.getItem('tonigravity_state_v5');
-      if (saved) {
-        const parsed = JSON.parse(saved);
+      const savedV7 = localStorage.getItem('tonigravity_state_v7');
+      const savedLegacy = localStorage.getItem('tonigravity_state_v6') || localStorage.getItem('tonigravity_state_v5');
+      if (savedV7) {
+        const parsed = JSON.parse(savedV7);
         if (parsed.directives) appState.directives = parsed.directives;
         if (parsed.rules) appState.rules = parsed.rules;
         if (parsed.memory) appState.memory = parsed.memory;
         if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
         if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
+      } else if (savedLegacy) {
+        const parsed = JSON.parse(savedLegacy);
+        // On upgrade from legacy, retain user's saved projects, rules, and memory while loading complete directives
+        if (parsed.rules) appState.rules = parsed.rules;
+        if (parsed.memory) appState.memory = parsed.memory;
+        if (parsed.savedProjects && parsed.savedProjects.length) appState.savedProjects = parsed.savedProjects;
+        if (parsed.currentProjectId) appState.currentProjectId = parsed.currentProjectId;
+        saveAllChanges();
       }
     } catch (e) {
       console.error(e);
@@ -1648,6 +1614,9 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     document.getElementById('activeDirIcon').innerText = dir.icon;
     document.getElementById('activeDirTitle').innerText = dir.title;
     document.getElementById('activeDirSummary').innerText = dir.summary;
+    if (document.getElementById('activeDirFilename')) {
+      document.getElementById('activeDirFilename').innerText = dir.filename || `0${dir.number}_Directriz.md`;
+    }
 
     const rulesList = document.getElementById('activeDirRulesList');
     rulesList.innerHTML = dir.rules.map(r => `
@@ -1660,7 +1629,11 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
     const previewContainer = document.getElementById('directivePreviewContainer');
     const sanitizedHTML = DOMPurify.sanitize(marked.parse(dir.markdownContent));
     previewContainer.innerHTML = sanitizedHTML;
-    document.getElementById('directiveMarkdownTextarea').value = dir.markdownContent;
+    const textarea = document.getElementById('directiveMarkdownTextarea');
+    if (textarea) {
+      textarea.value = dir.markdownContent;
+      onDirectiveTextareaInput();
+    }
   }
 
   function renderRulesGrid() {
@@ -1859,6 +1832,40 @@ Todo proyecto debe figurar registrado en \`Registro_Proyectos_Toni.csv\` con su 
       btnEditor.className = 'px-3 py-1.5 rounded-lg bg-white text-slate-900 font-semibold shadow-sm transition';
       btnPreview.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition';
     }
+  }
+
+  function onDirectiveTextareaInput() {
+    const textarea = document.getElementById('directiveMarkdownTextarea');
+    const wordCount = document.getElementById('editorWordCount');
+    if (textarea && wordCount) {
+      wordCount.innerText = `${textarea.value.length} caracteres · ${textarea.value.split(/\s+/).filter(Boolean).length} palabras`;
+    }
+  }
+
+  function resetActiveDirectiveToDefault() {
+    const orig = DEFAULT_DIRECTIVES.find(d => d.id === appState.activeDirectiveId);
+    const current = appState.directives.find(d => d.id === appState.activeDirectiveId);
+    if (orig && current) {
+      if (confirm('¿Deseas restablecer esta directriz a su contenido original?')) {
+        current.markdownContent = orig.markdownContent;
+        renderActiveDirectiveDetails();
+        saveAllChanges();
+        showToast('✓ Directriz restablecida al original.');
+      }
+    }
+  }
+
+  function downloadActiveDirectiveMarkdown() {
+    const dir = appState.directives.find(d => d.id === appState.activeDirectiveId);
+    if (!dir) return;
+    const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(dir.markdownContent);
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = dir.filename || `Directriz-${dir.id}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast(`📥 ${a.download} descargada.`);
   }
 
   function saveActiveDirectiveEdit() {
@@ -2978,7 +2985,7 @@ export default function ${name.replace(/[^a-zA-Z0-9]/g, '')}App() {
 
   function saveAllChanges() {
     try {
-      localStorage.setItem('tonigravity_state_v6', JSON.stringify(appState));
+      localStorage.setItem('tonigravity_state_v7', JSON.stringify(appState));
     } catch (e) {
       console.error(e);
     }
