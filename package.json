@@ -1,0 +1,10 @@
+{
+  "name": "tonigravity",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tonigravity - AI Agent OS & Master Directives Control Center",
+  "scripts": {
+    "dev": "npx -y serve public",
+    "build": "mkdir -p public && cp index.html favicon.svg logo.svg public/ 2>/dev/null || true"
+  }
+}

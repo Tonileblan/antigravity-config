@@ -1,0 +1,4 @@
+node_modules
+tools/stitch-mcp/node_modules
+.git
+.DS_Store
