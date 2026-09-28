@@ -43,6 +43,16 @@
       "branch": "main"
     },
     {
+      "name": "Vibe-Coding",
+      "repo": "https://github.com/Tonileblan/vibestack-studio.git",
+      "branch": "main"
+    },
+    {
+      "name": "Orange-Territorio-Madrid",
+      "repo": "https://github.com/Tonileblan/Orange-Territorio-Madrid.git",
+      "branch": "main"
+    },
+    {
       "name": "antigravity-config",
       "repo": "https://github.com/Tonileblan/antigravity-config.git",
       "branch": "main"
