@@ -1,0 +1,64 @@
+{
+  "modo": "propio",
+  "negocio": {
+    "nombre": "BikeFlow",
+    "web": "",
+    "queVende": "CRM y Software Integral de Gestión de Taller y Tienda de Bicicletas",
+    "clienteIdeal": "Dueños y mecánicos de tiendas y talleres de bicicletas",
+    "dolorCaptacion": "Pagar cuotas mensuales continuas de ~500€/mes (~6.000€/año) por CRMs rígidos y caros"
+  },
+  "regalo": {
+    "concepto": "Simulador Interactivo de Ahorro 'Software Lifetime vs Cuotas Mensuales' + Pack de Auditoría y Puesta en Marcha a los 30 días",
+    "porQueFunciona": "Demuestra con cifras reales del sector cuánto dinero y tiempo ahorra el taller y cómo amortiza la licencia de 100€ en 2-3 reparaciones"
+  },
+  "mecanica": ["calculadora_interactiva", "comparador_top3_crms"],
+  "informe": {
+    "modulos": [
+      "tarjetas_ahorro_neto",
+      "grafico_curva_costes",
+      "roi_amortizacion_express",
+      "pack_puesta_marcha_30_dias",
+      "tabla_top3_crms_espana"
+    ],
+    "referenciasReales": "Cuota actual de 16€ a 900€/mes (media sector ~500€/mes). Top 3 CRMs España: Ciclomax, Gesio Bike, TallerGP (costes 2.400€ - 6.000€/año) vs 100€ Lifetime BikeFlow"
+  },
+  "captura": {
+    "campos": [
+      "nombre",
+      "nombre_taller",
+      "email",
+      "whatsapp_opcional"
+    ],
+    "destino": "email_sheets_telegram",
+    "rgpdListo": true
+  },
+  "cta": {
+    "tipo": "compra_directa_lifetime",
+    "precio": 100,
+    "url_pasarela": "stripe/checkout",
+    "soporte_whatsapp": true
+  },
+  "marca": {
+    "nombre": "BikeFlow",
+    "tema": "dark_and_light",
+    "colores": {
+      "primario": "#10B981",
+      "fondo_dark": "#0F172A",
+      "acento": "#3B82F6"
+    },
+    "tono": "directo, profesional, honesto, transparente y basado en datos reales del taller",
+    "nombreAsistente": "BikeFlow Auditor"
+  },
+  "hosting": {
+    "donde": "vercel",
+    "dominio": "bikeflow.vercel.app"
+  },
+  "skill": {
+    "nombre": "consultor-bikeflow"
+  },
+  "pendientes": [
+    "Configurar pasarela Stripe o checkout de 100€",
+    "Conectar webhook/token de Telegram y credenciales de Google Sheets / Resend",
+    "Vincular dominio propio si se adquiere en el futuro"
+  ]
+}
