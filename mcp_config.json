@@ -1,0 +1,55 @@
+{
+  "mcpServers": {
+    "stitch": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/toni/Proyectos/antigravity-config/tools/stitch-mcp/index.js"
+      ]
+    },
+    "macos-control": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/toni/Proyectos/Flowmind/tools/macos-control/index.js"
+      ]
+    },
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}"
+      }
+    },
+    "vercel": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.vercel.com"
+      ]
+    },
+    "notebooks": {
+      "command": "node",
+      "args": [
+        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-0.11.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
+        "notebooks-antigravityide"
+      ]
+    },
+    "visualization": {
+      "command": "node",
+      "args": [
+        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-0.11.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
+        "visualization-antigravityide"
+      ]
+    },
+    "data-agent-kit": {
+      "command": "node",
+      "args": [
+        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-0.11.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
+        "dataAgentKit-antigravityide"
+      ]
+    }
+  }
+}
