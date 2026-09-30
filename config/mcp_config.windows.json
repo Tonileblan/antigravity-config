@@ -34,6 +34,15 @@
         "https://mcp.vercel.com"
       ]
     },
+    "notebooklm": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "notebooklm-mcp@latest"
+      ]
+    },
     "whatsapp": {
       "command": "node",
       "args": [

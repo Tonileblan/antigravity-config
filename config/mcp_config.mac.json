@@ -29,6 +29,13 @@
         "mcp-remote",
         "https://mcp.vercel.com"
       ]
+    },
+    "notebooklm": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "notebooklm-mcp@latest"
+      ]
     }
   }
 }

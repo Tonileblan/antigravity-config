@@ -23,6 +23,13 @@
         "https://mcp.vercel.com"
       ]
     },
+    "notebooklm": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "notebooklm-mcp@latest"
+      ]
+    },
     "notebooks": {
       "command": "node",
       "args": [
