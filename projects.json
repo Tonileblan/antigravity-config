@@ -28,11 +28,6 @@
       "branch": "main"
     },
     {
-      "name": "IA-Trading",
-      "repo": "https://github.com/Tonileblan/algo-wizard-pro.git",
-      "branch": "main"
-    },
-    {
       "name": "ByToniProyect",
       "repo": "https://github.com/Tonileblan/ByToniProyect.git",
       "branch": "main"
@@ -55,6 +50,31 @@
     {
       "name": "antigravity-config",
       "repo": "https://github.com/Tonileblan/antigravity-config.git",
+      "branch": "main"
+    },
+    {
+      "name": "BikeFlow",
+      "repo": "https://github.com/Tonileblan/BikeFlow.git",
+      "branch": "main"
+    },
+    {
+      "name": "EduHub",
+      "repo": "https://github.com/Tonileblan/EduHub.git",
+      "branch": "main"
+    },
+    {
+      "name": "Memberout",
+      "repo": "https://github.com/Tonileblan/Memberout.git",
+      "branch": "main"
+    },
+    {
+      "name": "groomer-flow",
+      "repo": "https://github.com/Tonileblan/groomer-flow.git",
+      "branch": "main"
+    },
+    {
+      "name": "Recursos-Globales",
+      "repo": "https://github.com/Tonileblan/Recursos-Globales.git",
       "branch": "main"
     }
   ]
