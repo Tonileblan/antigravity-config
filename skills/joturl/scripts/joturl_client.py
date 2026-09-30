@@ -29,15 +29,28 @@ class JotUrlClient:
     # --- FUNCIONALIDADES ESPECÍFICAS ---
 
     def create_link(self, destination_url, alias=None):
-        """Crea un enlace corto básico"""
-        payload = {
-            "url": destination_url
+        """Crea un enlace corto usando el endpoint de JotUrl"""
+        # Nota: El domain_id y project_id se obtienen de la prueba exitosa
+        # Idealmente, podrían parametrizarse si cambian en el futuro.
+        domain_id = "eab2032b7461b2b356ba6ac9f048203c"
+        project_id = "de3c944d57b433eb8940e60061db908f"
+        
+        url = f"https://joturl.com/a/i1/urls/shorten"
+        params = {
+            "domain_id": domain_id,
+            "project_id": project_id,
+            "long_url": destination_url
         }
         if alias:
-            payload["alias"] = alias
+            params["alias"] = alias
             
-        # Endpoint de ejemplo, requiere el endpoint oficial de JotUrl
-        return self.request("POST", "/links", payload)
+        response = requests.post(url, headers=self.headers, params=params, data="")
+        
+        if response.status_code in [200, 201]:
+            return response.json()
+        else:
+            print(f"Error {response.status_code}: {response.text}")
+            response.raise_for_status()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="JotUrl API Client")
