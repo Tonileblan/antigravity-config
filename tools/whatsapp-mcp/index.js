@@ -11,10 +11,12 @@ import makeWASocket, {
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   Browsers,
+  makeCacheableSignalKeyStore,
 } from "@whiskeysockets/baileys";
 import pino from "pino";
 import path from "path";
 import fs from "fs/promises";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { execFile, exec } from "child_process";
 import { promisify } from "util";
 import { fileURLToPath } from "url";
@@ -25,59 +27,85 @@ const execFilePromise = promisify(execFile);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const AUTH_DIR = path.join(__dirname, "auth_info");
+const DB_FILE = path.join(AUTH_DIR, "messages_db.json");
 
 let sock = null;
 let baileysState = "disconnected";
 let currentQR = null;
 let userInfo = null;
+
+// Map: jid -> Array<{ id, sender, senderJid, fromMe, text, timestamp, isGroup, groupName }>
 let messageStore = new Map();
+// Map: jid -> { jid, name, isGroup, participantCount, lastMessage, lastUpdated }
 let chatStore = new Map();
 
-async function checkMacWhatsApp() {
-  if (process.platform !== "darwin") {
-    return { installed: false, running: false };
-  }
+// Cargar almacenamiento persistente local si existe
+function loadPersistedData() {
   try {
-    const script = `
-      tell application "System Events"
-        set isRunning to (count (every process whose bundle identifier is "net.whatsapp.WhatsApp")) > 0
-      end tell
-      return isRunning
-    `;
-    const { stdout } = await execFilePromise("osascript", ["-e", script]);
-    const running = stdout.trim() === "true";
-    return { installed: true, running, bundleId: "net.whatsapp.WhatsApp" };
-  } catch (e) {
-    return { installed: false, running: false, error: e.message };
+    if (existsSync(DB_FILE)) {
+      const raw = readFileSync(DB_FILE, "utf-8");
+      const data = JSON.parse(raw);
+      if (data.chats && Array.isArray(data.chats)) {
+        for (const chat of data.chats) {
+          chatStore.set(chat.jid, chat);
+        }
+      }
+      if (data.messages && typeof data.messages === "object") {
+        for (const [jid, msgs] of Object.entries(data.messages)) {
+          messageStore.set(jid, msgs);
+        }
+      }
+    }
+  } catch (err) {
+    console.error("[WhatsApp MCP] Error al cargar DB local:", err.message);
   }
 }
 
-async function sendViaMacWhatsApp(phone, message) {
-  const cleanedPhone = phone.replace(/[\s\+\-\(\)]/g, "");
-  const encodedText = encodeURIComponent(message);
-  const waUrl = `whatsapp://send?phone=${cleanedPhone}&text=${encodedText}`;
+let saveTimeout = null;
+function persistDataDebounced() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    try {
+      await fs.mkdir(AUTH_DIR, { recursive: true });
+      const messagesObj = {};
+      for (const [jid, msgs] of messageStore.entries()) {
+        messagesObj[jid] = msgs.slice(-100); // Guardar hasta los últimos 100 mensajes por chat
+      }
+      const payload = {
+        lastSaved: new Date().toISOString(),
+        chats: Array.from(chatStore.values()),
+        messages: messagesObj,
+      };
+      await fs.writeFile(DB_FILE, JSON.stringify(payload, null, 2), "utf-8");
+    } catch (e) {
+      console.error("[WhatsApp MCP] Error guardando DB:", e.message);
+    }
+  }, 1000);
+}
 
-  // Abrir WhatsApp con el chat y texto pre-cargado
-  await execPromise(`open "${waUrl}"`);
+loadPersistedData();
 
-  // Esperar a que WhatsApp se enfoque y pulsar Enter para enviar
-  const sendScript = `
-    delay 0.8
-    tell application "WhatsApp" to activate
-    delay 0.2
-    tell application "System Events"
-      keystroke return
-    end tell
-  `;
-  await execFilePromise("osascript", ["-e", sendScript]);
-
-  return {
-    method: "macos_whatsapp_desktop",
-    success: true,
-    recipient: cleanedPhone,
-    message,
-    timestamp: new Date().toISOString(),
-  };
+async function syncAllGroups() {
+  if (!sock || baileysState !== "connected") return;
+  try {
+    const groups = await sock.groupFetchAllParticipating();
+    for (const [jid, group] of Object.entries(groups)) {
+      const existing = chatStore.get(jid) || {};
+      chatStore.set(jid, {
+        jid,
+        name: group.subject || existing.name || "Grupo sin nombre",
+        isGroup: true,
+        participantCount: group.participants?.length || 0,
+        creation: group.creation ? new Date(group.creation * 1000).toISOString() : null,
+        desc: group.desc || "",
+        lastMessage: existing.lastMessage || "",
+        lastUpdated: existing.lastUpdated || new Date().toISOString(),
+      });
+    }
+    persistDataDebounced();
+  } catch (err) {
+    console.error("[WhatsApp MCP] Error al sincronizar grupos:", err.message);
+  }
 }
 
 async function initBaileys() {
@@ -92,8 +120,11 @@ async function initBaileys() {
       version,
       logger: pino({ level: "silent" }),
       printQRInTerminal: false,
-      auth: state,
-      browser: Browsers.macOS("Desktop"),
+      auth: {
+        creds: state.creds,
+        keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" })),
+      },
+      browser: Browsers.ubuntu("Chrome"),
       syncFullHistory: false,
       connectTimeoutMs: 60000,
       defaultQueryTimeoutMs: 60000,
@@ -101,7 +132,7 @@ async function initBaileys() {
 
     sock.ev.on("creds.update", saveCreds);
 
-    sock.ev.on("connection.update", (update) => {
+    sock.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect, qr } = update;
 
       if (qr) {
@@ -120,7 +151,9 @@ async function initBaileys() {
         baileysState = "connected";
         currentQR = null;
         userInfo = sock.user;
-        console.error(`[WhatsApp MCP] Baileys conectado como ${sock.user?.id}`);
+        console.error(`[WhatsApp MCP] Baileys conectado exitosamente como ${sock.user?.id}`);
+        // Sincronizar metadatos de todos los grupos
+        setTimeout(syncAllGroups, 2000);
       }
     });
 
@@ -130,28 +163,56 @@ async function initBaileys() {
           const jid = msg.key.remoteJid;
           if (!jid) continue;
 
+          const isGroup = jid.endsWith("@g.us");
           const text =
             msg.message?.conversation ||
             msg.message?.extendedTextMessage?.text ||
             msg.message?.imageMessage?.caption ||
+            msg.message?.videoMessage?.caption ||
+            (msg.message?.audioMessage ? "[Audio/Nota de voz]" : "") ||
+            (msg.message?.documentMessage ? `[Documento: ${msg.message.documentMessage.fileName || 'archivo'}]` : "") ||
+            (msg.message?.imageMessage ? "[Imagen]" : "") ||
             "";
 
-          const sender = msg.key.fromMe ? "me" : msg.pushName || jid;
+          const senderName = msg.pushName || (msg.key.fromMe ? "Yo" : "Desconocido");
+          const senderJid = msg.key.participant || (msg.key.fromMe ? "Yo" : jid);
           const timestamp = msg.messageTimestamp
             ? new Date(Number(msg.messageTimestamp) * 1000).toISOString()
             : new Date().toISOString();
 
+          let groupName = null;
+          if (isGroup) {
+            const cachedGroup = chatStore.get(jid);
+            groupName = cachedGroup?.name || "Grupo de WhatsApp";
+          }
+
           if (!messageStore.has(jid)) messageStore.set(jid, []);
           const history = messageStore.get(jid);
-          history.push({ id: msg.key.id, sender, fromMe: msg.key.fromMe, text, timestamp });
-          if (history.length > 50) history.shift();
+          history.push({
+            id: msg.key.id,
+            sender: senderName,
+            senderJid,
+            fromMe: Boolean(msg.key.fromMe),
+            text,
+            timestamp,
+            isGroup,
+            groupName,
+          });
 
+          if (history.length > 200) history.shift();
+
+          const existingChat = chatStore.get(jid) || {};
           chatStore.set(jid, {
             jid,
-            name: msg.pushName || jid.split("@")[0],
+            name: isGroup ? (existingChat.name || "Grupo") : (msg.pushName || existingChat.name || jid.split("@")[0]),
+            isGroup,
+            participantCount: existingChat.participantCount || (isGroup ? 0 : 1),
             lastMessage: text,
+            lastSender: senderName,
             lastUpdated: timestamp,
           });
+
+          persistDataDebounced();
         }
       }
     });
@@ -165,17 +226,17 @@ async function initBaileys() {
 initBaileys();
 
 function normalizeJid(phoneOrJid) {
-  let cleaned = phoneOrJid.replace(/[\s\+\-\(\)]/g, "");
-  if (!cleaned.includes("@")) {
-    cleaned = `${cleaned}@s.whatsapp.net`;
+  let cleaned = phoneOrJid.trim().replace(/[\s\+\-\(\)]/g, "");
+  if (cleaned.endsWith("@g.us") || cleaned.endsWith("@s.whatsapp.net")) {
+    return cleaned;
   }
-  return cleaned;
+  return `${cleaned}@s.whatsapp.net`;
 }
 
 const server = new Server(
   {
     name: "whatsapp-mcp",
-    version: "1.1.0",
+    version: "2.0.0",
   },
   {
     capabilities: {
@@ -187,73 +248,101 @@ const server = new Server(
 const TOOLS = [
   {
     name: "whatsapp_status",
-    description: "Devuelve el estado de la conexión de WhatsApp (tanto la app de escritorio de macOS como el servicio WebSocket en segundo plano).",
+    description: "Devuelve el estado de la conexión de WhatsApp Multi-Device (conectado, desconectado, esperando QR, usuario y conteo de chats/grupos).",
     inputSchema: {
       type: "object",
       properties: {},
     },
   },
   {
-    name: "whatsapp_send_message",
-    description: "Envía un mensaje de texto por WhatsApp a un número de teléfono (utiliza WhatsApp Desktop nativo de macOS o WebSocket directamente).",
+    name: "whatsapp_list_groups",
+    description: "Lista todos los grupos de WhatsApp en los que participas, con su JID, nombre/asunto, cantidad de participantes, último mensaje y fecha.",
     inputSchema: {
       type: "object",
       properties: {
-        phone: {
+        limit: {
+          type: "number",
+          description: "Límite máximo de grupos a devolver (por defecto 50).",
+        },
+        search: {
           type: "string",
-          description: "Número de teléfono con prefijo de país (ejemplo: '34612345678' o '+34 612 345 678').",
+          description: "Filtro de búsqueda por nombre de grupo (opcional).",
+        },
+      },
+    },
+  },
+  {
+    name: "whatsapp_get_group_messages",
+    description: "Obtiene los mensajes registrados de un grupo de WhatsApp específico buscando por su nombre o su JID (@g.us). Permite filtrar por texto.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        groupNameOrJid: {
+          type: "string",
+          description: "Nombre del grupo (ej: 'Trabajo', 'Familia', 'Comunidad') o JID directo (ej: '1203630...@g.us').",
+        },
+        limit: {
+          type: "number",
+          description: "Cantidad de mensajes recientes a devolver (por defecto 30).",
+        },
+        search: {
+          type: "string",
+          description: "Palabra o frase para filtrar mensajes dentro del grupo.",
+        },
+      },
+      required: ["groupNameOrJid"],
+    },
+  },
+  {
+    name: "whatsapp_get_all_recent_messages",
+    description: "Devuelve los mensajes más recientes registrados en todos los grupos y chats en orden cronológico.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        limit: {
+          type: "number",
+          description: "Número total de mensajes a devolver (por defecto 40).",
+        },
+        onlyGroups: {
+          type: "boolean",
+          description: "Si es true, solo devuelve mensajes provenientes de grupos.",
+        },
+        search: {
+          type: "string",
+          description: "Filtro para buscar una palabra o tema en todos los mensajes.",
+        },
+      },
+    },
+  },
+  {
+    name: "whatsapp_send_message",
+    description: "Envía un mensaje de texto a un número de teléfono individual o a un grupo de WhatsApp.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        recipient: {
+          type: "string",
+          description: "Número de teléfono con prefijo (ej: '+34612345678') o JID de grupo ('120363...@g.us').",
         },
         message: {
           type: "string",
           description: "Texto del mensaje que deseas enviar.",
         },
       },
-      required: ["phone", "message"],
-    },
-  },
-  {
-    name: "whatsapp_open_chat",
-    description: "Abre el chat de un contacto o número específico en la aplicación WhatsApp Desktop de macOS.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        phone: {
-          type: "string",
-          description: "Número de teléfono con prefijo de país.",
-        },
-      },
-      required: ["phone"],
+      required: ["recipient", "message"],
     },
   },
   {
     name: "whatsapp_list_chats",
-    description: "Lista las conversaciones y mensajes registrados recientemente.",
+    description: "Lista todas las conversaciones (individuales y grupos) registradas en la base de datos.",
     inputSchema: {
       type: "object",
       properties: {
         limit: {
           type: "number",
-          description: "Cantidad máxima de chats a devolver (por defecto 20).",
+          description: "Cantidad máxima de chats a devolver (por defecto 30).",
         },
       },
-    },
-  },
-  {
-    name: "whatsapp_get_chat_history",
-    description: "Obtiene los últimos mensajes registrados de una conversación.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        phone: {
-          type: "string",
-          description: "Número de teléfono o JID del chat.",
-        },
-        limit: {
-          type: "number",
-          description: "Cantidad de mensajes.",
-        },
-      },
-      required: ["phone"],
     },
   },
 ];
@@ -262,25 +351,170 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   return { tools: TOOLS };
 });
 
+async function ensureConnected(maxWaitMs = 6000) {
+  if (baileysState === "connected") return true;
+  const start = Date.now();
+  while (Date.now() - start < maxWaitMs) {
+    if (baileysState === "connected") return true;
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  return baileysState === "connected";
+}
+
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
+
+  // Esperar a que la conexión esté lista si está conectando
+  await ensureConnected(4000);
 
   try {
     switch (name) {
       case "whatsapp_status": {
-        const macStatus = await checkMacWhatsApp();
+        const groupsCount = Array.from(chatStore.values()).filter((c) => c.isGroup).length;
+        const totalMessages = Array.from(messageStore.values()).reduce((acc, m) => acc + m.length, 0);
+
         return {
           content: [
             {
               type: "text",
               text: JSON.stringify(
                 {
-                  connected: macStatus.running || baileysState === "connected",
-                  macOSDesktopApp: macStatus,
-                  webSocketService: {
-                    status: baileysState,
-                    user: userInfo || null,
+                  connected: baileysState === "connected",
+                  status: baileysState,
+                  user: userInfo || null,
+                  totalChats: chatStore.size,
+                  totalGroups: groupsCount,
+                  totalStoredMessages: totalMessages,
+                },
+                null,
+                2
+              ),
+            },
+          ],
+        };
+      }
+
+      case "whatsapp_list_groups": {
+        const search = (args?.search || "").toLowerCase();
+        let groups = Array.from(chatStore.values()).filter((c) => c.isGroup);
+
+        if (search) {
+          groups = groups.filter((g) => (g.name || "").toLowerCase().includes(search));
+        }
+
+        // Ordenar por última actividad
+        groups.sort((a, b) => new Date(b.lastUpdated || 0) - new Date(a.lastUpdated || 0));
+        const limit = args?.limit || 50;
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  totalGroupsFound: groups.length,
+                  groups: groups.slice(0, limit),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+        };
+      }
+
+      case "whatsapp_get_group_messages": {
+        const query = (args?.groupNameOrJid || "").trim();
+        const search = (args?.search || "").toLowerCase();
+        const limit = args?.limit || 30;
+
+        // Buscar JID del grupo directamente o por coincidencia de nombre
+        let targetJid = null;
+        let matchedGroup = null;
+
+        if (query.endsWith("@g.us")) {
+          targetJid = query;
+          matchedGroup = chatStore.get(targetJid);
+        } else {
+          const lowerQuery = query.toLowerCase();
+          for (const [jid, chat] of chatStore.entries()) {
+            if (chat.isGroup && (chat.name || "").toLowerCase().includes(lowerQuery)) {
+              targetJid = jid;
+              matchedGroup = chat;
+              break;
+            }
+          }
+        }
+
+        if (!targetJid) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(
+                  {
+                    success: false,
+                    error: `No se encontró ningún grupo que coincida con '${query}'. Usa whatsapp_list_groups para ver los grupos disponibles.`,
                   },
+                  null,
+                  2
+                ),
+              },
+            ],
+          };
+        }
+
+        let messages = messageStore.get(targetJid) || [];
+        if (search) {
+          messages = messages.filter((m) => (m.text || "").toLowerCase().includes(search) || (m.sender || "").toLowerCase().includes(search));
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  success: true,
+                  groupJid: targetJid,
+                  groupName: matchedGroup?.name || "Grupo",
+                  totalMessagesCount: messages.length,
+                  messages: messages.slice(-limit),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+        };
+      }
+
+      case "whatsapp_get_all_recent_messages": {
+        const limit = args?.limit || 40;
+        const onlyGroups = args?.onlyGroups !== false; // true por defecto
+        const search = (args?.search || "").toLowerCase();
+
+        let allMsgs = [];
+        for (const [jid, msgs] of messageStore.entries()) {
+          for (const m of msgs) {
+            if (onlyGroups && !m.isGroup) continue;
+            if (search && !((m.text || "").toLowerCase().includes(search) || (m.sender || "").toLowerCase().includes(search) || (m.groupName || "").toLowerCase().includes(search))) {
+              continue;
+            }
+            allMsgs.push({ ...m, jid });
+          }
+        }
+
+        allMsgs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  totalFiltered: allMsgs.length,
+                  messages: allMsgs.slice(-limit),
                 },
                 null,
                 2
@@ -291,50 +525,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "whatsapp_send_message": {
-        // Intentar primero por Baileys si está conectado
-        if (baileysState === "connected" && sock) {
-          try {
-            const jid = normalizeJid(args.phone);
-            const res = await sock.sendMessage(jid, { text: args.message });
-            return {
-              content: [
-                {
-                  type: "text",
-                  text: JSON.stringify(
-                    {
-                      method: "websocket_baileys",
-                      success: true,
-                      messageId: res?.key?.id,
-                      recipient: jid,
-                      message: args.message,
-                      timestamp: new Date().toISOString(),
-                    },
-                    null,
-                    2
-                  ),
-                },
-              ],
-            };
-          } catch (e) {
-            console.error("[WhatsApp MCP] Fallo WebSocket, usando WhatsApp Desktop fallback:", e);
-          }
+        if (baileysState !== "connected" || !sock) {
+          return {
+            isError: true,
+            content: [
+              {
+                type: "text",
+                text: "WhatsApp no está conectado. Primero vincula tu cuenta ejecutando auth.js.",
+              },
+            ],
+          };
         }
 
-        // Fallback nativo ultra-fiable en macOS WhatsApp Desktop
-        const desktopRes = await sendViaMacWhatsApp(args.phone, args.message);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(desktopRes, null, 2),
-            },
-          ],
-        };
-      }
+        const jid = normalizeJid(args.recipient);
+        const res = await sock.sendMessage(jid, { text: args.message });
 
-      case "whatsapp_open_chat": {
-        const cleaned = args.phone.replace(/[\s\+\-\(\)]/g, "");
-        await execPromise(`open "whatsapp://send?phone=${cleaned}"`);
         return {
           content: [
             {
@@ -342,7 +547,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               text: JSON.stringify(
                 {
                   success: true,
-                  message: `Chat con ${cleaned} abierto en WhatsApp Desktop.`,
+                  messageId: res?.key?.id,
+                  recipient: jid,
+                  message: args.message,
+                  timestamp: new Date().toISOString(),
                 },
                 null,
                 2
@@ -353,9 +561,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "whatsapp_list_chats": {
-        const limit = args?.limit || 20;
-        const chats = Array.from(chatStore.values()).slice(0, limit);
-        const macStatus = await checkMacWhatsApp();
+        const limit = args?.limit || 30;
+        const chats = Array.from(chatStore.values())
+          .sort((a, b) => new Date(b.lastUpdated || 0) - new Date(a.lastUpdated || 0))
+          .slice(0, limit);
 
         return {
           content: [
@@ -363,31 +572,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: "text",
               text: JSON.stringify(
                 {
-                  macOSWhatsAppRunning: macStatus.running,
-                  totalLoggedChats: chats.length,
+                  totalChats: chats.length,
                   chats,
-                },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
-
-      case "whatsapp_get_chat_history": {
-        const jid = normalizeJid(args.phone);
-        const history = messageStore.get(jid) || [];
-        const limit = args?.limit || 20;
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                {
-                  jid,
-                  messages: history.slice(-limit),
                 },
                 null,
                 2

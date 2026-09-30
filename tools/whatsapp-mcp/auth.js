@@ -11,12 +11,25 @@ import fs from 'fs/promises';
 import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
 
+import qrcodeTerminal from 'qrcode-terminal';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const AUTH_DIR = path.join(__dirname, 'auth_info');
 const QR_HTML_PATH = path.join(__dirname, 'qr.html');
+const QR_PNG_PATH = path.join(__dirname, 'qr.png');
 
 let browserOpened = false;
+
+function openFileInBrowser(filePath) {
+  if (process.platform === 'win32') {
+    exec(`cmd.exe /c start "" "${filePath}"`);
+  } else if (process.platform === 'darwin') {
+    exec(`open "${filePath}"`);
+  } else {
+    exec(`xdg-open "${filePath}"`);
+  }
+}
 
 async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con WhatsApp') {
   const html = `<!DOCTYPE html>
@@ -28,39 +41,42 @@ async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con Wh
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f2f5;
+      background: #0b141a;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      color: #111b21;
+      color: #e9edef;
     }
     .container {
-      background: white;
+      background: #111b21;
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       text-align: center;
       max-width: 440px;
       width: 90%;
+      border: 1px solid #222e35;
     }
     .badge {
       display: inline-block;
-      background: #25D366;
+      background: #00a884;
       color: white;
       font-weight: 700;
       font-size: 13px;
       padding: 6px 14px;
       border-radius: 20px;
       margin-bottom: 16px;
+      letter-spacing: 0.5px;
     }
     h1 {
       font-size: 24px;
       margin: 0 0 8px 0;
+      color: #e9edef;
     }
     p {
-      color: #667781;
+      color: #8696a0;
       font-size: 14px;
       margin-bottom: 24px;
       line-height: 1.5;
@@ -69,7 +85,6 @@ async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con Wh
       background: white;
       padding: 16px;
       border-radius: 16px;
-      border: 2px solid #e9edef;
       display: inline-block;
       margin-bottom: 20px;
     }
@@ -80,12 +95,11 @@ async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con Wh
     }
     .steps {
       text-align: left;
-      background: #f8fafc;
+      background: #202c33;
       padding: 16px 20px;
       border-radius: 12px;
-      border: 1px solid #e2e8f0;
       font-size: 13px;
-      color: #334155;
+      color: #d1d7db;
     }
     .steps ol {
       margin: 0;
@@ -104,8 +118,8 @@ async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con Wh
 </head>
 <body>
   <div class="container">
-    <div class="badge">WHATSAPP MCP SERVER</div>
-    <h1>Vincular Dispositivo</h1>
+    <div class="badge">WHATSAPP MCP & GROUPS</div>
+    <h1>Vincular WhatsApp</h1>
     <p>${statusText}</p>
     
     <div class="qr-frame">
@@ -115,8 +129,8 @@ async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con Wh
     <div class="steps">
       <ol>
         <li>Abre <strong>WhatsApp</strong> en tu móvil.</li>
-        <li>Toca <strong>Ajustes / Configuración</strong> ➔ <strong>Dispositivos vinculados</strong>.</li>
-        <li>Selecciona <strong>Vincular un dispositivo</strong> y apunta tu cámara a este código.</li>
+        <li>Toca <strong>Ajustes / Menú</strong> ➔ <strong>Dispositivos vinculados</strong>.</li>
+        <li>Selecciona <strong>Vincular un dispositivo</strong> y apunta al código QR.</li>
       </ol>
     </div>
   </div>
@@ -127,7 +141,7 @@ async function writeHtmlQR(qrDataUrl, statusText = 'Escanea el código QR con Wh
 
   if (!browserOpened) {
     browserOpened = true;
-    exec(`open "${QR_HTML_PATH}"`);
+    openFileInBrowser(QR_HTML_PATH);
   }
 }
 
@@ -140,24 +154,26 @@ async function writeSuccessHtml(user) {
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f2f5;
+      background: #0b141a;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
+      color: #e9edef;
     }
     .container {
-      background: white;
+      background: #111b21;
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       text-align: center;
       max-width: 440px;
+      border: 1px solid #222e35;
     }
     .icon { font-size: 60px; margin-bottom: 16px; }
-    h1 { color: #059669; margin-bottom: 8px; }
-    p { color: #64748b; font-size: 15px; }
+    h1 { color: #00a884; margin-bottom: 8px; }
+    p { color: #8696a0; font-size: 15px; }
   </style>
 </head>
 <body>
@@ -165,7 +181,7 @@ async function writeSuccessHtml(user) {
     <div class="icon">✅</div>
     <h1>¡WhatsApp Conectado!</h1>
     <p>Dispositivo vinculado correctamente: <strong>${user?.id || 'OK'}</strong></p>
-    <p>Ya puedes cerrar esta pestaña. Tu servidor MCP de WhatsApp está listo para enviar y recibir mensajes.</p>
+    <p>Tu servidor de WhatsApp está 100% activo en segundo plano para leer grupos y mensajes.</p>
   </div>
 </body>
 </html>`;
@@ -173,8 +189,9 @@ async function writeSuccessHtml(user) {
 }
 
 async function connectToWhatsApp() {
-  console.log('📱 Iniciando vinculación WhatsApp MCP con firma oficial macOS...');
+  console.log('📱 Iniciando vinculación WhatsApp Multi-Device...');
 
+  await fs.mkdir(AUTH_DIR, { recursive: true });
   const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`Usando versión Baileys WA: ${version.join('.')} (latest: ${isLatest})`);
@@ -196,8 +213,12 @@ async function connectToWhatsApp() {
     const { connection, lastDisconnect, qr } = update;
 
     if (qr) {
-      console.log('⚡️ Nuevo QR generado con firma macOS Desktop.');
+      console.log('\n=================== ESCANEA ESTE CÓDIGO QR EN TU WHATSAPP ===================\n');
+      qrcodeTerminal.generate(qr, { small: true });
+      console.log('\n===============================================================================\n');
+
       const qrDataUrl = await QRCode.toDataURL(qr, { margin: 2, scale: 10 });
+      await QRCode.toFile(QR_PNG_PATH, qr, { margin: 2, scale: 10 });
       await writeHtmlQR(qrDataUrl);
     }
 
@@ -209,7 +230,7 @@ async function connectToWhatsApp() {
         setTimeout(connectToWhatsApp, 3000);
       }
     } else if (connection === 'open') {
-      console.log('✅ ¡WHATSAPP CONECTADO EXITOSAMENTE!');
+      console.log('✅ ¡WHATSAPP VINCULADO Y CONECTADO EXITOSAMENTE!');
       console.log(`ID Usuario: ${sock.user?.id || 'OK'}`);
       await writeSuccessHtml(sock.user);
       setTimeout(() => process.exit(0), 3000);
