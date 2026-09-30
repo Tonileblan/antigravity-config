@@ -39,6 +39,12 @@
       "args": [
         "__CONFIG_DIR__\\tools\\whatsapp-mcp\\index.js"
       ]
+    },
+    "telegram": {
+      "command": "node",
+      "args": [
+        "__CONFIG_DIR__\\tools\\telegram-mcp\\index.js"
+      ]
     }
   }
 }
