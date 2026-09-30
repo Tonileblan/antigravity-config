@@ -26,39 +26,22 @@
     "notebooks": {
       "command": "node",
       "args": [
-        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-0.11.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
+        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-1.0.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
         "notebooks-antigravityide"
       ]
     },
     "visualization": {
       "command": "node",
       "args": [
-        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-0.11.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
+        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-1.0.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
         "visualization-antigravityide"
       ]
     },
     "data-agent-kit": {
       "command": "node",
       "args": [
-        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-0.11.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
+        "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-1.0.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
         "dataAgentKit-antigravityide"
-      ]
-    },
-    "github": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
-      }
-    },
-    "google-drive": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@piotr-agier/google-drive-mcp"
       ]
     }
   }
