@@ -50,6 +50,12 @@
         "/Users/toni/.antigravity-ide/extensions/googlecloudtools.datacloud-1.0.0-universal/mcp_servers/cli/mcp_proxy_bundle.js",
         "dataAgentKit-antigravityide"
       ]
+    },
+    "ora": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/toni/Proyectos/antigravity-config/tools/ora-mcp/index.js"
+      ]
     }
   }
 }
