@@ -27,6 +27,11 @@ Write-Host "-> Total de proyectos registrados: $($manifest.projects.Count)" -For
 
 foreach ($p in $manifest.projects) {
     $targetDir = Join-Path $WorkspaceRoot $p.name
+    if (-not (Test-Path $targetDir) -and $p.name -eq "Memberout" -and (Test-Path (Join-Path $WorkspaceRoot "PrimeIO"))) {
+        $targetDir = Join-Path $WorkspaceRoot "PrimeIO"
+    } elseif (-not (Test-Path $targetDir) -and $p.name -eq "PrimeIO" -and (Test-Path (Join-Path $WorkspaceRoot "Memberout"))) {
+        $targetDir = Join-Path $WorkspaceRoot "Memberout"
+    }
     if ($p.name -eq "antigravity-config") {
         continue
     }

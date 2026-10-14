@@ -1,0 +1,39 @@
+{
+  "modo": "propio",
+  "negocio": { 
+    "nombre": "Primeio / MuiBici", 
+    "web": "https://primeio.com/muibici", 
+    "queVende": "Software de gestión (MuiBici) para talleres de bicicletas de pago único (149€), como alternativa al modelo SaaS.", 
+    "clienteIdeal": "Dueño de taller de bicicletas / mecánico de trinchera.", 
+    "dolorCaptacion": "Exceso de llamadas, fugas de facturación por no apuntar piezas pequeñas, y desconfianza en software caro o complejo." 
+  },
+  "regalo": { 
+    "concepto": "Auditor de Caos y Rentabilidad (SaaS vs Propiedad)", 
+    "porQueFunciona": "Pone números reales a lo que están perdiendo por desorganización y cuotas mensuales, mostrando el retorno inmediato del pago único." 
+  },
+  "mecanica": ["form"],
+  "informe": { 
+    "modulos": ["Grafica de Sangría SaaS a 5 años", "Puntuacion de Caos", "Dinero oculto perdido al mes", "Plan Táctico"], 
+    "referenciasReales": "Comparación contra software genérico de 39-50€/mes." 
+  },
+  "captura": { 
+    "campos": ["Nombre", "Email"], 
+    "destino": "acumbamail", 
+    "rgpdListo": true 
+  },
+  "cta": { 
+    "tipo": "contacto", 
+    "url": "https://primeio.com/muibici (trackeado con JotUrl)" 
+  },
+  "marca": { 
+    "fuente": "manual", 
+    "colores": {"primario": "#111827", "acento": "#4f46e5"}, 
+    "tono": "Claro, cercano, pragmático. Sin clichés ni psicología barata. Hablamos de taller a taller.", 
+    "nombreAsistente": "Auditor PrimeIO" 
+  },
+  "hosting": { 
+    "donde": "vercel", 
+    "dominio": "" 
+  },
+  "skill": { "nombre": "mi-consultor-primeio" }
+}

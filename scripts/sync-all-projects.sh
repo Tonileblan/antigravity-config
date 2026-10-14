@@ -24,6 +24,11 @@ console.log('📦 Total de proyectos registrados:', manifest.projects.length);
 
 for (const p of manifest.projects) {
   let targetDir = path.join(workspaceRoot, p.name);
+  if (!fs.existsSync(targetDir) && p.name === 'Memberout' && fs.existsSync(path.join(workspaceRoot, 'PrimeIO'))) {
+    targetDir = path.join(workspaceRoot, 'PrimeIO');
+  } else if (!fs.existsSync(targetDir) && p.name === 'PrimeIO' && fs.existsSync(path.join(workspaceRoot, 'Memberout'))) {
+    targetDir = path.join(workspaceRoot, 'Memberout');
+  }
   if (fs.existsSync(targetDir)) {
     let gitDir = targetDir;
     if (!fs.existsSync(path.join(targetDir, '.git'))) {
