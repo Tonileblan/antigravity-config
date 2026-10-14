@@ -49,7 +49,12 @@
     },
     {
       "name": "PrimeIO",
-      "repo": "https://github.com/Tonileblan/Memberout.git",
+      "repo": "https://github.com/Tonileblan/PrimeIO.git",
+      "branch": "main"
+    },
+    {
+      "name": "Live00",
+      "repo": "https://github.com/Tonileblan/Live00.git",
       "branch": "main"
     },
     {
