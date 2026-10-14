@@ -3,11 +3,6 @@
   "description": "Manifest of all workspace project repositories for Antigravity cross-machine sync",
   "projects": [
     {
-      "name": "Control61-Web",
-      "repo": "https://github.com/Tonileblan/intel-web-glow.git",
-      "branch": "main"
-    },
-    {
       "name": "Bicicletas-Puertanueva",
       "repo": "https://github.com/Tonileblan/bicicletaspuertanueva.git",
       "branch": "main"
@@ -50,16 +45,6 @@
     {
       "name": "antigravity-config",
       "repo": "https://github.com/Tonileblan/antigravity-config.git",
-      "branch": "main"
-    },
-    {
-      "name": "BikeFlow",
-      "repo": "https://github.com/Tonileblan/BikeFlow.git",
-      "branch": "main"
-    },
-    {
-      "name": "EduHub",
-      "repo": "https://github.com/Tonileblan/EduHub.git",
       "branch": "main"
     },
     {
