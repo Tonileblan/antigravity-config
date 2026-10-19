@@ -296,15 +296,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           qParts.push(`'${args.folderId}' in parents`);
         }
         if (args.query) {
-          const sanitized = args.query.replace(/'/g, "\\'");
-          qParts.push(`name contains '${sanitized}'`);
+          if (args.query.includes("=") || args.query.includes("contains")) {
+            qParts.push(`(${args.query})`);
+          } else {
+            const sanitized = args.query.replace(/'/g, "\\'");
+            qParts.push(`name contains '${sanitized}'`);
+          }
         }
 
         const res = await drive.files.list({
           q: qParts.join(" and "),
           pageSize: args.pageSize || 20,
-          fields: "files(id, name, mimeType, webViewLink, size, modifiedTime, parents)",
+          fields: "files(id, name, mimeType, webViewLink, size, modifiedTime, parents, shortcutDetails)",
           orderBy: "modifiedTime desc",
+          supportsAllDrives: true,
+          includeItemsFromAllDrives: true,
         });
 
         return {
@@ -334,8 +340,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const res = await drive.files.list({
           q,
           pageSize: args.pageSize || 25,
-          fields: "files(id, name, mimeType, webViewLink, size, modifiedTime)",
+          fields: "files(id, name, mimeType, webViewLink, size, modifiedTime, shortcutDetails)",
           orderBy: args.orderBy || "modifiedTime desc",
+          supportsAllDrives: true,
+          includeItemsFromAllDrives: true,
         });
 
         return {
