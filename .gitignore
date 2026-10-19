@@ -3,3 +3,7 @@ node_modules/
 .DS_Store
 *.log
 .vercel
+credentials.json
+token.json
+**/credentials.json
+**/token.json

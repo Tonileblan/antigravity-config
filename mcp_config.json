@@ -56,6 +56,12 @@
       "args": [
         "/Users/toni/Proyectos/antigravity-config/tools/ora-mcp/index.js"
       ]
+    },
+    "gdrive": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/toni/Proyectos/antigravity-config/tools/gdrive-mcp/index.js"
+      ]
     }
   }
 }
