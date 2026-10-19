@@ -59,33 +59,39 @@ async function main() {
 
   const server = http.createServer(async (req, res) => {
     try {
-      if (req.url.startsWith('/oauth2callback')) {
-        const parsedUrl = url.parse(req.url, true);
-        const code = parsedUrl.query.code;
+      const parsedUrl = url.parse(req.url, true);
+      const code = parsedUrl.query.code;
+      const error = parsedUrl.query.error;
 
-        if (code) {
-          const { tokens } = await oauth2Client.getToken(code);
-          oauth2Client.setCredentials(tokens);
-          fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
+      if (error) {
+        res.writeHead(400, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(`<h1>❌ Error de autorización: ${error}</h1><p>Por favor inténtalo de nuevo.</p>`);
+        console.error('❌ Error de autorización recibido de Google:', error);
+        return;
+      }
 
-          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-          res.end(`
-            <html>
-              <body style="font-family: system-ui, sans-serif; text-align: center; padding: 50px; background: #0f172a; color: #f8fafc;">
-                <h1 style="color: #38bdf8;">✅ Autenticación con Google Drive Exitosa</h1>
-                <p>Las credenciales se han guardado correctamente en <code>token.json</code>.</p>
-                <p style="color: #94a3b8;">Ya puedes cerrar esta ventana y regresar a Antigravity.</p>
-              </body>
-            </html>
-          `);
+      if (code) {
+        const { tokens } = await oauth2Client.getToken(code);
+        oauth2Client.setCredentials(tokens);
+        fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
 
-          console.log('\n✅ Autenticación completada con éxito.');
-          console.log(`📁 Token guardado en: ${TOKEN_PATH}`);
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(`
+          <html>
+            <body style="font-family: system-ui, sans-serif; text-align: center; padding: 50px; background: #0f172a; color: #f8fafc;">
+              <h1 style="color: #38bdf8;">✅ Autenticación con Google Drive Exitosa</h1>
+              <p>Las credenciales se han guardado correctamente en <code>token.json</code>.</p>
+              <p style="color: #94a3b8;">Ya puedes cerrar esta ventana y regresar a Antigravity.</p>
+            </body>
+          </html>
+        `);
 
-          server.close(() => {
-            process.exit(0);
-          });
-        }
+        console.log('\n✅ Autenticación completada con éxito.');
+        console.log(`📁 Token guardado en: ${TOKEN_PATH}`);
+
+        server.close(() => {
+          process.exit(0);
+        });
       }
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'text/plain' });
