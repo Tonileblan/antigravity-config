@@ -55,6 +55,29 @@ if (Test-Path $mcpToolDir) {
     npm install --silent
     Pop-Location
 }
+$gdriveToolDir = Join-Path $ScriptDir "tools\gdrive-mcp"
+if (Test-Path $gdriveToolDir) {
+    Push-Location $gdriveToolDir
+    npm install --silent
+    Pop-Location
+
+    # Auto-restaurar credenciales y token desde Google Drive local si existen
+    $gdriveAuthSources = @(
+        "G:\Mi unidad\.antigravity-auth\gdrive",
+        "G:\My Drive\.antigravity-auth\gdrive",
+        "H:\Mi unidad\.antigravity-auth\gdrive",
+        "$env:USERPROFILE\Google Drive\Mi unidad\.antigravity-auth\gdrive",
+        "$env:USERPROFILE\Google Drive\.antigravity-auth\gdrive"
+    )
+    foreach ($src in $gdriveAuthSources) {
+        if (Test-Path (Join-Path $src "token.json")) {
+            Copy-Item -Force (Join-Path $src "credentials.json") (Join-Path $gdriveToolDir "credentials.json") -ErrorAction SilentlyContinue
+            Copy-Item -Force (Join-Path $src "token.json") (Join-Path $gdriveToolDir "token.json") -ErrorAction SilentlyContinue
+            Write-Host "  OK Google Drive: Credenciales restauradas automaticamente desde Drive" -ForegroundColor Green
+            break
+        }
+    }
+}
 
 # 6. Configurar mcp_config.json para Windows
 Write-Host "-> Configurando servidores MCP..." -ForegroundColor Yellow

@@ -20,10 +20,44 @@ const TOKEN_PATH = path.join(__dirname, "token.json");
 let driveClient = null;
 let authClient = null;
 
+function ensureCredentialsExist() {
+  if (fs.existsSync(CREDENTIALS_PATH) && fs.existsSync(TOKEN_PATH)) {
+    return true;
+  }
+
+  const possiblePaths = [
+    // macOS
+    path.join(
+      process.env.HOME || "",
+      "Library/CloudStorage/GoogleDrive-leblangarcia@gmail.com/Mi unidad/.antigravity-auth/gdrive"
+    ),
+    // Windows
+    "G:\\Mi unidad\\.antigravity-auth\\gdrive",
+    "G:\\My Drive\\.antigravity-auth\\gdrive",
+    "H:\\Mi unidad\\.antigravity-auth\\gdrive",
+    path.join(process.env.USERPROFILE || "", "Google Drive\\Mi unidad\\.antigravity-auth\\gdrive"),
+    path.join(process.env.USERPROFILE || "", "Google Drive\\.antigravity-auth\\gdrive"),
+  ];
+
+  for (const p of possiblePaths) {
+    const cred = path.join(p, "credentials.json");
+    const tok = path.join(p, "token.json");
+    if (fs.existsSync(cred) && fs.existsSync(tok)) {
+      try {
+        fs.copyFileSync(cred, CREDENTIALS_PATH);
+        fs.copyFileSync(tok, TOKEN_PATH);
+        return true;
+      } catch {}
+    }
+  }
+
+  return false;
+}
+
 function getAuthClient() {
   if (authClient) return authClient;
 
-  if (!fs.existsSync(CREDENTIALS_PATH) || !fs.existsSync(TOKEN_PATH)) {
+  if (!ensureCredentialsExist()) {
     return null;
   }
 

@@ -54,6 +54,12 @@
       "args": [
         "__CONFIG_DIR__\\tools\\telegram-mcp\\index.js"
       ]
+    },
+    "gdrive": {
+      "command": "node",
+      "args": [
+        "__CONFIG_DIR__\\tools\\gdrive-mcp\\index.js"
+      ]
     }
   }
 }
