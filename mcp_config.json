@@ -1,5 +1,11 @@
 {
   "mcpServers": {
+    "primemind": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/toni/Proyectos/antigravity-config/tools/primemind-mcp/index.js"
+      ]
+    },
     "stitch": {
       "command": "/usr/local/bin/node",
       "args": [
@@ -62,6 +68,16 @@
       "args": [
         "/Users/toni/Proyectos/antigravity-config/tools/gdrive-mcp/index.js"
       ]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "BSA-BZBqyY8JXb1Wl_yzmbc17Gkr3SY"
+      }
     }
   }
 }
