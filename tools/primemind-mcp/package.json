@@ -1,0 +1,17 @@
+{
+  "name": "primemind-mcp",
+  "version": "1.0.0",
+  "description": "Cross-platform Model Context Protocol (MCP) Server for PrimeMind Mindmaps & Sales Funnels",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "primemind-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "ws": "^8.18.0"
+  }
+}
