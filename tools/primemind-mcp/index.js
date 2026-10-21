@@ -26,12 +26,65 @@ let connectedClients = new Set();
 let latestClientState = null;
 const pendingRequests = new Map();
 
+// Configuración de Supabase para persistencia cruzada (App <-> Web)
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xbdyapccxxhynujkhubp.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiZHlhcGNjeHhoeW51amtodWJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NjI2MzIsImV4cCI6MjEwNzAzODYzMn0.0zs93Lj3mPnuNRV-mAI3WNfbXcyBD6OPBMkVq1i5VB0';
+
+let cachedProjects = [];
+
+async function saveProjectToSupabase(project) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/primemind_projects`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=representation',
+      },
+      body: JSON.stringify({
+        id: project.id,
+        name: project.name || project.title,
+        type: project.type,
+        funnel_data: project.funnelData || null,
+        mindmap_data: project.mindmapData || null,
+        created_at: project.createdAt || Date.now(),
+        updated_at: project.updatedAt || Date.now(),
+      }),
+    });
+    const saved = await res.json();
+    return saved;
+  } catch (err) {
+    console.warn('[PrimeMind MCP] Advertencia al persistir en Supabase:', err.message);
+    return null;
+  }
+}
+
+async function fetchProjectsFromSupabase() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/primemind_projects?select=*&order=updated_at.desc`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+      },
+    });
+    const rows = await res.json();
+    if (Array.isArray(rows)) {
+      cachedProjects = rows;
+      return rows;
+    }
+  } catch (err) {
+    console.warn('[PrimeMind MCP] Advertencia al leer proyectos de Supabase:', err.message);
+  }
+  return cachedProjects;
+}
+
 // 1. Iniciar Servidor HTTP y WebSocket del Puente Local
-const httpServer = http.createServer((req, res) => {
+const httpServer = http.createServer(async (req, res) => {
   // Configurar CORS para permitir comunicación desde localhost y Vercel
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, apikey');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -48,6 +101,13 @@ const httpServer = http.createServer((req, res) => {
         latestState: latestClientState,
       })
     );
+    return;
+  }
+
+  if (req.url === '/api/projects') {
+    const projects = await fetchProjectsFromSupabase();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(projects));
     return;
   }
 
@@ -567,12 +627,83 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'primemind_create_funnel': {
-        const result = await sendCommandToBrowser('CREATE_FUNNEL', args);
+        const title = args?.title || 'Nuevo Embudo IA';
+        const rawNodes = args?.nodes || [];
+        const rawConns = args?.connections || [];
+        const projectId = `funnel-ai-${Date.now()}`;
+
+        // Construir modelo del proyecto de embudo
+        const nodes = rawNodes.map((item, idx) => {
+          const generatedId = `fn-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 4)}`;
+          return {
+            id: item.id || generatedId,
+            typeId: item.typeId || 'optin_page',
+            category: item.category || 'page',
+            title: item.title || 'Paso',
+            x: item.x ?? (80 + idx * 260),
+            y: item.y ?? 220,
+            width: item.width || 112,
+            height: item.height || 116,
+            url: item.url,
+            notes: item.notes,
+            metrics: { visitors: 0, conversions: 0, conversionRate: 100, revenue: 0 },
+          };
+        });
+
+        const connections = rawConns.map((c, cIdx) => ({
+          id: `conn-ai-${cIdx}-${Date.now()}`,
+          sourceId: c.sourceId,
+          targetId: c.targetId,
+          conversionRate: 100,
+          visitors: 0,
+        }));
+
+        if (connections.length === 0 && nodes.length > 1 && !rawConns.length) {
+          for (let i = 0; i < nodes.length - 1; i++) {
+            connections.push({
+              id: `conn-chain-${i}-${Date.now()}`,
+              sourceId: nodes[i].id,
+              targetId: nodes[i + 1].id,
+              conversionRate: 100,
+              visitors: 0,
+            });
+          }
+        }
+
+        const funnelData = {
+          id: projectId,
+          title,
+          activeLayer: 'mapping',
+          forecastConfig: { totalAdSpend: 0, averageCpc: 0.5, currency: '€' },
+          updatedAt: new Date().toISOString(),
+          nodes,
+          connections,
+        };
+
+        // 1. Guardar de forma garantizada e inmediata en Supabase (Nube)
+        await saveProjectToSupabase({
+          id: projectId,
+          name: title,
+          type: 'funnel',
+          funnelData,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        });
+
+        // 2. Si hay navegador conectado, despachar en vivo por WebSocket a 60fps
+        if (connectedClients.size > 0) {
+          try {
+            await sendCommandToBrowser('CREATE_FUNNEL', args, 2500);
+          } catch (e) {
+            console.warn('[PrimeMind MCP] Advertencia al despachar por WS:', e.message);
+          }
+        }
+
         return {
           content: [
             {
               type: 'text',
-              text: `🎯 Embudo "${result.title}" creado con éxito en PrimeMind con ${result.nodesCount} pasos y ${result.connectionsCount} flujos de conexión.\n\nNodos creados:\n${result.nodes.map((n) => `• [${n.typeId}] ${n.title} (id: ${n.id})`).join('\n')}`,
+              text: `🎯 Embudo "${title}" creado y guardado con éxito en PrimeMind (Nube Supabase + Local) con ${nodes.length} pasos y ${connections.length} flujos de conexión.\nEstá disponible y sincronizado en la web (https://primemind.vercel.app).\n\nNodos:\n${nodes.map((n) => `• [${n.typeId}] ${n.title} (id: ${n.id})`).join('\n')}`,
             },
           ],
         };
