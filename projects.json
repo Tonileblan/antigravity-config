@@ -71,11 +71,6 @@
       "name": "Muibici",
       "repo": "https://github.com/Tonileblan/muibici.git",
       "branch": "main"
-    },
-    {
-      "name": "pedal-wise-hub",
-      "repo": "https://github.com/Tonileblan/pedal-wise-hub.git",
-      "branch": "main"
     }
   ]
 }
