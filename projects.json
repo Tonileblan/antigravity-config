@@ -76,6 +76,11 @@
       "name": "PrimeMind",
       "repo": "https://github.com/Tonileblan/primemind.git",
       "branch": "main"
+    },
+    {
+      "name": "Happytrading",
+      "repo": "https://github.com/Tonileblan/Happytrading.git",
+      "branch": "main"
     }
   ]
 }
