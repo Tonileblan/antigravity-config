@@ -81,6 +81,21 @@
       "name": "Happytrading",
       "repo": "https://github.com/Tonileblan/Happytrading.git",
       "branch": "main"
+    },
+    {
+      "name": "BikeFlow",
+      "repo": "https://github.com/Tonileblan/BikeFlow.git",
+      "branch": "main"
+    },
+    {
+      "name": "Control61-Web",
+      "repo": "https://github.com/Tonileblan/intel-web-glow.git",
+      "branch": "main"
+    },
+    {
+      "name": "EduHub",
+      "repo": "https://github.com/Tonileblan/EduHub.git",
+      "branch": "main"
     }
   ]
 }
